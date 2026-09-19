@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDex - Take Attendance</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Plus Jakarta Sans","Segoe UI",Arial,sans-serif;
+    background:
+        radial-gradient(circle at 75% 20%,rgba(71,167,239,.10),transparent 27%),
+        radial-gradient(circle at 15% 80%,rgba(87,184,238,.08),transparent 28%),
+        #f3f7fc;
+    color:#10244a;
+    -webkit-font-smoothing:antialiased;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:280px;
+    background:rgba(238,244,251,.97);
+    border-right:1px solid #d5e0eb;
+    padding:24px 16px;
+    overflow-y:auto;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:800;
+    margin:4px 12px 24px;
+    padding-bottom:24px;
+    border-bottom:1px solid #d9e3ed;
+    letter-spacing:-.8px;
+}
+
+.logo span{
+    color:#1769e8;
+}
+
+.menu-title{
+    color:#71809b;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.3px;
+    text-transform:uppercase;
+    margin:18px 12px 8px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#18345d;
+    font-size:13px;
+    font-weight:650;
+    padding:11px 13px;
+    min-height:46px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.menu a:hover{
+    background:#eef4ff;
+    color:#075ee8;
+}
+
+.menu a.active{
+    background:#dcecff;
+    color:#075ee8;
+    font-weight:700;
+}
+
+.menu-icon{
+    width:32px;
+    height:32px;
+    min-width:32px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e6eef7;
+    color:#45617f;
+}
+
+.menu-icon svg{
+    width:16px;
+    height:16px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.account-title{
+    margin-top:35px;
+}
+
+.logout{
+    color:#e00000 !important;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    margin-left:280px;
+    min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    height:96px;
+    background:rgba(255,255,255,.94);
+    border-bottom:1px solid #dce4ef;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 36px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.srm-box{
+    width:50px;
+    height:50px;
+    background:transparent;
+    border-radius:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#075ee8;
+    font-size:18px;
+    font-weight:800;
+}
+
+.brand-name{
+    font-size:23px;
+    font-weight:800;
+}
+
+.brand-name span{
+    color:#1769e8;
+}
+
+.brand-sub{
+    color:#506b89;
+    font-size:10px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.profile-text{
+    text-align:right;
+}
+
+.profile-name{
+    font-weight:700;
+    font-size:13px;
+}
+
+.profile-id{
+    color:#637892;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.profile-photo{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #d7e1ed;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:36px 38px 70px;
+}
+
+.page-title{
+    font-size:34px;
+    margin-bottom:8px;
+}
+
+.page-subtitle{
+    color:#496789;
+    font-size:14px;
+    margin-bottom:27px;
+}
+
+/* ================= CLASS ================= */
+
+.class-card{
+    background:#fff;
+    border:1px solid #dbe4ef;
+    border-radius:18px;
+    padding:26px 28px;
+    margin-bottom:28px;
+}
+
+.class-card h2{
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+.class-details{
+    color:#315071;
+    font-size:15px;
+    line-height:1.9;
+}
+
+.class-details b{
+    color:#071b41;
+}
+
+.subject{
+    font-weight:800;
+    color:#075ee8;
+}
+
+/* ================= CAMERA CARD ================= */
+
+.camera-card{
+    background:#fff;
+    border:1px solid #dbe4ef;
+    border-radius:18px;
+    padding:30px;
+}
+
+.camera-title{
+    font-size:24px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.camera-subtitle{
+    color:#647b96;
+    font-size:15px;
+    margin-bottom:25px;
+}
+
+.camera-area{
+    width:100%;
+    max-width:1000px;
+    margin:auto;
+}
+
+.video-wrapper{
+    width:100%;
+    min-height:430px;
+    background:#071b41;
+    border-radius:16px;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+video{
+    width:100%;
+    height:100%;
+    max-height:540px;
+    object-fit:cover;
+    display:none;
+    background:#071b41;
+}
+
+.camera-placeholder{
+    color:#fff;
+    text-align:center;
+    padding:30px;
+}
+
+.camera-icon{
+    font-size:58px;
+    margin-bottom:15px;
+}
+
+.camera-placeholder h3{
+    font-size:22px;
+    margin-bottom:8px;
+}
+
+.camera-placeholder p{
+    color:#c9d6ea;
+}
+
+/* ================= CONTROLS ================= */
+
+.controls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:22px;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:700;
+    border-radius:10px;
+    padding:13px 22px;
+}
+
+button:disabled{
+    cursor:not-allowed;
+    opacity:.55;
+}
+
+.start-btn{
+    background:#126bd4;
+    color:#fff;
+}
+
+.capture-btn{
+    background:#111f3d;
+    color:#fff;
+}
+
+.stop-btn{
+    background:#fff;
+    color:#d71919;
+    border:1px solid #e2bcbc;
+}
+
+.retake-btn{
+    background:#fff;
+    color:#075ee8;
+    border:1px solid #bcd2f5;
+}
+
+.review-btn{
+    background:#13a348;
+    color:#fff;
+    min-width:210px;
+}
+
+/* ================= COUNTER ================= */
+
+.capture-status{
+    text-align:center;
+    margin-top:22px;
+}
+
+.capture-count{
+    font-size:24px;
+    font-weight:800;
+    color:#075ee8;
+}
+
+.capture-help{
+    margin-top:7px;
+    color:#5d7291;
+    font-size:14px;
+}
+
+/* ================= PHOTOS ================= */
+
+.photo-section{
+    margin-top:32px;
+}
+
+.photo-section h3{
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+.photo-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.photo-box{
+    height:155px;
+    background:#f3f6fa;
+    border:1px dashed #b7c5d8;
+    border-radius:12px;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.photo-box .empty-photo{
+    color:#8a9ab0;
+    font-size:14px;
+}
+
+.photo-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.photo-number{
+    position:absolute;
+    top:8px;
+    left:8px;
+    background:#075ee8;
+    color:#fff;
+    padding:5px 9px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* ================= MESSAGE ================= */
+
+.message{
+    margin-top:22px;
+    padding:14px 18px;
+    border-radius:10px;
+    background:#eef5ff;
+    border:1px solid #c5dcff;
+    color:#0754b9;
+    font-size:14px;
+}
+
+.message.error{
+    background:#fff0f0;
+    border-color:#ffcaca;
+    color:#c60000;
+}
+
+/* ================= REVIEW AREA ================= */
+
+.review-area{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:22px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1050px){
+
+    .sidebar{
+        width:230px;
+    }
+
+    .main{
+        margin-left:230px;
+    }
+
+    .content{
+        padding:30px 25px;
+    }
+
+    .photo-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .header{
+        height:auto;
+        padding:18px;
+        flex-wrap:wrap;
+        gap:15px;
+    }
+
+    .profile-text{
+        display:none;
+    }
+
+    .content{
+        padding:22px 18px;
+    }
+
+    .page-title{
+        font-size:30px;
+    }
+
+    .video-wrapper{
+        min-height:280px;
+    }
+
+    .photo-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .controls{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Snap<span>Dex</span>
+    </div>
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+    <nav class="menu">
+
+        <a href="facultydashboard.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3.5 10.5L12 3.5l8.5 7"></path>
+                    <path d="M5.5 9.5V20h13V9.5"></path>
+                    <path d="M9 20v-6h6v6"></path>
+                </svg>
+            </span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="facultydashboard.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                    <path d="M8 3v4"></path>
+                    <path d="M16 3v4"></path>
+                    <path d="M4 10h16"></path>
+                </svg>
+            </span>
+            <span>My Classes</span>
+        </a>
+
+        <a href="subjects.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="5" y="3.5" width="14" height="17" rx="1.5"></rect>
+                    <path d="M8 7h8"></path>
+                    <path d="M8 11h8"></path>
+                    <path d="M8 15h5"></path>
+                </svg>
+            </span>
+            <span>Subjects</span>
+        </a>
+
+        <a href="students.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="9" cy="8" r="3"></circle>
+                    <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"></path>
+                    <circle cx="17" cy="9" r="2.5"></circle>
+                    <path d="M15 15.5c2.8-.1 4.8 1.5 5.5 4.5"></path>
+                </svg>
+            </span>
+            <span>Students</span>
+        </a>
+
+        <a href="takeattendance.html" class="active">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="5" width="17" height="14" rx="2"></rect>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M8 5l1-2h6l1 2"></path>
+                </svg>
+            </span>
+            <span>Take Attendance</span>
+        </a>
+
+        <a href="attendancehistory.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7v5l3 2"></path>
+                </svg>
+            </span>
+            <span>Attendance History</span>
+        </a>
+
+        <a href="reports.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 20V10"></path>
+                    <path d="M12 20V5"></path>
+                    <path d="M19 20v-8"></path>
+                </svg>
+            </span>
+            <span>Reports</span>
+        </a>
+
+    </nav>
+
+    <div class="menu-title account-title">
+        ACCOUNT
+    </div>
+
+    <nav class="menu">
+
+        <a href="facultyprofile.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5 20.5c.6-3.5 3-5.5 7-5.5s6.4 2 7 5.5"></path>
+                </svg>
+            </span>
+            <span>My Profile</span>
+        </a>
+
+        <a href="index.html" class="logout"
+           onclick="return logout();">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5"></path>
+                    <path d="M15 12H3"></path>
+                    <path d="M21 4v16"></path>
+                </svg>
+            </span>
+            <span>Logout</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="srm-box">
+            SRM
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+            <div class="brand-sub">
+                Smart Attendance • SRM Institute of Science and Technology
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile">
+
+        <div class="profile-text">
+
+            <div
+                class="profile-name"
+                id="facultyName">
+                Faculty
+            </div>
+
+            <div
+                class="profile-id"
+                id="facultyId">
+                -
+            </div>
+
+        </div>
+
+        <img
+            id="facultyPhoto"
+            class="profile-photo"
+            src="srm-logo.png"
+            alt="Faculty">
+    </div>
+
+</header>
+
+
+<section class="content">
+
+    <h1 class="page-title">
+        Take Attendance
+    </h1>
+
+    <p class="page-subtitle">
+        Capture exactly 4 live photos manually and review the attendance before finalizing.
+    </p>
+
+
+    <!-- ================= SELECTED CLASS ================= -->
+
+    <div class="class-card">
+
+        <h2>
+            Selected Class
+        </h2>
+
+        <div
+            class="class-details"
+            id="classDetails">
+            Loading class...
+        </div>
+
+    </div>
+
+
+    <!-- ================= CAMERA ================= -->
+
+    <div class="camera-card">
+
+        <div class="camera-title">
+            Live Camera
+        </div>
+
+        <div class="camera-subtitle">
+            Start the camera and click
+            <b>Capture Photo</b>
+            manually four times.
+        </div>
+
+
+        <div class="camera-area">
+
+            <div class="video-wrapper">
+
+                <div
+                    class="camera-placeholder"
+                    id="cameraPlaceholder">
+
+                    <div class="camera-icon">
+                        Camera
+                    </div>
+
+                    <h3>
+                        Camera is not started
+                    </h3>
+
+                    <p>
+                        Click "Start Camera" to begin.
+                    </p>
+
+                </div>
+
+
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline>
+                </video>
+
+            </div>
+
+
+            <!-- CONTROLS -->
+
+            <div class="controls">
+
+                <button
+                    class="start-btn"
+                    id="startBtn"
+                    onclick="startCamera()">
+                    ▶ Start Camera
+                </button>
+
+
+                <button
+                    class="capture-btn"
+                    id="captureBtn"
+                    onclick="capturePhoto()"
+                    disabled>
+                    📸 Capture Photo
+                </button>
+
+
+                <button
+                    class="stop-btn"
+                    id="stopBtn"
+                    onclick="stopCamera()">
+                    ■ Stop Camera
+                </button>
+
+            </div>
+
+
+            <!-- COUNTER -->
+
+            <div class="capture-status">
+
+                <div class="capture-count">
+                    <span id="captureCount">0</span> / 4 Photos Captured
+                </div>
+
+                <div
+                    class="capture-help"
+                    id="captureHelp">
+                    Start the camera, then manually capture 4 photos.
+                </div>
+
+            </div>
+
+
+            <!-- PHOTOS -->
+
+            <div class="photo-section">
+
+                <h3>
+                    Captured Photos
+                </h3>
+
+                <div class="photo-grid">
+
+                    <div
+                        class="photo-box"
+                        id="photo1">
+                        <div class="empty-photo">
+                            Photo 1
+                        </div>
+                    </div>
+
+                    <div
+                        class="photo-box"
+                        id="photo2">
+                        <div class="empty-photo">
+                            Photo 2
+                        </div>
+                    </div>
+
+                    <div
+                        class="photo-box"
+                        id="photo3">
+                        <div class="empty-photo">
+                            Photo 3
+                        </div>
+                    </div>
+
+                    <div
+                        class="photo-box"
+                        id="photo4">
+                        <div class="empty-photo">
+                            Photo 4
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                class="message"
+                id="message">
+                Faculty must manually capture exactly 4 photos.
+            </div>
+
+
+            <!-- RETAKE + REVIEW -->
+
+            <div class="review-area">
+
+                <button
+                    class="retake-btn"
+                    id="retakeBtn"
+                    onclick="retakePhotos()"
+                    disabled>
+                    ↻ Retake Photos
+                </button>
+
+
+                <button
+                    class="review-btn"
+                    id="reviewBtn"
+                    onclick="goToReview()"
+                    disabled>
+                    ✓ Review Attendance
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<canvas
+    id="canvas"
+    style="display:none;">
+</canvas>
+
+
+<script>
+
+/* =========================================================
+   SNAPDEX - TAKE ATTENDANCE
+   FINAL FRONTEND VERSION
+   MANUAL EXACTLY 4 PHOTO CAPTURES
+========================================================= */
+
+
+/* ================= FACULTY ================= */
+
+let faculty = null;
+
+try{
+
+    faculty = JSON.parse(
+        localStorage.getItem(
+            "snapdexFaculty"
+        ) || "null"
+    );
+
+}catch(error){
+
+    faculty = null;
+
+}
+
+
+function loadFaculty(){
+
+    if(!faculty){
+        return;
+    }
+
+
+    document.getElementById(
+        "facultyName"
+    ).textContent =
+        faculty.name || "Faculty";
+
+
+    document.getElementById(
+        "facultyId"
+    ).textContent =
+        faculty.id ||
+        faculty.facultyId ||
+        "-";
+
+
+    if(faculty.profilePhoto){
+
+        document.getElementById(
+            "facultyPhoto"
+        ).src =
+            faculty.profilePhoto;
+
+    }
+
+}
+
+
+loadFaculty();
+
+
+/* ================= CLASSES ================= */
+
+let allClasses = [];
+
+try{
+
+    allClasses = JSON.parse(
+        localStorage.getItem(
+            "snapdexClasses"
+        ) || "[]"
+    );
+
+    if(!Array.isArray(allClasses)){
+        allClasses = [];
+    }
+
+}catch(error){
+
+    allClasses = [];
+
+}
+
+
+/* ================= FACULTY CLASSES ================= */
+
+let classes = allClasses;
+
+if(faculty){
+
+    const facultyId =
+        String(
+            faculty.id ||
+            faculty.facultyId ||
+            ""
+        );
+
+
+    const filtered =
+        allClasses.filter(
+            c =>
+                !c.facultyId ||
+                String(c.facultyId) === facultyId
+        );
+
+
+    if(filtered.length > 0){
+
+        classes = filtered;
+
+    }
+
+}
+
+
+/* ================= SELECTED CLASS ================= */
+
+let selectedClass = null;
+
+try{
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexSelectedClass"
+            ) || "null"
+        );
+
+
+    if(saved){
+
+        selectedClass = saved;
+
+    }
+
+}catch(error){
+
+    selectedClass = null;
+
+}
+
+
+if(!selectedClass && classes.length > 0){
+
+    selectedClass = classes[0];
+
+    localStorage.setItem(
+        "snapdexSelectedClass",
+        JSON.stringify(selectedClass)
+    );
+
+}
+
+
+/* ================= DISPLAY CLASS ================= */
+
+function displayClass(){
+
+    const box =
+        document.getElementById(
+            "classDetails"
+        );
+
+
+    if(!selectedClass){
+
+        box.innerHTML = `
+            <span style="color:#c60000;">
+                No class found. Please create a class first.
+            </span>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML = `
+
+        <div>
+            <b>Department:</b>
+            ${escapeHTML(
+                selectedClass.department || "-"
+            )}
+        </div>
+
+        <div>
+            <b>Program / Branch:</b>
+            ${escapeHTML(
+                selectedClass.program || "-"
+            )}
+        </div>
+
+        <div>
+            <b>Year:</b>
+            ${escapeHTML(
+                selectedClass.year || "-"
+            )}
+
+            &nbsp; • &nbsp;
+
+            <b>Semester:</b>
+            ${escapeHTML(
+                selectedClass.semester || "-"
+            )}
+
+            &nbsp; • &nbsp;
+
+            <b>Section:</b>
+            ${escapeHTML(
+                selectedClass.section || "-"
+            )}
+        </div>
+
+        <div>
+            <b>Subject:</b>
+
+            <span class="subject">
+                ${escapeHTML(
+                    selectedClass.subject || "-"
+                )}
+            </span>
+        </div>
+
+    `;
+
+}
+
+
+displayClass();
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+let stream = null;
+
+let capturedPhotos = [];
+
+
+/* ================= START CAMERA ================= */
+
+async function startCamera(){
+
+    if(capturedPhotos.length >= 4){
+
+        showMessage(
+            "All 4 photos are already captured.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(!navigator.mediaDevices ||
+       !navigator.mediaDevices.getUserMedia){
+
+        showMessage(
+            "Camera is not supported by this browser.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        stream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video:{
+                    facingMode:"user",
+                    width:{
+                        ideal:1280
+                    },
+                    height:{
+                        ideal:720
+                    }
+                },
+
+                audio:false
+
+            });
+
+
+        const video =
+            document.getElementById(
+                "camera"
+            );
+
+
+        video.srcObject =
+            stream;
+
+
+        video.style.display =
+            "block";
+
+
+        document.getElementById(
+            "cameraPlaceholder"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "startBtn"
+        ).disabled =
+            true;
+
+
+        document.getElementById(
+            "captureBtn"
+        ).disabled =
+            false;
+
+
+        showMessage(
+            "Camera started. Click Capture Photo manually.",
+            false
+        );
+
+
+        document.getElementById(
+            "captureHelp"
+        ).textContent =
+            "Capture each photo manually. " +
+            "Photo " +
+            (capturedPhotos.length + 1) +
+            " is next.";
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Camera permission was denied or camera is unavailable.",
+            true
+        );
+
+    }
+
+}
+
+
+/* ================= CAPTURE PHOTO ================= */
+
+function capturePhoto(){
+
+    if(!stream){
+
+        showMessage(
+            "Please start the camera first.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(capturedPhotos.length >= 4){
+
+        showMessage(
+            "Exactly 4 photos are allowed.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const video =
+        document.getElementById(
+            "camera"
+        );
+
+
+    const canvas =
+        document.getElementById(
+            "canvas"
+        );
+
+
+    const width =
+        video.videoWidth || 1280;
+
+
+    const height =
+        video.videoHeight || 720;
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+        height;
+
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    context.drawImage(
+        video,
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const photo =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.85
+        );
+
+
+    capturedPhotos.push(
+        photo
+    );
+
+
+    const number =
+        capturedPhotos.length;
+
+
+    showPhoto(
+        number,
+        photo
+    );
+
+
+    updateCounter();
+
+
+    /* ================= 4 PHOTOS COMPLETE ================= */
+
+    if(capturedPhotos.length === 4){
+
+        stopCamera();
+
+
+        document.getElementById(
+            "reviewBtn"
+        ).disabled =
+            false;
+
+
+        document.getElementById(
+            "retakeBtn"
+        ).disabled =
+            false;
+
+
+        document.getElementById(
+            "captureBtn"
+        ).disabled =
+            true;
+
+
+        document.getElementById(
+            "captureHelp"
+        ).textContent =
+            "4/4 photos captured. Review attendance now.";
+
+
+        showMessage(
+            "✓ All 4 photos captured successfully.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    /* ================= NEXT PHOTO ================= */
+
+    showMessage(
+        "Photo " +
+        number +
+        " captured. Capture photo " +
+        (number + 1) +
+        ".",
+        false
+    );
+
+
+    document.getElementById(
+        "captureHelp"
+    ).textContent =
+        "Photo " +
+        (number + 1) +
+        " is next. Click Capture Photo manually.";
+
+}
+
+
+/* ================= SHOW PHOTO ================= */
+
+function showPhoto(
+    number,
+    photo
+){
+
+    const box =
+        document.getElementById(
+            "photo" + number
+        );
+
+
+    box.innerHTML = `
+
+        <img
+            src="${photo}"
+            alt="Captured Photo ${number}"
+        >
+
+        <div class="photo-number">
+            Photo ${number}
+        </div>
+
+    `;
+
+}
+
+
+/* ================= COUNTER ================= */
+
+function updateCounter(){
+
+    document.getElementById(
+        "captureCount"
+    ).textContent =
+        capturedPhotos.length;
+
+}
+
+
+/* ================= STOP CAMERA ================= */
+
+function stopCamera(){
+
+    if(stream){
+
+        stream
+            .getTracks()
+            .forEach(
+                track =>
+                    track.stop()
+            );
+
+        stream = null;
+
+    }
+
+
+    const video =
+        document.getElementById(
+            "camera"
+        );
+
+
+    video.srcObject =
+        null;
+
+
+    video.style.display =
+        "none";
+
+
+    document.getElementById(
+        "cameraPlaceholder"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "captureBtn"
+    ).disabled =
+        true;
+
+
+    document.getElementById(
+        "startBtn"
+    ).disabled =
+        capturedPhotos.length >= 4;
+
+}
+
+
+/* ================= RETAKE ================= */
+
+function retakePhotos(){
+
+    stopCamera();
+
+
+    capturedPhotos = [];
+
+
+    updateCounter();
+
+
+    for(let i = 1; i <= 4; i++){
+
+        document.getElementById(
+            "photo" + i
+        ).innerHTML = `
+            <div class="empty-photo">
+                Photo ${i}
+            </div>
+        `;
+
+    }
+
+
+    document.getElementById(
+        "reviewBtn"
+    ).disabled =
+        true;
+
+
+    document.getElementById(
+        "retakeBtn"
+    ).disabled =
+        true;
+
+
+    document.getElementById(
+        "startBtn"
+    ).disabled =
+        false;
+
+
+    document.getElementById(
+        "captureHelp"
+    ).textContent =
+        "Start the camera and manually capture 4 photos.";
+
+
+    showMessage(
+        "Photos cleared. You can capture 4 new photos.",
+        false
+    );
+
+}
+
+
+/* =========================================================
+   REVIEW ATTENDANCE
+========================================================= */
+
+function goToReview(){
+
+    if(capturedPhotos.length !== 4){
+
+        showMessage(
+            "Exactly 4 photos are required before review.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(!selectedClass){
+
+        showMessage(
+            "No class selected.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    /* SAVE EXACTLY 4 PHOTOS */
+
+    localStorage.setItem(
+        "snapdexAttendancePhotos",
+        JSON.stringify(
+            capturedPhotos
+        )
+    );
+
+
+    /* SAVE CLASS */
+
+    localStorage.setItem(
+        "snapdexAttendanceClass",
+        JSON.stringify(
+            selectedClass
+        )
+    );
+
+
+    /* CREATE SESSION */
+
+    const attendanceSession = {
+
+        id:
+            Date.now(),
+
+        classId:
+            selectedClass.id || "",
+
+        facultyId:
+            faculty
+                ? (
+                    faculty.id ||
+                    faculty.facultyId ||
+                    ""
+                  )
+                : "",
+
+        facultyName:
+            faculty
+                ? faculty.name || ""
+                : "",
+
+        department:
+            selectedClass.department || "",
+
+        program:
+            selectedClass.program || "",
+
+        year:
+            selectedClass.year || "",
+
+        semester:
+            selectedClass.semester || "",
+
+        section:
+            selectedClass.section || "",
+
+        subject:
+            selectedClass.subject || "",
+
+        capturedPhotos:
+            4,
+
+        createdAt:
+            new Date().toISOString(),
+
+        status:
+            "REVIEW_REQUIRED"
+
+    };
+
+
+    localStorage.setItem(
+        "snapdexCurrentAttendance",
+        JSON.stringify(
+            attendanceSession
+        )
+    );
+
+
+    /*
+       IMPORTANT:
+       No student is automatically marked present.
+       Attendance will be finalized only
+       after faculty review.
+    */
+
+
+    window.location.href =
+        "attendancereview.html";
+
+}
+
+
+/* ================= MESSAGE ================= */
+
+function showMessage(
+    text,
+    isError
+){
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+
+    box.textContent =
+        text;
+
+
+    if(isError){
+
+        box.classList.add(
+            "error"
+        );
+
+    }else{
+
+        box.classList.remove(
+            "error"
+        );
+
+    }
+
+}
+
+
+/* ================= ESCAPE HTML ================= */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    return confirm(
+        "Are you sure you want to logout?"
+    );
+
+}
+
+
+/* ================= PAGE EXIT ================= */
+
+window.addEventListener(
+    "beforeunload",
+    function(){
+
+        if(stream){
+
+            stream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+        }
+
+    }
+);
+
+
+/* ================= INITIALIZE ================= */
+
+updateCounter();
+
+</script>
+
+</body>
+</html>

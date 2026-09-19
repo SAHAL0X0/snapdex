@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SnapDex - My Profile</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+    color:#071b41;
+}
+
+.layout{
+    min-height:100vh;
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:300px;
+    background:#fff;
+    border-right:1px solid #dce4ef;
+    padding:35px 22px;
+}
+
+.logo{
+    font-size:34px;
+    font-weight:800;
+    margin:0 20px 55px;
+}
+
+.logo span{
+    color:#1769e8;
+}
+
+.menu-title{
+    color:#71809b;
+    font-size:14px;
+    margin:0 20px 20px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#071b41;
+    font-size:17px;
+    padding:16px 20px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.menu a:hover{
+    background:#eef4ff;
+    color:#075ee8;
+}
+
+.menu a.active{
+    background:#dfeaff;
+    color:#075ee8;
+    font-weight:700;
+}
+
+.menu-icon{
+    width:25px;
+    text-align:center;
+}
+
+.account-title{
+    margin-top:35px;
+}
+
+.logout{
+    color:#e00000 !important;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    margin-left:300px;
+    width:calc(100% - 300px);
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    height:100px;
+    background:#fff;
+    border-bottom:1px solid #dce4ef;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 38px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.srm-box{
+    width:58px;
+    height:58px;
+    background:#eef4ff;
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#075ee8;
+    font-size:21px;
+    font-weight:800;
+}
+
+.brand-name{
+    font-size:30px;
+    font-weight:800;
+}
+
+.brand-name span{
+    color:#1769e8;
+}
+
+.brand-sub{
+    color:#506b89;
+    font-size:15px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.profile-text{
+    text-align:right;
+}
+
+.profile-name{
+    font-weight:700;
+    font-size:16px;
+}
+
+.profile-id{
+    color:#637892;
+    font-size:13px;
+    margin-top:4px;
+}
+
+.profile-photo-small{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #d7e1ed;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:42px 45px 70px;
+}
+
+.page-title{
+    font-size:38px;
+    margin-bottom:8px;
+}
+
+.page-subtitle{
+    color:#496789;
+    font-size:16px;
+    margin-bottom:30px;
+}
+
+/* ================= PROFILE CARD ================= */
+
+.profile-card{
+    background:#fff;
+    border:1px solid #dbe4ef;
+    border-radius:18px;
+    overflow:hidden;
+    max-width:1000px;
+}
+
+.profile-top{
+    padding:35px;
+    background:linear-gradient(
+        135deg,
+        #eef4ff,
+        #ffffff
+    );
+
+    display:flex;
+    align-items:center;
+    gap:30px;
+
+    border-bottom:1px solid #dbe4ef;
+}
+
+.profile-photo-large{
+    width:130px;
+    height:130px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #fff;
+    box-shadow:0 5px 18px rgba(7,27,65,0.12);
+}
+
+.profile-main-name{
+    font-size:30px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.profile-role{
+    color:#1769e8;
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+.profile-faculty-id{
+    color:#60758f;
+    font-size:15px;
+}
+
+/* ================= DETAILS ================= */
+
+.details{
+    padding:32px 35px;
+}
+
+.details-title{
+    font-size:21px;
+    font-weight:800;
+    margin-bottom:22px;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.detail-box{
+    border:1px solid #dbe4ef;
+    border-radius:12px;
+    padding:18px 20px;
+    background:#fbfcfe;
+}
+
+.detail-label{
+    color:#71809b;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.detail-value{
+    color:#071b41;
+    font-size:16px;
+    font-weight:600;
+    word-break:break-word;
+}
+
+/* ================= INFO BOX ================= */
+
+.info-box{
+    margin-top:25px;
+    padding:17px 20px;
+    border-radius:12px;
+    background:#eef4ff;
+    color:#315071;
+    font-size:14px;
+    line-height:1.6;
+}
+
+/* ================= BUTTONS ================= */
+
+.actions{
+    padding:0 35px 32px;
+    display:flex;
+    gap:12px;
+}
+
+.back-btn{
+    border:none;
+    background:#075ee8;
+    color:#fff;
+    padding:12px 22px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.back-btn:hover{
+    background:#054fc4;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1050px){
+
+    .sidebar{
+        width:230px;
+    }
+
+    .main{
+        margin-left:230px;
+        width:calc(100% - 230px);
+    }
+
+    .content{
+        padding:30px 25px;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .header{
+        height:auto;
+        padding:18px;
+        flex-wrap:wrap;
+        gap:15px;
+    }
+
+    .profile-text{
+        display:none;
+    }
+
+    .content{
+        padding:22px 18px;
+    }
+
+    .profile-top{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .details-grid{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        padding-left:20px;
+        padding-right:20px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="layout">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Snap<span>Dex</span>
+    </div>
+
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="facultydashboard.html">
+            <span class="menu-icon">🏠</span>
+            <span>Dashboard</span>
+        </a>
+
+
+        <a href="facultydashboard.html">
+            <span class="menu-icon">🏫</span>
+            <span>My Classes</span>
+        </a>
+
+
+        <a href="subjects.html">
+            <span class="menu-icon">📚</span>
+            <span>Subjects</span>
+        </a>
+
+
+        <a href="students.html">
+            <span class="menu-icon">👥</span>
+            <span>Students</span>
+        </a>
+
+
+        <a href="takeattendance.html">
+            <span class="menu-icon">📷</span>
+            <span>Take Attendance</span>
+        </a>
+
+
+        <a href="attendancehistory.html">
+            <span class="menu-icon">◷</span>
+            <span>Attendance History</span>
+        </a>
+
+
+        <a href="reports.html">
+            <span class="menu-icon">📊</span>
+            <span>Reports</span>
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title account-title">
+        ACCOUNT
+    </div>
+
+
+    <nav class="menu">
+
+        <a
+            href="facultyprofile.html"
+            class="active"
+        >
+            <span class="menu-icon">👤</span>
+            <span>My Profile</span>
+        </a>
+
+
+        <a
+            href="index.html"
+            class="logout"
+            onclick="return logout();"
+        >
+            <span class="menu-icon">↪</span>
+            <span>Logout</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+
+    <div class="brand">
+
+        <div class="srm-box">
+            SRM
+        </div>
+
+
+        <div>
+
+            <div class="brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+
+            <div class="brand-sub">
+                Smart Attendance • SRM Institute of Science and Technology
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HEADER PROFILE -->
+
+    <div class="profile">
+
+        <div class="profile-text">
+
+            <div
+                class="profile-name"
+                id="headerFacultyName"
+            >
+                Faculty
+            </div>
+
+
+            <div
+                class="profile-id"
+                id="headerFacultyId"
+            >
+                -
+            </div>
+
+        </div>
+
+
+        <img
+            id="headerFacultyPhoto"
+            class="profile-photo-small"
+            src="srm-logo.png"
+            alt="Faculty"
+        >
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<section class="content">
+
+
+    <h1 class="page-title">
+        My Profile
+    </h1>
+
+
+    <p class="page-subtitle">
+        View your faculty profile and account information.
+    </p>
+
+
+    <!-- ================= PROFILE CARD ================= -->
+
+    <div class="profile-card">
+
+
+        <!-- PROFILE TOP -->
+
+        <div class="profile-top">
+
+
+            <img
+                id="profilePhoto"
+                class="profile-photo-large"
+                src="srm-logo.png"
+                alt="Faculty Profile Photo"
+            >
+
+
+            <div>
+
+                <div
+                    class="profile-main-name"
+                    id="profileName"
+                >
+                    Faculty
+                </div>
+
+
+                <div class="profile-role">
+                    Faculty / Teacher
+                </div>
+
+
+                <div
+                    class="profile-faculty-id"
+                    id="profileFacultyId"
+                >
+                    Faculty ID: -
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="details">
+
+
+            <div class="details-title">
+                Personal & Academic Information
+            </div>
+
+
+            <div class="details-grid">
+
+
+                <!-- NAME -->
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        FULL NAME
+                    </div>
+
+                    <div
+                        class="detail-value"
+                        id="detailName"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <!-- FACULTY ID -->
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        FACULTY ID
+                    </div>
+
+                    <div
+                        class="detail-value"
+                        id="detailFacultyId"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        OFFICIAL EMAIL
+                    </div>
+
+                    <div
+                        class="detail-value"
+                        id="detailEmail"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        DEPARTMENT
+                    </div>
+
+                    <div
+                        class="detail-value"
+                        id="detailDepartment"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <!-- DESIGNATION -->
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        DESIGNATION
+                    </div>
+
+                    <div
+                        class="detail-value"
+                    >
+                        Faculty / Teacher
+                    </div>
+
+                </div>
+
+
+                <!-- INSTITUTE -->
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        INSTITUTE
+                    </div>
+
+                    <div
+                        class="detail-value"
+                    >
+                        SRM Institute of Science and Technology
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFO -->
+
+            <div class="info-box">
+
+                🔐 Your faculty account information is associated
+                with your SnapDex profile. Official email and faculty
+                identity are used for attendance and class management.
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTION -->
+
+        <div class="actions">
+
+            <a
+                href="facultydashboard.html"
+                class="back-btn"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SNAPDEX FACULTY PROFILE
+===================================================== */
+
+
+/* ================= LOAD FACULTY ================= */
+
+let faculty = null;
+
+
+try{
+
+    faculty =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexFaculty"
+            ) || "null"
+        );
+
+}catch(error){
+
+    faculty = null;
+
+}
+
+
+/* ================= DISPLAY ================= */
+
+function loadProfile(){
+
+    if(!faculty){
+
+        document.getElementById(
+            "profileName"
+        ).textContent =
+            "Faculty";
+
+
+        document.getElementById(
+            "detailName"
+        ).textContent =
+            "Not available";
+
+
+        return;
+
+    }
+
+
+    /* ================= BASIC DATA ================= */
+
+    const name =
+        faculty.name ||
+        "Faculty";
+
+
+    const facultyId =
+        faculty.id ||
+        faculty.facultyId ||
+        "-";
+
+
+    const email =
+        faculty.email ||
+        faculty.officialEmail ||
+        "-";
+
+
+    const department =
+        faculty.department ||
+        faculty.dept ||
+        "-";
+
+
+    /* ================= HEADER ================= */
+
+    document.getElementById(
+        "headerFacultyName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "headerFacultyId"
+    ).textContent =
+        facultyId;
+
+
+    /* ================= PROFILE TOP ================= */
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "profileFacultyId"
+    ).textContent =
+        "Faculty ID: " +
+        facultyId;
+
+
+    /* ================= DETAILS ================= */
+
+    document.getElementById(
+        "detailName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "detailFacultyId"
+    ).textContent =
+        facultyId;
+
+
+    document.getElementById(
+        "detailEmail"
+    ).textContent =
+        email;
+
+
+    document.getElementById(
+        "detailDepartment"
+    ).textContent =
+        department;
+
+
+    /* ================= PHOTO ================= */
+
+    if(
+        faculty.profilePhoto
+    ){
+
+        document.getElementById(
+            "profilePhoto"
+        ).src =
+            faculty.profilePhoto;
+
+
+        document.getElementById(
+            "headerFacultyPhoto"
+        ).src =
+            faculty.profilePhoto;
+
+    }
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    return confirm(
+        "Are you sure you want to logout?"
+    );
+
+}
+
+
+/* ================= START ================= */
+
+loadProfile();
+
+
+/* ================= REFRESH ================= */
+
+window.addEventListener(
+    "pageshow",
+    function(){
+
+        try{
+
+            faculty =
+                JSON.parse(
+                    localStorage.getItem(
+                        "snapdexFaculty"
+                    ) || "null"
+                );
+
+        }catch(error){
+
+            faculty = null;
+
+        }
+
+
+        loadProfile();
+
+    }
+);
+
+</script>
+
+</body>
+</html>    

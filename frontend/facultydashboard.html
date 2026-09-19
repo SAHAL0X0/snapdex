@@ -1,0 +1,2868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SnapDex - Faculty Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --navy:#0d2450;
+    --blue:#087fe0;
+    --blue-dark:#075fc7;
+    --blue-soft:#eaf4ff;
+    --bg:#f3f7fc;
+    --white:#fff;
+    --border:#dce6f0;
+    --text:#10244a;
+    --muted:#71839d;
+    --green:#07966b;
+    --red:#dc3d3d;
+    --shadow:0 12px 35px rgba(31,76,120,.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+    min-height:100vh;
+    font-family:"Plus Jakarta Sans","Segoe UI",Arial,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(circle at 75% 20%,rgba(71,167,239,.10),transparent 27%),
+      radial-gradient(circle at 15% 80%,rgba(87,184,238,.08),transparent 28%),
+      var(--bg);
+    -webkit-font-smoothing:antialiased;
+}
+
+/* ONLY SRM LOGO WATERMARK - NO BUILDING */
+.bg-srm-logo{
+    position:fixed;
+    width:620px;
+    height:620px;
+    object-fit:contain;
+    left:61%;
+    top:58%;
+    transform:translate(-50%,-50%);
+    opacity:.045;
+    filter:blur(1px);
+    pointer-events:none;
+    user-select:none;
+    z-index:0;
+}
+
+.layout{min-height:100vh;}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    width:280px;
+    position:fixed;
+    left:0;top:0;bottom:0;
+    padding:24px 16px;
+    color:var(--text);
+    background:rgba(238,244,251,.97);
+    backdrop-filter:blur(18px);
+    border-right:1px solid #d5e0eb;
+    box-shadow:5px 0 25px rgba(28,73,118,.05);
+    z-index:100;
+    overflow-y:auto;
+}
+
+.logo-area{
+    position:relative;
+    padding:4px 12px 24px;
+    margin-bottom:22px;
+    border-bottom:1px solid #d9e3ed;
+}
+
+.logo-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+/* Real colour SRM logo */
+.sidebar-srm-logo{
+    width:92px;
+    height:60px;
+    object-fit:contain;
+    object-position:center;
+    flex-shrink:0;
+    display:block;
+}
+
+.logo-box{display:none;}
+
+.logo-text h1{
+    font-size:23px;
+    line-height:1;
+    letter-spacing:-.8px;
+    color:#102653;
+}
+.logo-text h1 span{color:#087fe0;}
+.logo-text p{
+    margin-top:5px;
+    font-size:8px;
+    color:#637894;
+    letter-spacing:1.25px;
+    font-weight:800;
+}
+
+.nav-label{
+    padding:0 12px;
+    margin:18px 0 8px;
+    color:#71839c;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.3px;
+    text-transform:uppercase;
+}
+
+.nav-item{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:11px 13px;
+    margin:5px 0;
+    min-height:46px;
+    border-radius:13px;
+    color:#18345d;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:650;
+    transition:.2s ease;
+}
+.nav-item .icon{
+    width:32px;height:32px;
+    display:flex;
+    align-items:center;justify-content:center;
+    border-radius:9px;
+    background:#e6eef7;
+    color:#45617f;
+    font-size:14px;
+    flex-shrink:0;
+}
+.nav-item:hover{
+    color:#087fe0;
+    background:#e7f2ff;
+    transform:translateX(2px);
+}
+.nav-item.active{
+    color:#075fc7;
+    background:#dcecff;
+    box-shadow:inset 0 0 0 1px rgba(8,127,224,.04);
+}
+.nav-item.active .icon{
+    background:#cbe4ff;
+    color:#087fe0;
+}
+.nav-item.logout{margin-top:18px;color:#b53d3d;}
+.nav-item.logout:hover{background:#fff0f0;color:#d22f2f;}
+
+/* ================= MAIN ================= */
+.main{margin-left:280px;min-height:100vh;position:relative;z-index:2;}
+
+.header{
+    height:96px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 36px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid #dce6f0;
+    position:sticky;top:0;z-index:20;
+}
+.header-left{display:flex;align-items:center;gap:14px;}
+.srm-logo{
+    width:50px;height:50px;
+    object-fit:contain;
+    flex-shrink:0;
+}
+.brand h2{font-size:23px;color:#102653;line-height:1;}
+.brand h2 span{color:#087fe0;}
+.brand p{margin-top:5px;font-size:10px;color:#71839d;}
+
+.faculty-info{display:flex;align-items:center;gap:12px;}
+.faculty-name{text-align:right;display:flex;flex-direction:column;}
+.faculty-name strong{font-size:13px;color:#13264b;}
+.faculty-name span{margin-top:3px;font-size:10px;color:#74869f;}
+.faculty-info img{
+    width:50px;height:50px;border-radius:50%;object-fit:cover;
+    border:2px solid #e3edf7;background:#edf4fb;
+}
+
+.content{padding:36px 38px 70px;position:relative;z-index:2;}
+.welcome{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:27px;}
+.welcome h1{font-size:34px;letter-spacing:-1.2px;color:#0e2044;}
+.welcome p{margin-top:6px;font-size:14px;color:#71839d;}
+.date-chip{
+    display:flex;align-items:center;gap:8px;padding:11px 15px;
+    border:1px solid #dbe6f0;border-radius:12px;background:#fff;
+    color:#526780;font-size:11px;font-weight:700;box-shadow:0 7px 20px rgba(35,90,140,.06);
+}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:19px;margin-bottom:32px;}
+.stat-card{
+    min-height:157px;padding:24px;background:rgba(255,255,255,.95);
+    border:1px solid #dce6ef;border-radius:19px;box-shadow:var(--shadow);
+}
+.stat-top{margin-bottom:14px;}
+.stat-icon{
+    width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+    border-radius:13px;background:#e8f4ff;color:#087fe0;font-size:18px;
+}
+.stat-card.purple .stat-icon{background:#f0eaff;color:#7044d7;}
+.stat-card.green .stat-icon{background:#e5faf4;color:#079d7b;}
+.stat-card.orange .stat-icon{background:#fff3e6;color:#e87512;}
+.stat-number{font-size:30px;font-weight:800;color:#0e2044;}
+.stat-label{margin-top:3px;font-size:12px;color:#617590;}
+
+.section{
+    background:rgba(255,255,255,.96);border:1px solid #dce6ef;
+    border-radius:21px;box-shadow:var(--shadow);overflow:hidden;
+}
+.section-header{
+    min-height:82px;padding:20px 24px;display:flex;align-items:center;
+    justify-content:space-between;border-bottom:1px solid #e0e8f0;
+}
+.section-title-wrap h2{font-size:19px;color:#12264b;}
+.section-title-wrap p{margin-top:4px;font-size:11px;color:#7788a0;}
+.btn-primary{
+    border:0;padding:12px 17px;border-radius:11px;background:linear-gradient(135deg,#176ee6,#087fe0);
+    color:white;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 9px 20px rgba(20,110,220,.20);
+}
+.btn-primary:hover{transform:translateY(-1px);}
+
+.table-wrapper{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:930px;}
+th{
+    padding:14px 15px;text-align:left;background:#f6f9fc;color:#637792;
+    font-size:10px;letter-spacing:.6px;text-transform:uppercase;font-weight:800;
+}
+td{padding:17px 15px;border-bottom:1px solid #e7edf3;color:#263b5d;font-size:12px;}
+tbody tr:hover{background:#f9fcff;}
+tbody tr:last-child td{border-bottom:none;}
+.program-cell{max-width:300px;line-height:1.4;}
+.subject-name{font-weight:800;color:#12274d;}
+.badge{
+    display:inline-flex;align-items:center;padding:7px 10px;border-radius:9px;
+    font-size:10px;font-weight:800;background:#edf4ff;color:#155fd2;border:1px solid #d6e6ff;
+}
+.section-badge{background:#f0f4f8;color:#53657d;border:0;}
+.action-buttons{display:flex;gap:8px;align-items:center;}
+.btn-attendance{
+    border:0;padding:9px 12px;border-radius:9px;background:#07986c;color:#fff;
+    font-size:10px;font-weight:800;cursor:pointer;
+}
+.btn-attendance:hover{background:#07845f;}
+.btn-danger{
+    padding:8px 11px;border:1px solid #fecaca;border-radius:9px;background:#fff;color:#dc2626;
+    font-size:10px;font-weight:800;cursor:pointer;
+}
+.btn-danger:hover{background:#fff4f4;}
+.empty{text-align:center;padding:55px 20px;color:#72849d;font-size:13px;}
+.empty-icon{font-size:32px;margin-bottom:10px;}
+
+/* ================= MODAL ================= */
+.modal-overlay{
+    display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;
+    padding:20px;background:rgba(18,47,80,.25);backdrop-filter:blur(7px);
+}
+.modal-overlay.show{display:flex;}
+.modal{width:100%;max-width:620px;max-height:90vh;overflow-y:auto;background:#fff;border-radius:22px;box-shadow:0 30px 80px rgba(20,60,100,.20);}
+.modal-header{padding:24px 27px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e3eaf1;}
+.modal-title{display:flex;align-items:center;gap:12px;}
+.modal-title h2{font-size:21px;color:#12264b;}
+.modal-title p{margin-top:4px;font-size:10px;color:#7a8aa0;}
+.modal-title-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#e7f3ff;color:#087fe0;font-size:19px;}
+.close-btn{width:34px;height:34px;border:0;border-radius:9px;background:#f1f5f9;color:#566a84;font-size:20px;cursor:pointer;}
+.modal-body{padding:24px 27px;}
+.form-intro{padding:12px 14px;margin-bottom:20px;border-radius:10px;background:#f4f8fc;color:#657892;font-size:11px;line-height:1.5;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{margin-bottom:7px;color:#344866;font-size:11px;font-weight:800;}
+.form-group select,.form-group input{width:100%;height:44px;padding:0 12px;border:1px solid #d8e3ed;border-radius:10px;background:#fbfdff;color:#263a5c;outline:none;font-size:12px;}
+.form-group select:focus,.form-group input:focus{border-color:#179be8;box-shadow:0 0 0 3px rgba(23,155,232,.08);}
+.form-group select:disabled{background:#f1f5f9;color:#9aa7b8;cursor:not-allowed;}
+.field-hint{margin-top:6px;color:#8392a7;font-size:9px;line-height:1.4;}
+.error{display:none;margin-top:6px;color:#dc2626;font-size:10px;}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;padding:18px 27px;border-top:1px solid #e3eaf1;}
+.cancel-btn{padding:10px 17px;border:1px solid #dbe4ed;border-radius:10px;background:#fff;color:#5c6f89;font-size:12px;font-weight:700;cursor:pointer;}
+
+@media(max-width:1150px){
+    .sidebar{width:250px;}
+    .main{margin-left:250px;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:800px){
+    .sidebar{position:relative;width:100%;height:auto;bottom:auto;border-right:0;border-bottom:1px solid #d5e0eb;}
+    .main{margin-left:0;}
+    .nav-item{display:flex;}
+    .header{position:relative;padding:14px 20px;}
+    .content{padding:26px 20px 60px;}
+}
+@media(max-width:620px){
+    .stats{grid-template-columns:1fr;}
+    .welcome{flex-direction:column;gap:14px;}
+    .form-grid{grid-template-columns:1fr;}
+    .form-group.full{grid-column:auto;}
+    .bg-srm-logo{width:380px;height:380px;left:58%;opacity:.035;}
+    .faculty-name{display:none;}
+    .srm-logo{width:44px;height:44px;}
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- SRM LOGO BACKGROUND WATERMARK -->
+<img src="srm_logo.png" class="bg-srm-logo" alt="" aria-hidden="true">
+
+<div class="layout">
+
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="logo-area">
+
+        <div class="logo-row">
+
+            <img
+                src="srm_logo.png"
+                class="sidebar-srm-logo"
+                alt="SRM Institute of Science and Technology"
+            >
+
+            <div class="logo-text">
+                <h1>Snap<span>Dex</span></h1>
+                <p>SMART ATTENDANCE</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-label">
+        Main Menu
+    </div>
+
+
+    <a
+        href="facultydashboard.html"
+        class="nav-item active"
+    >
+
+        <span class="icon">⌂</span>
+
+        Dashboard
+
+    </a>
+
+
+    <a
+        href="#classes"
+        class="nav-item"
+    >
+
+        <span class="icon">▦</span>
+
+        My Classes
+
+    </a>
+
+
+    <a
+        href="subjects.html"
+        class="nav-item"
+    >
+
+        <span class="icon">▤</span>
+
+        Subjects
+
+    </a>
+
+
+    <a
+        href="students.html"
+        class="nav-item"
+    >
+
+        <span class="icon">♙</span>
+
+        Students
+
+    </a>
+
+
+    <a
+        href="takeattendance.html"
+        class="nav-item"
+    >
+
+        <span class="icon">◉</span>
+
+        Take Attendance
+
+    </a>
+
+
+    <div class="nav-label">
+        Analytics
+    </div>
+
+
+    <a
+        href="attendancehistory.html"
+        class="nav-item"
+    >
+
+        <span class="icon">◷</span>
+
+        Attendance History
+
+    </a>
+
+
+    <a
+        href="reports.html"
+        class="nav-item"
+    >
+
+        <span class="icon">▥</span>
+
+        Reports
+
+    </a>
+
+
+    <div class="nav-label">
+        Account
+    </div>
+
+
+    <a
+        href="facultyprofile.html"
+        class="nav-item"
+    >
+
+        <span class="icon">♙</span>
+
+        My Profile
+
+    </a>
+
+
+    <a
+        href="#"
+        class="nav-item logout"
+        onclick="logout(); return false;"
+    >
+
+        <span class="icon">↪</span>
+
+        Logout
+
+    </a>
+
+</aside>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="header-left">
+
+        <img
+            src="srm_logo.png"
+            class="srm-logo"
+            alt="SRM Logo"
+            onerror="this.style.display='none'"
+        >
+
+
+        <div class="brand">
+
+            <h2>
+                Snap<span>Dex</span>
+            </h2>
+
+            <p>
+                SRM Institute of Science and Technology
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="faculty-info">
+
+        <div class="faculty-name">
+
+            <strong id="headerFacultyName">
+                Faculty
+            </strong>
+
+            <span id="headerFacultyId">
+                Faculty ID
+            </span>
+
+        </div>
+
+
+        <img
+            id="headerFacultyPhoto"
+            src=""
+            alt="Faculty"
+        >
+
+    </div>
+
+</header>
+
+
+
+<!-- CONTENT -->
+
+<div class="content">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <div>
+
+            <h1>
+                Faculty Dashboard
+            </h1>
+
+            <p>
+                Manage your classes and attendance from one place.
+            </p>
+
+        </div>
+
+
+        <div class="date-chip">
+
+            <span>▣</span>
+
+            <span id="currentDate">
+                Today
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         STATS
+    ========================= -->
+
+    <div class="stats">
+
+
+        <div class="stat-card blue">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ▦
+                </div>
+
+            </div>
+
+            <div
+                class="stat-number"
+                id="classCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                My Classes
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card purple">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ◈
+                </div>
+
+            </div>
+
+            <div
+                class="stat-number"
+                id="subjectCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Subjects
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card green">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ♙
+                </div>
+
+            </div>
+
+            <div
+                class="stat-number"
+                id="studentCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Total Students
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ◷
+                </div>
+
+            </div>
+
+            <div
+                class="stat-number"
+                id="sessionCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Today's Sessions
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         MY CLASSES
+    ========================= -->
+
+    <section
+        class="section"
+        id="classes"
+    >
+
+        <div class="section-header">
+
+            <div class="section-title-wrap">
+
+                <h2>
+                    My Classes
+                </h2>
+
+                <p>
+                    Manage your assigned classes and start attendance.
+                </p>
+
+            </div>
+
+
+            <button
+                class="btn-primary"
+                onclick="openAddClassModal()"
+            >
+
+                <span>＋</span>
+
+                Add Class
+
+            </button>
+
+        </div>
+
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Program / Branch
+                        </th>
+
+                        <th>
+                            Year
+                        </th>
+
+                        <th>
+                            Semester
+                        </th>
+
+                        <th>
+                            Section
+                        </th>
+
+                        <th>
+                            Subject
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="classesTableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+
+<!-- =========================
+     ADD CLASS MODAL
+========================= -->
+
+<div
+    class="modal-overlay"
+    id="addClassModal"
+>
+
+    <div class="modal">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+            <div class="modal-title">
+
+                <div class="modal-title-icon">
+                    ＋
+                </div>
+
+                <div>
+
+                    <h2>
+                        Add New Class
+                    </h2>
+
+                    <p>
+                        Configure the academic details for your class.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="close-btn"
+                type="button"
+                onclick="closeAddClassModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <!-- MODAL BODY -->
+
+        <div class="modal-body">
+
+
+            <div class="form-intro">
+
+                Select the academic hierarchy in order:
+                <strong>Department → Program → Year → Semester → Section</strong>,
+                then choose the subject.
+
+            </div>
+
+
+            <div class="form-grid">
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="form-group full">
+
+                    <label for="department">
+                        Department
+                    </label>
+
+                    <select
+                        id="department"
+                        onchange="loadPrograms()"
+                    >
+
+                        <option value="">
+                            Select Department
+                        </option>
+
+                        <option value="Engineering and Technology">
+                            Engineering and Technology
+                        </option>
+
+                        <option value="Management">
+                            Management
+                        </option>
+
+                        <option value="Computer Applications">
+                            Computer Applications
+                        </option>
+
+                        <option value="Science and Humanities">
+                            Science and Humanities
+                        </option>
+
+                        <option value="Medicine and Health Sciences">
+                            Medicine and Health Sciences
+                        </option>
+
+                        <option value="Hotel Management">
+                            Hotel Management
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- PROGRAM -->
+
+                <div class="form-group">
+
+                    <label for="program">
+                        Program / Branch
+                    </label>
+
+                    <select
+                        id="program"
+                        onchange="loadYears()"
+                        disabled
+                    >
+
+                        <option value="">
+                            Select Program / Branch
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- YEAR -->
+
+                <div class="form-group">
+
+                    <label for="year">
+                        Year
+                    </label>
+
+                    <select
+                        id="year"
+                        onchange="loadSemesters()"
+                        disabled
+                    >
+
+                        <option value="">
+                            Select Year
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- SEMESTER -->
+
+                <div class="form-group">
+
+                    <label for="semester">
+                        Semester
+                    </label>
+
+                    <select
+                        id="semester"
+                        onchange="loadSections()"
+                        disabled
+                    >
+
+                        <option value="">
+                            Select Semester
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- SECTION -->
+
+                <div class="form-group">
+
+                    <label for="section">
+                        Section
+                    </label>
+
+                    <select
+                        id="section"
+                        disabled
+                    >
+
+                        <option value="">
+                            Select Section
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- SUBJECT -->
+
+                <div class="form-group full">
+
+                    <label for="subject">
+                        Subject
+                    </label>
+
+                    <select
+                        id="subject"
+                    >
+
+                        <option value="">
+                            Select Subject
+                        </option>
+
+                    </select>
+
+                    <div class="field-hint">
+                        Choose the subject that belongs to this class.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="classError"
+                class="error"
+            ></div>
+
+        </div>
+
+
+
+        <!-- MODAL FOOTER -->
+
+        <div class="modal-footer">
+
+            <button
+                class="cancel-btn"
+                type="button"
+                onclick="closeAddClassModal()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                class="btn-primary"
+                type="button"
+                onclick="saveClass()"
+            >
+                Save Class
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   FACULTY DATA
+===================================================== */
+
+let faculty = null;
+
+try{
+
+    faculty =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexFaculty"
+            ) || "null"
+        );
+
+}catch(error){
+
+    console.error(
+        "Faculty data error:",
+        error
+    );
+
+}
+
+
+/* =====================================================
+   PROGRAM DATA
+===================================================== */
+
+const programs = {
+
+    "Engineering and Technology":[
+
+        "B.Tech in Computer Science & Engineering (CSE)",
+
+        "B.Tech in Computer Science and Engineering (CSE) – Data Science",
+
+        "B.Tech in Computer Science and Engineering (CSE) – Cyber Security",
+
+        "B.Tech in Computer Science and Engineering (CSE) – Artificial Intelligence & Machine Learning",
+
+        "B.Tech in Computer Science and Engineering (CSE) – Cloud Computing",
+
+        "B.Tech in Electronics & Communication Engineering",
+
+        "B.Tech Electronics & Communication Engineering – Data Science",
+
+        "B.Tech in Electronics Engineering (VLSI Design and Technology)",
+
+        "B.Tech in Mechanical Engineering",
+
+        "B.Tech in Automobile Engineering"
+
+    ],
+
+    "Management":[
+
+        "Bachelor of Business Administration (BBA)"
+
+    ],
+
+    "Computer Applications":[
+
+        "Bachelor of Computer Applications (BCA)",
+
+        "BCA in Data Science"
+
+    ],
+
+    "Science and Humanities":[
+
+        "B.Sc. (Computer Science)"
+
+    ],
+
+    "Medicine and Health Sciences":[
+
+        "Medicine and Health Sciences"
+
+    ],
+
+    "Hotel Management":[
+
+        "B.Sc. in Hotel and Hospitality Administration"
+
+    ]
+
+};
+
+
+/* =====================================================
+   SUBJECT DATA
+===================================================== */
+
+const subjects = [
+
+    "Java Programming",
+
+    "Operating Systems",
+
+    "Database Management Systems",
+
+    "Computer Networks",
+
+    "Data Structures",
+
+    "Web Technology",
+
+    "Software Engineering",
+
+    "Mathematics"
+
+];
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadFaculty();
+
+        loadSubjects();
+
+        renderClasses();
+
+        updateStats();
+
+        showCurrentDate();
+
+    }
+);
+
+
+/* =====================================================
+   LOAD FACULTY
+===================================================== */
+
+function loadFaculty(){
+
+    if(!faculty){
+
+        document.getElementById(
+            "headerFacultyName"
+        ).textContent =
+            "Faculty";
+
+        document.getElementById(
+            "headerFacultyId"
+        ).textContent =
+            "Faculty ID";
+
+        return;
+    }
+
+
+    document.getElementById(
+        "headerFacultyName"
+    ).textContent =
+        faculty.name ||
+        "Faculty";
+
+
+    document.getElementById(
+        "headerFacultyId"
+    ).textContent =
+        faculty.id ||
+        "Faculty ID";
+
+
+    const photo =
+        document.getElementById(
+            "headerFacultyPhoto"
+        );
+
+
+    if(faculty.profilePhoto){
+
+        photo.src =
+            faculty.profilePhoto;
+
+    }else{
+
+        photo.src =
+            "srm-logo.png";
+
+    }
+
+}
+
+
+/* =====================================================
+   CURRENT DATE
+===================================================== */
+
+function showCurrentDate(){
+
+    const date =
+        new Date();
+
+
+    const formatted =
+        date.toLocaleDateString(
+            "en-IN",
+            {
+                weekday:"short",
+                day:"2-digit",
+                month:"short",
+                year:"numeric"
+            }
+        );
+
+
+    document.getElementById(
+        "currentDate"
+    ).textContent =
+        formatted;
+
+}
+
+
+/* =====================================================
+   LOAD SUBJECTS
+===================================================== */
+
+function loadSubjects(){
+
+    const select =
+        document.getElementById(
+            "subject"
+        );
+
+
+    subjects.forEach(
+        function(subject){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                subject;
+
+            option.textContent =
+                subject;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD PROGRAMS
+===================================================== */
+
+function loadPrograms(){
+
+    const department =
+        document.getElementById(
+            "department"
+        ).value;
+
+
+    const programSelect =
+        document.getElementById(
+            "program"
+        );
+
+    const yearSelect =
+        document.getElementById(
+            "year"
+        );
+
+    const semesterSelect =
+        document.getElementById(
+            "semester"
+        );
+
+    const sectionSelect =
+        document.getElementById(
+            "section"
+        );
+
+
+    programSelect.innerHTML =
+        '<option value="">Select Program / Branch</option>';
+
+    yearSelect.innerHTML =
+        '<option value="">Select Year</option>';
+
+    semesterSelect.innerHTML =
+        '<option value="">Select Semester</option>';
+
+    sectionSelect.innerHTML =
+        '<option value="">Select Section</option>';
+
+
+    programSelect.disabled =
+        true;
+
+    yearSelect.disabled =
+        true;
+
+    semesterSelect.disabled =
+        true;
+
+    sectionSelect.disabled =
+        true;
+
+
+    if(!department){
+
+        return;
+    }
+
+
+    const departmentPrograms =
+        programs[department] || [];
+
+
+    departmentPrograms.forEach(
+        function(program){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                program;
+
+            option.textContent =
+                program;
+
+            programSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    programSelect.disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   LOAD YEARS
+===================================================== */
+
+function loadYears(){
+
+    const program =
+        document.getElementById(
+            "program"
+        ).value;
+
+
+    const yearSelect =
+        document.getElementById(
+            "year"
+        );
+
+    const semesterSelect =
+        document.getElementById(
+            "semester"
+        );
+
+    const sectionSelect =
+        document.getElementById(
+            "section"
+        );
+
+
+    yearSelect.innerHTML =
+        '<option value="">Select Year</option>';
+
+    semesterSelect.innerHTML =
+        '<option value="">Select Semester</option>';
+
+    sectionSelect.innerHTML =
+        '<option value="">Select Section</option>';
+
+
+    semesterSelect.disabled =
+        true;
+
+    sectionSelect.disabled =
+        true;
+
+
+    if(!program){
+
+        yearSelect.disabled =
+            true;
+
+        return;
+    }
+
+
+    const years = [
+
+        "1st Year",
+        "2nd Year",
+        "3rd Year",
+        "4th Year"
+
+    ];
+
+
+    years.forEach(
+        function(year){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                year;
+
+            option.textContent =
+                year;
+
+            yearSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    yearSelect.disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   LOAD SEMESTERS
+===================================================== */
+
+function loadSemesters(){
+
+    const year =
+        document.getElementById(
+            "year"
+        ).value;
+
+
+    const semesterSelect =
+        document.getElementById(
+            "semester"
+        );
+
+
+    const sectionSelect =
+        document.getElementById(
+            "section"
+        );
+
+
+    semesterSelect.innerHTML =
+        '<option value="">Select Semester</option>';
+
+    sectionSelect.innerHTML =
+        '<option value="">Select Section</option>';
+
+
+    sectionSelect.disabled =
+        true;
+
+
+    if(!year){
+
+        semesterSelect.disabled =
+            true;
+
+        return;
+    }
+
+
+    let semesterNumbers = [];
+
+
+    if(year === "1st Year"){
+
+        semesterNumbers =
+            [1,2];
+
+    }else if(year === "2nd Year"){
+
+        semesterNumbers =
+            [3,4];
+
+    }else if(year === "3rd Year"){
+
+        semesterNumbers =
+            [5,6];
+
+    }else if(year === "4th Year"){
+
+        semesterNumbers =
+            [7,8];
+
+    }
+
+
+    semesterNumbers.forEach(
+        function(number){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                "Semester " + number;
+
+            option.textContent =
+                "Semester " + number;
+
+            semesterSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    semesterSelect.disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   LOAD SECTIONS
+===================================================== */
+
+function loadSections(){
+
+    const semester =
+        document.getElementById(
+            "semester"
+        ).value;
+
+
+    const sectionSelect =
+        document.getElementById(
+            "section"
+        );
+
+
+    sectionSelect.innerHTML =
+        '<option value="">Select Section</option>';
+
+
+    sectionSelect.disabled =
+        true;
+
+
+    if(!semester){
+
+        return;
+    }
+
+
+    const sections = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+    ];
+
+
+    sections.forEach(
+        function(section){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                section;
+
+            option.textContent =
+                "Section " + section;
+
+            sectionSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    sectionSelect.disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   OPEN MODAL
+===================================================== */
+
+function openAddClassModal(){
+
+    document
+        .getElementById(
+            "addClassModal"
+        )
+        .classList.add(
+            "show"
+        );
+
+
+    document.getElementById(
+        "classError"
+    ).textContent =
+        "";
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
+function closeAddClassModal(){
+
+    document
+        .getElementById(
+            "addClassModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    resetForm();
+
+}
+
+
+/* =====================================================
+   RESET FORM
+===================================================== */
+
+function resetForm(){
+
+    const department =
+        document.getElementById(
+            "department"
+        );
+
+    const program =
+        document.getElementById(
+            "program"
+        );
+
+    const year =
+        document.getElementById(
+            "year"
+        );
+
+    const semester =
+        document.getElementById(
+            "semester"
+        );
+
+    const section =
+        document.getElementById(
+            "section"
+        );
+
+    const subject =
+        document.getElementById(
+            "subject"
+        );
+
+
+    department.value =
+        "";
+
+    program.innerHTML =
+        '<option value="">Select Program / Branch</option>';
+
+    year.innerHTML =
+        '<option value="">Select Year</option>';
+
+    semester.innerHTML =
+        '<option value="">Select Semester</option>';
+
+    section.innerHTML =
+        '<option value="">Select Section</option>';
+
+    subject.value =
+        "";
+
+
+    program.disabled =
+        true;
+
+    year.disabled =
+        true;
+
+    semester.disabled =
+        true;
+
+    section.disabled =
+        true;
+
+
+    document.getElementById(
+        "classError"
+    ).textContent =
+        "";
+
+}
+
+
+/* =====================================================
+   SAVE CLASS
+===================================================== */
+
+function saveClass(){
+
+    const department =
+        document.getElementById(
+            "department"
+        ).value;
+
+    const program =
+        document.getElementById(
+            "program"
+        ).value;
+
+    const year =
+        document.getElementById(
+            "year"
+        ).value;
+
+    const semester =
+        document.getElementById(
+            "semester"
+        ).value;
+
+    const section =
+        document.getElementById(
+            "section"
+        ).value;
+
+    const subject =
+        document.getElementById(
+            "subject"
+        ).value;
+
+    const error =
+        document.getElementById(
+            "classError"
+        );
+
+
+    error.textContent =
+        "";
+
+
+    if(
+        !department ||
+        !program ||
+        !year ||
+        !semester ||
+        !section ||
+        !subject
+    ){
+
+        error.textContent =
+            "Please select all class details before saving.";
+
+        return;
+    }
+
+
+    if(!faculty){
+
+        error.textContent =
+            "Faculty profile not found. Please login again.";
+
+        return;
+    }
+
+
+    let classes = [];
+
+
+    try{
+
+        classes =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexClasses"
+                ) || "[]"
+            );
+
+    }catch(e){
+
+        classes = [];
+
+    }
+
+
+    /* DUPLICATE CHECK */
+
+    const duplicate =
+        classes.some(
+            function(cls){
+
+                return (
+
+                    String(
+                        cls.facultyId
+                    ) === String(
+                        faculty.id
+                    )
+
+                    &&
+
+                    normalize(
+                        cls.department
+                    ) === normalize(
+                        department
+                    )
+
+                    &&
+
+                    normalize(
+                        cls.program
+                    ) === normalize(
+                        program
+                    )
+
+                    &&
+
+                    normalizeYear(
+                        cls.year
+                    ) === normalizeYear(
+                        year
+                    )
+
+                    &&
+
+                    normalizeSemester(
+                        cls.semester
+                    ) === normalizeSemester(
+                        semester
+                    )
+
+                    &&
+
+                    normalizeSection(
+                        cls.section
+                    ) === normalizeSection(
+                        section
+                    )
+
+                    &&
+
+                    normalize(
+                        cls.subject
+                    ) === normalize(
+                        subject
+                    )
+
+                );
+
+            }
+        );
+
+
+    if(duplicate){
+
+        error.textContent =
+            "This class is already added to your dashboard.";
+
+        return;
+    }
+
+
+    /* CREATE CLASS */
+
+    const newClass = {
+
+        id:
+            Date.now(),
+
+        facultyId:
+            faculty.id || "",
+
+        facultyName:
+            faculty.name || "",
+
+        department:
+            department,
+
+        program:
+            program,
+
+        year:
+            year,
+
+        semester:
+            semester,
+
+        section:
+            section,
+
+        subject:
+            subject
+
+    };
+
+
+    classes.push(
+        newClass
+    );
+
+
+    localStorage.setItem(
+        "snapdexClasses",
+        JSON.stringify(
+            classes
+        )
+    );
+
+
+    closeAddClassModal();
+
+    renderClasses();
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   GET FACULTY CLASSES
+===================================================== */
+
+function getFacultyClasses(){
+
+    if(!faculty){
+
+        return [];
+    }
+
+
+    let classes = [];
+
+
+    try{
+
+        classes =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexClasses"
+                ) || "[]"
+            );
+
+    }catch(e){
+
+        return [];
+    }
+
+
+    return classes.filter(
+        function(cls){
+
+            return String(
+                cls.facultyId
+            ) === String(
+                faculty.id
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   RENDER CLASSES
+===================================================== */
+
+function renderClasses(){
+
+    const tbody =
+        document.getElementById(
+            "classesTableBody"
+        );
+
+
+    const classes =
+        getFacultyClasses();
+
+
+    tbody.innerHTML =
+        "";
+
+
+    if(classes.length === 0){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty"
+                >
+
+                    <div class="empty-icon">
+                        ▦
+                    </div>
+
+                    <strong>
+                        No classes added yet
+                    </strong>
+
+                    Click "Add Class" to create your first class.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    classes.forEach(
+        function(cls){
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        cls.department
+                    )}
+                </td>
+
+
+                <td>
+
+                    <div class="program-cell">
+
+                        ${escapeHtml(
+                            cls.program
+                        )}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        cls.year
+                    )}
+                </td>
+
+
+                <td>
+
+                    <span class="badge">
+
+                        ${escapeHtml(
+                            cls.semester
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="section-badge">
+
+                        ${escapeHtml(
+                            cls.section
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <div class="subject-name">
+
+                        ${escapeHtml(
+                            cls.subject
+                        )}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="btn-attendance"
+                            onclick="takeAttendance(${Number(cls.id)})"
+                        >
+                            ◉ Take Attendance
+                        </button>
+
+
+                        <button
+                            class="btn-danger"
+                            onclick="deleteClass(${Number(cls.id)})"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   TAKE ATTENDANCE
+===================================================== */
+
+function takeAttendance(classId){
+
+    let classes = [];
+
+
+    try{
+
+        classes =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexClasses"
+                ) || "[]"
+            );
+
+    }catch(e){
+
+        alert(
+            "Unable to load classes."
+        );
+
+        return;
+    }
+
+
+    const selectedClass =
+        classes.find(
+            function(cls){
+
+                return String(
+                    cls.id
+                ) === String(
+                    classId
+                );
+
+            }
+        );
+
+
+    if(!selectedClass){
+
+        alert(
+            "Class not found."
+        );
+
+        return;
+    }
+
+
+    localStorage.setItem(
+        "snapdexSelectedClass",
+        JSON.stringify(
+            selectedClass
+        )
+    );
+
+
+    localStorage.setItem(
+        "snapdexAttendanceClass",
+        JSON.stringify(
+            selectedClass
+        )
+    );
+
+
+    /* CLEAR OLD ATTENDANCE PHOTOS */
+
+    localStorage.removeItem(
+        "snapdexAttendancePhotos"
+    );
+
+
+    localStorage.removeItem(
+        "snapdexCurrentAttendance"
+    );
+
+
+    window.location.href =
+        "takeattendance.html";
+
+}
+
+
+/* =====================================================
+   DELETE CLASS
+===================================================== */
+
+function deleteClass(classId){
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete this class?"
+        );
+
+
+    if(!confirmDelete){
+
+        return;
+    }
+
+
+    let classes = [];
+
+
+    try{
+
+        classes =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexClasses"
+                ) || "[]"
+            );
+
+    }catch(e){
+
+        classes = [];
+
+    }
+
+
+    classes =
+        classes.filter(
+            function(cls){
+
+                return String(
+                    cls.id
+                ) !== String(
+                    classId
+                );
+
+            }
+        );
+
+
+    localStorage.setItem(
+        "snapdexClasses",
+        JSON.stringify(
+            classes
+        )
+    );
+
+
+    renderClasses();
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   UPDATE STATS
+===================================================== */
+
+function updateStats(){
+
+    const classes =
+        getFacultyClasses();
+
+
+    /* CLASSES */
+
+    document.getElementById(
+        "classCount"
+    ).textContent =
+        classes.length;
+
+
+    /* SUBJECTS */
+
+    const uniqueSubjects =
+        new Set();
+
+
+    classes.forEach(
+        function(cls){
+
+            if(cls.subject){
+
+                uniqueSubjects.add(
+                    normalize(
+                        cls.subject
+                    )
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "subjectCount"
+    ).textContent =
+        uniqueSubjects.size;
+
+
+    /* STUDENTS */
+
+    let students = [];
+
+
+    try{
+
+        students =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudents"
+                ) || "[]"
+            );
+
+    }catch(e){
+
+        students = [];
+
+    }
+
+
+    /* LEGACY STUDENT */
+
+    try{
+
+        const singleStudent =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudent"
+                ) || "null"
+            );
+
+
+        if(
+            singleStudent &&
+            singleStudent.registrationNumber &&
+            !students.some(
+                function(student){
+
+                    return String(
+                        student.registrationNumber
+                    ) === String(
+                        singleStudent.registrationNumber
+                    );
+
+                }
+            )
+        ){
+
+            students.push(
+                singleStudent
+            );
+
+        }
+
+    }catch(e){}
+
+
+    const matchedStudentIds =
+        new Set();
+
+
+    students.forEach(
+        function(student){
+
+            const matched =
+                classes.some(
+                    function(cls){
+
+                        return (
+
+                            normalize(
+                                student.department
+                            ) ===
+                            normalize(
+                                cls.department
+                            )
+
+                            &&
+
+                            normalize(
+                                student.program
+                            ) ===
+                            normalize(
+                                cls.program
+                            )
+
+                            &&
+
+                            normalizeYear(
+                                student.year
+                            ) ===
+                            normalizeYear(
+                                cls.year
+                            )
+
+                            &&
+
+                            normalizeSemester(
+                                student.semester
+                            ) ===
+                            normalizeSemester(
+                                cls.semester
+                            )
+
+                            &&
+
+                            normalizeSection(
+                                student.section
+                            ) ===
+                            normalizeSection(
+                                cls.section
+                            )
+
+                        );
+
+                    }
+                );
+
+
+            if(matched){
+
+                const studentId =
+                    student.registrationNumber ||
+                    student.id ||
+                    student.email ||
+                    student.name;
+
+
+                matchedStudentIds.add(
+                    String(
+                        studentId
+                    )
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "studentCount"
+    ).textContent =
+        matchedStudentIds.size;
+
+
+    /* TODAY'S SESSIONS */
+
+    let history = [];
+
+
+    try{
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexAttendanceHistory"
+                ) || "[]"
+            );
+
+    }catch(e){
+
+        history = [];
+
+    }
+
+
+    const today =
+        new Date()
+            .toISOString()
+            .slice(0,10);
+
+
+    const todaySessions =
+        history.filter(
+            function(session){
+
+                if(
+                    faculty &&
+                    session.facultyId &&
+                    String(
+                        session.facultyId
+                    ) !== String(
+                        faculty.id
+                    )
+                ){
+
+                    return false;
+
+                }
+
+
+                const dateValue =
+                    session.dateTime ||
+                    session.date ||
+                    "";
+
+
+                if(!dateValue){
+
+                    return false;
+
+                }
+
+
+                try{
+
+                    return new Date(
+                        dateValue
+                    )
+                    .toISOString()
+                    .slice(0,10) ===
+                    today;
+
+                }catch(e){
+
+                    return false;
+
+                }
+
+            }
+        );
+
+
+    document.getElementById(
+        "sessionCount"
+    ).textContent =
+        todaySessions.length;
+
+}
+
+
+/* =====================================================
+   NORMALIZATION
+===================================================== */
+
+function normalize(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function normalizeYear(value){
+
+    const text =
+        normalize(
+            value
+        );
+
+
+    const match =
+        text.match(
+            /\d+/
+        );
+
+
+    return match
+        ? match[0]
+        : text;
+
+}
+
+
+function normalizeSemester(value){
+
+    const text =
+        normalize(
+            value
+        );
+
+
+    const match =
+        text.match(
+            /\d+/
+        );
+
+
+    return match
+        ? match[0]
+        : text;
+
+}
+
+
+function normalizeSection(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /section/gi,
+        ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    const confirmLogout =
+        confirm(
+            "Are you sure you want to logout?"
+        );
+
+
+    if(!confirmLogout){
+
+        return;
+    }
+
+
+    /*
+       IMPORTANT:
+       Faculty profile is NOT deleted.
+       Only current login session is removed.
+    */
+
+    sessionStorage.removeItem(
+        "snapdexCurrentUser"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL ON OUTSIDE CLICK
+===================================================== */
+
+document
+    .getElementById(
+        "addClassModal"
+    )
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                closeAddClassModal();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   ESC KEY CLOSE MODAL
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Escape"
+        ){
+
+            const modal =
+                document.getElementById(
+                    "addClassModal"
+                );
+
+
+            if(
+                modal.classList.contains(
+                    "show"
+                )
+            ){
+
+                closeAddClassModal();
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

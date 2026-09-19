@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SnapDex - Student Dashboard</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+    color:#06245c;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:300px;
+    background:white;
+    border-right:1px solid #dce3ed;
+    padding:35px 22px;
+    flex-shrink:0;
+}
+
+.logo{
+    font-size:36px;
+    font-weight:800;
+    margin:0 20px 55px;
+    color:#071d49;
+}
+
+.logo span{
+    color:#1769e0;
+}
+
+.menu-title{
+    font-size:14px;
+    color:#71809b;
+    margin:0 20px 18px;
+    font-weight:600;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#071d49;
+    padding:17px 20px;
+    border-radius:13px;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:pointer;
+}
+
+.menu a:hover{
+    background:#eef4ff;
+}
+
+.menu a.active{
+    background:#dceaff;
+    color:#075bdc;
+    font-weight:700;
+}
+
+.account{
+    margin-top:35px;
+}
+
+.logout{
+    color:red !important;
+}
+
+
+/* ================= MAIN ================= */
+
+.main{
+    flex:1;
+    padding:35px 45px;
+    min-width:0;
+}
+
+
+/* ================= TOP ================= */
+
+.top{
+    background:white;
+    border-bottom:1px solid #dce3ed;
+    margin:-35px -45px 30px;
+    padding:20px 45px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.srm{
+    width:60px;
+    height:60px;
+    background:#edf3ff;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#075bdc;
+    font-size:22px;
+    font-weight:800;
+}
+
+.brand-name{
+    font-size:30px;
+    font-weight:800;
+    color:#071d49;
+}
+
+.brand-name span{
+    color:#1769e0;
+}
+
+.brand-sub{
+    font-size:15px;
+    color:#61728f;
+    margin-top:5px;
+}
+
+.student-info{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    text-align:right;
+}
+
+.student-info img{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #d8e1ef;
+}
+
+.student-name{
+    font-size:17px;
+    font-weight:700;
+    color:#071d49;
+}
+
+.student-reg{
+    font-size:14px;
+    color:#61728f;
+    margin-top:5px;
+}
+
+
+/* ================= WELCOME ================= */
+
+.welcome{
+    background:linear-gradient(120deg,#2365ec,#4a43df);
+    color:white;
+    border-radius:24px;
+    padding:38px 40px;
+    margin-bottom:30px;
+}
+
+.welcome h1{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.welcome p{
+    font-size:18px;
+}
+
+
+/* ================= STATS ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:22px;
+    margin-bottom:30px;
+}
+
+.stat{
+    background:white;
+    border:1px solid #dce3ed;
+    border-radius:18px;
+    padding:28px;
+}
+
+.stat-title{
+    color:#627492;
+    font-size:16px;
+    margin-bottom:18px;
+}
+
+.stat-value{
+    font-size:42px;
+    font-weight:800;
+    color:#1769e0;
+}
+
+.present{
+    color:#08a63d !important;
+}
+
+.absent{
+    color:#ef2029 !important;
+}
+
+
+/* ================= CARD ================= */
+
+.card{
+    background:white;
+    border:1px solid #dce3ed;
+    border-radius:20px;
+    padding:30px;
+    margin-bottom:30px;
+}
+
+.card h2{
+    font-size:28px;
+    color:#071d49;
+    margin-bottom:8px;
+}
+
+.card-sub{
+    color:#627492;
+    margin-bottom:25px;
+}
+
+
+/* ================= ACADEMIC ================= */
+
+.academic{
+    background:#f7f9fc;
+    border:1px solid #e0e6ef;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:25px;
+    line-height:1.8;
+    font-size:16px;
+}
+
+
+/* ================= TABLE ================= */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#f1f5fa;
+    text-align:left;
+    padding:17px;
+    font-size:14px;
+    color:#071d49;
+}
+
+td{
+    padding:18px 17px;
+    border-bottom:1px solid #e6ebf2;
+    color:#173764;
+}
+
+.subject{
+    font-weight:700;
+    color:#071d49;
+}
+
+.teacher{
+    color:#536887;
+}
+
+.badge{
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:20px;
+    background:#eef3ff;
+    color:#075bdc;
+    font-weight:700;
+}
+
+.badge.present-badge{
+    background:#e4f8eb;
+    color:#08a63d;
+}
+
+.badge.absent-badge{
+    background:#ffe7e8;
+    color:#ef2029;
+}
+
+.empty{
+    text-align:center;
+    padding:40px;
+    background:#f8fafc;
+    border-radius:14px;
+    color:#71809b;
+}
+
+
+/* ================= PROFILE MODAL ================= */
+
+.profile-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(7,29,73,.45);
+    backdrop-filter:blur(5px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:20px;
+}
+
+.profile-overlay.show{
+    display:flex;
+}
+
+.profile-modal{
+    width:100%;
+    max-width:500px;
+    background:white;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 25px 60px rgba(0,0,0,.2);
+}
+
+.profile-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.profile-header h2{
+    color:#071d49;
+}
+
+.close-btn{
+    border:none;
+    background:#f1f5f9;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.profile-photo{
+    display:flex;
+    justify-content:center;
+    margin-bottom:20px;
+}
+
+.profile-photo img{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #e1eaff;
+}
+
+.profile-details{
+    display:grid;
+    gap:12px;
+}
+
+.profile-row{
+    background:#f7f9fc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px 15px;
+}
+
+.profile-row strong{
+    display:block;
+    font-size:12px;
+    color:#71809b;
+    margin-bottom:4px;
+}
+
+.profile-row span{
+    font-size:15px;
+    color:#071d49;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:1000px){
+
+    .sidebar{
+        width:230px;
+    }
+
+    .main{
+        padding:25px;
+    }
+
+    .top{
+        margin:-25px -25px 25px;
+        padding:18px 25px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px){
+
+    .app{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        padding:20px;
+    }
+
+    .logo{
+        margin-bottom:25px;
+    }
+
+    .menu{
+        flex-direction:row;
+        flex-wrap:wrap;
+    }
+
+    .menu a{
+        font-size:14px;
+        padding:12px;
+    }
+
+    .main{
+        padding:18px;
+    }
+
+    .top{
+        margin:-18px -18px 20px;
+        padding:15px 18px;
+    }
+
+    .brand-sub{
+        display:none;
+    }
+
+    .brand-name{
+        font-size:22px;
+    }
+
+    .student-info div{
+        display:none;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .welcome h1{
+        font-size:28px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Snap<span>Dex</span>
+    </div>
+
+    <div class="menu-title">
+        MAIN
+    </div>
+
+    <nav class="menu">
+
+        <a class="active" onclick="showDashboard()">
+            🏠 Dashboard
+        </a>
+
+        <a onclick="scrollToSubjects()">
+            📚 My Subjects
+        </a>
+
+        <a onclick="scrollToAttendance()">
+            ✓ Attendance
+        </a>
+
+        <a onclick="scrollToHistory()">
+            🗓️ Attendance History
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title account">
+        ACCOUNT
+    </div>
+
+
+    <nav class="menu">
+
+        <a onclick="showProfile()">
+            👤 My Profile
+        </a>
+
+        <a class="logout" onclick="logout()">
+            ↪ Logout
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+<header class="top">
+
+    <div class="brand">
+
+        <div class="srm">
+            SRM
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+            <div class="brand-sub">
+                Smart Attendance • SRM Institute of Science and Technology
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="student-info">
+
+        <div>
+
+            <div class="student-name" id="topStudentName">
+                Student
+            </div>
+
+            <div class="student-reg" id="topStudentReg">
+                -
+            </div>
+
+        </div>
+
+        <img
+            id="studentPhoto"
+            src=""
+            alt="Student"
+        >
+
+    </div>
+
+</header>
+
+
+<!-- ================= WELCOME ================= -->
+
+<section class="welcome">
+
+    <h1>
+        Welcome, <span id="welcomeName">Student</span> 👋
+    </h1>
+
+    <p>
+        Track your attendance and academic subjects from one place.
+    </p>
+
+</section>
+
+
+<!-- ================= STATS ================= -->
+
+<section class="stats">
+
+    <div class="stat">
+
+        <div class="stat-title">
+            Overall Attendance
+        </div>
+
+        <div
+            class="stat-value"
+            id="overallAttendance"
+        >
+            0%
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-title">
+            Total Subjects
+        </div>
+
+        <div
+            class="stat-value"
+            id="totalSubjects"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-title">
+            Classes Attended
+        </div>
+
+        <div
+            class="stat-value present"
+            id="classesPresent"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-title">
+            Classes Missed
+        </div>
+
+        <div
+            class="stat-value absent"
+            id="classesAbsent"
+        >
+            0
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SUBJECTS ================= -->
+
+<section
+    class="card"
+    id="subjectsSection"
+>
+
+    <h2>
+        My Subjects
+    </h2>
+
+    <div class="card-sub">
+        Subjects assigned to your academic section.
+    </div>
+
+
+    <div class="academic">
+
+        <b>Program / Branch:</b>
+        <span id="studentProgram">-</span>
+
+        <br>
+
+        <b>Year:</b>
+        <span id="studentYear">-</span>
+
+        &nbsp; • &nbsp;
+
+        <b>Semester:</b>
+        <span id="studentSemester">-</span>
+
+        &nbsp; • &nbsp;
+
+        <b>Section:</b>
+        <span id="studentSection">-</span>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Subject</th>
+
+                    <th>Teacher</th>
+
+                    <th>Total Classes</th>
+
+                    <th>Present</th>
+
+                    <th>Absent</th>
+
+                    <th>Attendance</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="subjectTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ATTENDANCE ================= -->
+
+<section
+    class="card"
+    id="attendanceSection"
+>
+
+    <h2>
+        Attendance
+    </h2>
+
+    <div class="card-sub">
+        Your current attendance summary.
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Subject</th>
+
+                    <th>Total Classes</th>
+
+                    <th>Present</th>
+
+                    <th>Absent</th>
+
+                    <th>Attendance</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="attendanceTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ================= HISTORY ================= -->
+
+<section
+    class="card"
+    id="historySection"
+>
+
+    <h2>
+        Attendance History
+    </h2>
+
+    <div class="card-sub">
+        Your finalized attendance records.
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Date & Time</th>
+
+                    <th>Subject</th>
+
+                    <th>Section</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="historyTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<!-- ================= PROFILE MODAL ================= -->
+
+<div
+    class="profile-overlay"
+    id="profileOverlay"
+    onclick="closeProfile(event)"
+>
+
+    <div
+        class="profile-modal"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="profile-header">
+
+            <h2>
+                My Profile
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeProfile()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="profile-photo">
+
+            <img
+                id="profilePhoto"
+                src=""
+                alt="Profile"
+            >
+
+        </div>
+
+
+        <div class="profile-details">
+
+            <div class="profile-row">
+
+                <strong>Name</strong>
+
+                <span id="profileName">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Registration Number</strong>
+
+                <span id="profileReg">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Email</strong>
+
+                <span id="profileEmail">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Department</strong>
+
+                <span id="profileDepartment">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Program / Branch</strong>
+
+                <span id="profileProgram">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Year</strong>
+
+                <span id="profileYear">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Semester</strong>
+
+                <span id="profileSemester">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <strong>Section</strong>
+
+                <span id="profileSection">
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   STUDENT
+===================================================== */
+
+let student = null;
+
+
+/* =====================================================
+   LOAD EXACT LOGGED-IN STUDENT
+===================================================== */
+
+function loadStudent(){
+
+    student = null;
+
+
+    /* =================================================
+       1. MOST IMPORTANT:
+          SESSION STORAGE
+          This contains EXACT student who logged in.
+    ================================================= */
+
+    try{
+
+        const currentUser =
+            JSON.parse(
+                sessionStorage.getItem(
+                    "snapdexCurrentUser"
+                ) || "null"
+            );
+
+        const role =
+            sessionStorage.getItem(
+                "snapdexUserRole"
+            );
+
+
+        if(
+            currentUser &&
+            role === "student"
+        ){
+
+            student =
+                currentUser;
+
+            console.log(
+                "SnapDex Logged-in Student:",
+                student
+            );
+
+            return;
+        }
+
+    }catch(error){
+
+        console.error(
+            "Unable to load current student:",
+            error
+        );
+
+    }
+
+
+    /* =================================================
+       2. LOGGED-IN STUDENT LOCAL STORAGE
+    ================================================= */
+
+    try{
+
+        const loggedInStudent =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexLoggedInStudent"
+                ) || "null"
+            );
+
+        if(loggedInStudent){
+
+            student =
+                loggedInStudent;
+
+            console.log(
+                "SnapDex Local Logged-in Student:",
+                student
+            );
+
+            return;
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+
+    /* =================================================
+       3. LEGACY STORAGE
+    ================================================= */
+
+    try{
+
+        const legacyStudent =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudent"
+                ) || "null"
+            );
+
+        if(legacyStudent){
+
+            student =
+                legacyStudent;
+
+            console.log(
+                "SnapDex Legacy Student:",
+                student
+            );
+
+            return;
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+
+    /* =================================================
+       4. LAST FALLBACK
+    ================================================= */
+
+    try{
+
+        const students =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudents"
+                ) || "[]"
+            );
+
+        if(
+            Array.isArray(students) &&
+            students.length > 0
+        ){
+
+            student =
+                students[0];
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   NORMALIZATION
+===================================================== */
+
+function normalize(value){
+
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g," ");
+
+}
+
+
+function normalizeRegistration(value){
+
+    return String(value || "")
+        .trim()
+        .toUpperCase();
+
+}
+
+
+function normalizeSemester(value){
+
+    return normalize(value)
+        .replace(/^semester\s*/,"");
+
+}
+
+
+function normalizeYear(value){
+
+    return normalize(value)
+        .replace(/^year\s+/,"");
+
+}
+
+
+function normalizeSection(value){
+
+    return normalize(value)
+        .replace(/^section\s*/,"");
+
+}
+
+
+/* =====================================================
+   STUDENT DETAILS
+===================================================== */
+
+function loadStudentDetails(){
+
+    if(!student){
+
+        document.getElementById(
+            "welcomeName"
+        ).textContent =
+            "Student";
+
+        return;
+    }
+
+
+    document.getElementById(
+        "welcomeName"
+    ).textContent =
+        student.name || "Student";
+
+
+    document.getElementById(
+        "topStudentName"
+    ).textContent =
+        student.name || "Student";
+
+
+    document.getElementById(
+        "topStudentReg"
+    ).textContent =
+        student.registrationNumber || "-";
+
+
+    document.getElementById(
+        "studentProgram"
+    ).textContent =
+        student.program || "-";
+
+
+    document.getElementById(
+        "studentYear"
+    ).textContent =
+        student.year || "-";
+
+
+    document.getElementById(
+        "studentSemester"
+    ).textContent =
+        student.semester || "-";
+
+
+    document.getElementById(
+        "studentSection"
+    ).textContent =
+        student.section || "-";
+
+
+    const photo =
+        document.getElementById(
+            "studentPhoto"
+        );
+
+
+    if(student.profilePhoto){
+
+        photo.src =
+            student.profilePhoto;
+
+        photo.style.display =
+            "block";
+
+    }else{
+
+        photo.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   CLASSES
+===================================================== */
+
+function getClasses(){
+
+    try{
+
+        const classes =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexClasses"
+                ) || "[]"
+            );
+
+        return Array.isArray(classes)
+            ? classes
+            : [];
+
+    }catch(error){
+
+        console.error(error);
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   CLASS MATCH
+===================================================== */
+
+function classMatchesStudent(cls){
+
+    if(!student || !cls){
+
+        return false;
+
+    }
+
+
+    return (
+
+        normalize(cls.department) ===
+        normalize(student.department)
+
+        &&
+
+        normalize(cls.program) ===
+        normalize(student.program)
+
+        &&
+
+        normalizeYear(cls.year) ===
+        normalizeYear(student.year)
+
+        &&
+
+        normalizeSemester(cls.semester) ===
+        normalizeSemester(student.semester)
+
+        &&
+
+        normalizeSection(cls.section) ===
+        normalizeSection(student.section)
+
+    );
+
+}
+
+
+/* =====================================================
+   MY CLASSES
+===================================================== */
+
+let myClasses = [];
+
+
+function loadMyClasses(){
+
+    const classes =
+        getClasses();
+
+
+    myClasses =
+        classes.filter(
+            classMatchesStudent
+        );
+
+
+    const seen =
+        new Set();
+
+
+    myClasses =
+        myClasses.filter(
+            function(cls){
+
+                const key =
+                    normalize(cls.subject)
+                    +
+                    "|"
+                    +
+                    normalize(
+                        cls.facultyId ||
+                        cls.facultyName ||
+                        ""
+                    );
+
+
+                if(seen.has(key)){
+
+                    return false;
+
+                }
+
+
+                seen.add(key);
+
+                return true;
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   ATTENDANCE HISTORY
+===================================================== */
+
+function getHistory(){
+
+    try{
+
+        const history =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexAttendanceHistory"
+                ) || "[]"
+            );
+
+        return Array.isArray(history)
+            ? history
+            : [];
+
+    }catch(error){
+
+        console.error(error);
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   STUDENT RECORD
+===================================================== */
+
+function getStudentRecord(session){
+
+    if(
+        !session ||
+        !student
+    ){
+
+        return null;
+
+    }
+
+
+    const records =
+        Array.isArray(session.records)
+        ? session.records
+        : [];
+
+
+    const studentReg =
+        normalizeRegistration(
+            student.registrationNumber
+        );
+
+
+    /*
+       Registration number is the strongest
+       identity check.
+    */
+
+    if(studentReg){
+
+        const record =
+            records.find(
+                function(record){
+
+                    return (
+                        normalizeRegistration(
+                            record.registrationNumber
+                        )
+                        ===
+                        studentReg
+                    );
+
+                }
+            );
+
+        if(record){
+
+            return record;
+
+        }
+
+    }
+
+
+    /*
+       Email fallback for older records.
+    */
+
+    const studentEmail =
+        normalize(
+            student.email
+        );
+
+
+    if(studentEmail){
+
+        const emailRecord =
+            records.find(
+                function(record){
+
+                    return (
+                        normalize(
+                            record.email
+                        )
+                        ===
+                        studentEmail
+                    );
+
+                }
+            );
+
+        if(emailRecord){
+
+            return emailRecord;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   SESSION MATCH
+===================================================== */
+
+function sessionMatchesStudent(session){
+
+    if(
+        !session ||
+        !student
+    ){
+
+        return false;
+
+    }
+
+
+    /*
+       Most reliable method:
+       attendance record contains student's
+       registration number.
+    */
+
+    const record =
+        getStudentRecord(session);
+
+
+    if(record){
+
+        return true;
+
+    }
+
+
+    /*
+       Academic fallback.
+    */
+
+    if(
+        session.section &&
+        student.section &&
+        normalizeSection(session.section) !==
+        normalizeSection(student.section)
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        session.program &&
+        student.program &&
+        normalize(session.program) !==
+        normalize(student.program)
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        session.year &&
+        student.year &&
+        normalizeYear(session.year) !==
+        normalizeYear(student.year)
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        session.semester &&
+        student.semester &&
+        normalizeSemester(session.semester) !==
+        normalizeSemester(student.semester)
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        session.department &&
+        student.department &&
+        normalize(session.department) !==
+        normalize(student.department)
+    ){
+
+        return false;
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+   FINALIZED CHECK
+===================================================== */
+
+function isFinalized(session){
+
+    if(!session){
+
+        return false;
+
+    }
+
+
+    if(!session.status){
+
+        return true;
+
+    }
+
+
+    return (
+        normalize(
+            session.status
+        ) ===
+        "finalized"
+    );
+
+}
+
+
+/* =====================================================
+   SUBJECT STATS
+===================================================== */
+
+function getSubjectStats(subject){
+
+    const history =
+        getHistory();
+
+
+    let total = 0;
+
+    let present = 0;
+
+    let absent = 0;
+
+
+    history.forEach(
+        function(session){
+
+            if(!isFinalized(session)){
+
+                return;
+
+            }
+
+
+            if(
+                normalize(session.subject) !==
+                normalize(subject)
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                !sessionMatchesStudent(session)
+            ){
+
+                return;
+
+            }
+
+
+            const record =
+                getStudentRecord(session);
+
+
+            if(!record){
+
+                return;
+
+            }
+
+
+            const status =
+                normalize(
+                    record.attendance ||
+                    record.status
+                );
+
+
+            if(status === "present"){
+
+                total++;
+                present++;
+
+            }
+
+            else if(status === "absent"){
+
+                total++;
+                absent++;
+
+            }
+
+        }
+    );
+
+
+    return {
+
+        total:total,
+
+        present:present,
+
+        absent:absent
+
+    };
+
+}
+
+
+/* =====================================================
+   TEACHER NAME
+===================================================== */
+
+function getTeacherName(cls){
+
+    return (
+        cls.teacher ||
+        cls.facultyName ||
+        "Faculty"
+    );
+
+}
+
+
+/* =====================================================
+   SUBJECT TABLE
+===================================================== */
+
+function renderSubjects(){
+
+    const table =
+        document.getElementById(
+            "subjectTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    document.getElementById(
+        "totalSubjects"
+    ).textContent =
+        myClasses.length;
+
+
+    if(myClasses.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="empty">
+
+                        No subjects assigned yet.
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    myClasses.forEach(
+        function(cls){
+
+            const stats =
+                getSubjectStats(
+                    cls.subject
+                );
+
+
+            const percentage =
+                stats.total > 0
+                ? Math.round(
+                    (
+                        stats.present /
+                        stats.total
+                    ) * 100
+                )
+                : 0;
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td class="subject">
+                    ${escapeHTML(
+                        cls.subject || "-"
+                    )}
+                </td>
+
+                <td class="teacher">
+                    ${escapeHTML(
+                        getTeacherName(cls)
+                    )}
+                </td>
+
+                <td>
+                    ${stats.total}
+                </td>
+
+                <td class="present">
+                    ${stats.present}
+                </td>
+
+                <td class="absent">
+                    ${stats.absent}
+                </td>
+
+                <td>
+
+                    <span class="badge">
+
+                        ${percentage}%
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ATTENDANCE TABLE
+===================================================== */
+
+function renderAttendance(){
+
+    const table =
+        document.getElementById(
+            "attendanceTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if(myClasses.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    <div class="empty">
+
+                        No attendance records available.
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        updateOverall();
+
+        return;
+
+    }
+
+
+    myClasses.forEach(
+        function(cls){
+
+            const stats =
+                getSubjectStats(
+                    cls.subject
+                );
+
+
+            const percentage =
+                stats.total > 0
+                ? Math.round(
+                    (
+                        stats.present /
+                        stats.total
+                    ) * 100
+                )
+                : 0;
+
+
+            let badgeClass = "";
+
+            if(percentage >= 75){
+
+                badgeClass =
+                    "present-badge";
+
+            }else if(stats.total > 0){
+
+                badgeClass =
+                    "absent-badge";
+
+            }
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td class="subject">
+                    ${escapeHTML(
+                        cls.subject || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${stats.total}
+                </td>
+
+                <td class="present">
+                    ${stats.present}
+                </td>
+
+                <td class="absent">
+                    ${stats.absent}
+                </td>
+
+                <td>
+
+                    <span
+                        class="badge ${badgeClass}"
+                    >
+
+                        ${percentage}%
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+
+    updateOverall();
+
+}
+
+
+/* =====================================================
+   OVERALL
+===================================================== */
+
+function updateOverall(){
+
+    let total = 0;
+
+    let present = 0;
+
+    let absent = 0;
+
+
+    myClasses.forEach(
+        function(cls){
+
+            const stats =
+                getSubjectStats(
+                    cls.subject
+                );
+
+
+            total +=
+                stats.total;
+
+            present +=
+                stats.present;
+
+            absent +=
+                stats.absent;
+
+        }
+    );
+
+
+    const percentage =
+        total > 0
+        ? Math.round(
+            (
+                present /
+                total
+            ) * 100
+        )
+        : 0;
+
+
+    document.getElementById(
+        "overallAttendance"
+    ).textContent =
+        percentage + "%";
+
+
+    document.getElementById(
+        "classesPresent"
+    ).textContent =
+        present;
+
+
+    document.getElementById(
+        "classesAbsent"
+    ).textContent =
+        absent;
+
+}
+
+
+/* =====================================================
+   HISTORY TABLE
+===================================================== */
+
+function renderHistory(){
+
+    const table =
+        document.getElementById(
+            "historyTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    const history =
+        getHistory();
+
+
+    const studentHistory =
+        history.filter(
+            function(session){
+
+                if(!isFinalized(session)){
+
+                    return false;
+
+                }
+
+
+                return !!getStudentRecord(
+                    session
+                );
+
+            }
+        );
+
+
+    studentHistory.sort(
+        function(a,b){
+
+            return (
+                new Date(
+                    b.dateTime ||
+                    b.date ||
+                    0
+                )
+                -
+                new Date(
+                    a.dateTime ||
+                    a.date ||
+                    0
+                )
+            );
+
+        }
+    );
+
+
+    if(studentHistory.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="4">
+
+                    <div class="empty">
+
+                        No finalized attendance records yet.
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    studentHistory.forEach(
+        function(session){
+
+            const record =
+                getStudentRecord(
+                    session
+                );
+
+
+            if(!record){
+
+                return;
+
+            }
+
+
+            const status =
+                record.attendance ||
+                record.status ||
+                "UNKNOWN";
+
+
+            const normalized =
+                normalize(status);
+
+
+            let badgeClass = "";
+
+
+            if(normalized === "present"){
+
+                badgeClass =
+                    "present-badge";
+
+            }
+
+
+            if(normalized === "absent"){
+
+                badgeClass =
+                    "absent-badge";
+
+            }
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    ${escapeHTML(
+                        formatDate(
+                            session.dateTime ||
+                            session.date
+                        )
+                    )}
+
+                </td>
+
+
+                <td class="subject">
+
+                    ${escapeHTML(
+                        session.subject || "-"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    Section
+                    ${escapeHTML(
+                        session.section ||
+                        student.section ||
+                        "-"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="badge ${badgeClass}"
+                    >
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatDate(value){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showDashboard(){
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+function scrollToSubjects(){
+
+    document
+        .getElementById(
+            "subjectsSection"
+        )
+        .scrollIntoView({
+
+            behavior:"smooth"
+
+        });
+
+}
+
+
+function scrollToAttendance(){
+
+    document
+        .getElementById(
+            "attendanceSection"
+        )
+        .scrollIntoView({
+
+            behavior:"smooth"
+
+        });
+
+}
+
+
+function scrollToHistory(){
+
+    document
+        .getElementById(
+            "historySection"
+        )
+        .scrollIntoView({
+
+            behavior:"smooth"
+
+        });
+
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+function showProfile(){
+
+    if(!student){
+
+        alert(
+            "Student profile not found."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        student.name || "-";
+
+
+    document.getElementById(
+        "profileReg"
+    ).textContent =
+        student.registrationNumber || "-";
+
+
+    document.getElementById(
+        "profileEmail"
+    ).textContent =
+        student.email || "-";
+
+
+    document.getElementById(
+        "profileDepartment"
+    ).textContent =
+        student.department || "-";
+
+
+    document.getElementById(
+        "profileProgram"
+    ).textContent =
+        student.program || "-";
+
+
+    document.getElementById(
+        "profileYear"
+    ).textContent =
+        student.year || "-";
+
+
+    document.getElementById(
+        "profileSemester"
+    ).textContent =
+        student.semester || "-";
+
+
+    document.getElementById(
+        "profileSection"
+    ).textContent =
+        student.section || "-";
+
+
+    const profilePhoto =
+        document.getElementById(
+            "profilePhoto"
+        );
+
+
+    if(student.profilePhoto){
+
+        profilePhoto.src =
+            student.profilePhoto;
+
+        profilePhoto.style.display =
+            "block";
+
+    }else{
+
+        profilePhoto.style.display =
+            "none";
+
+    }
+
+
+    document
+        .getElementById(
+            "profileOverlay"
+        )
+        .classList
+        .add("show");
+
+}
+
+
+/* =====================================================
+   CLOSE PROFILE
+===================================================== */
+
+function closeProfile(event){
+
+    if(
+        event &&
+        event.target &&
+        event.target.id !==
+        "profileOverlay"
+    ){
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "profileOverlay"
+        )
+        .classList
+        .remove("show");
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    /*
+       Remove only current login.
+       Student profiles and attendance remain safe.
+    */
+
+    sessionStorage.removeItem(
+        "snapdexCurrentUser"
+    );
+
+    sessionStorage.removeItem(
+        "snapdexUserRole"
+    );
+
+    localStorage.removeItem(
+        "snapdexLoggedInStudent"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadStudent();
+
+loadStudentDetails();
+
+loadMyClasses();
+
+renderSubjects();
+
+renderAttendance();
+
+renderHistory();
+
+
+/* =====================================================
+   REFRESH AFTER BACK/FORWARD
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function(){
+
+        loadStudent();
+
+        loadStudentDetails();
+
+        loadMyClasses();
+
+        renderSubjects();
+
+        renderAttendance();
+
+        renderHistory();
+
+    }
+);
+
+
+/* =====================================================
+   DEBUG
+===================================================== */
+
+console.log(
+    "SnapDex Current Student:",
+    student
+);
+
+console.log(
+    "SnapDex My Classes:",
+    myClasses
+);
+
+console.log(
+    "SnapDex Attendance History:",
+    getHistory()
+);
+
+</script>
+
+</body>
+</html>

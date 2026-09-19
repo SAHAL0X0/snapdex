@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDex | Smart Attendance</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    color:#102653;
+
+    background:
+        radial-gradient(circle at 8% 25%,rgba(70,170,255,.23),transparent 30%),
+        radial-gradient(circle at 92% 70%,rgba(95,205,255,.18),transparent 32%),
+        linear-gradient(135deg,#fbfdff 0%,#eaf5ff 48%,#f8fcff 100%);
+}
+
+
+/* ================= BACKGROUND SRM SEAL ================= */
+
+.bg-seal{
+    position:fixed;
+    width:780px;
+    height:780px;
+
+    left:43%;
+    top:48%;
+
+    transform:translate(-50%,-50%);
+
+    object-fit:contain;
+
+    opacity:.075;
+    filter:blur(1.5px);
+
+    z-index:0;
+    pointer-events:none;
+}
+
+
+/* ================= SRM BUILDING ================= */
+
+.bg-building{
+    position:fixed;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:47%;
+
+    object-fit:cover;
+    object-position:center bottom;
+
+    opacity:.38;
+
+    filter:blur(1px);
+
+    z-index:1;
+    pointer-events:none;
+
+    -webkit-mask-image:
+        linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(0,0,0,.20) 12%,
+            rgba(0,0,0,.65) 38%,
+            black 72%,
+            black 100%
+        );
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(0,0,0,.20) 12%,
+            rgba(0,0,0,.65) 38%,
+            black 72%,
+            black 100%
+        );
+}
+
+
+/* Building soft overlay */
+
+.bg-building-overlay{
+    position:fixed;
+    inset:0;
+
+    z-index:2;
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(235,247,255,.02) 0%,
+            rgba(235,247,255,.05) 50%,
+            rgba(235,247,255,.18) 100%
+        );
+}
+
+
+/* ================= LIGHT GLOW ================= */
+
+.glow{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(100px);
+
+    pointer-events:none;
+    z-index:0;
+}
+
+.glow1{
+    width:430px;
+    height:430px;
+
+    left:-180px;
+    top:170px;
+
+    background:rgba(45,160,255,.13);
+}
+
+.glow2{
+    width:430px;
+    height:430px;
+
+    right:-160px;
+    bottom:-120px;
+
+    background:rgba(60,190,245,.14);
+}
+
+
+/* ================= HEADER ================= */
+
+header{
+    position:relative;
+    z-index:10;
+
+    height:88px;
+    padding:0 52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid rgba(190,210,235,.45);
+}
+
+
+/* BRAND */
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.srm-logo{
+    width:140px;
+    height:62px;
+    object-fit:contain;
+}
+
+.separator{
+    width:1px;
+    height:44px;
+    background:#bac9df;
+}
+
+.snapdex{
+    display:flex;
+    flex-direction:column;
+}
+
+.snapdex-name{
+    font-size:25px;
+    line-height:1;
+    font-weight:800;
+    color:#142a58;
+}
+
+.snapdex-name span{
+    color:#139ce9;
+}
+
+.snapdex-tag{
+    margin-top:5px;
+
+    font-size:9px;
+    letter-spacing:2.2px;
+    font-weight:800;
+
+    color:#71809a;
+}
+
+
+/* ================= NAV ================= */
+
+nav{
+    display:flex;
+    align-items:center;
+    gap:38px;
+}
+
+nav a{
+    position:relative;
+
+    text-decoration:none;
+
+    color:#142957;
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:.2s;
+}
+
+nav a:hover{
+    color:#087fe0;
+}
+
+nav a.active{
+    color:#087fe0;
+}
+
+nav a.active::after{
+    content:"";
+
+    position:absolute;
+
+    width:34px;
+    height:2px;
+
+    left:50%;
+    bottom:-13px;
+
+    transform:translateX(-50%);
+
+    border-radius:10px;
+
+    background:#087fe0;
+}
+
+
+/* ================= PORTAL ================= */
+
+.portal{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 19px;
+
+    background:white;
+
+    border:1px solid #dce7f4;
+    border-radius:30px;
+
+    box-shadow:
+        0 8px 25px rgba(30,90,150,.08);
+
+    font-size:12px;
+    font-weight:700;
+
+    white-space:nowrap;
+}
+
+.portal-dot{
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#16c69b;
+
+    box-shadow:
+        0 0 0 5px rgba(22,198,155,.12);
+}
+
+
+/* ================= MAIN ================= */
+
+main{
+    position:relative;
+    z-index:5;
+
+    max-width:1450px;
+
+    min-height:calc(100vh - 88px);
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:1.1fr .9fr;
+
+    align-items:center;
+
+    gap:70px;
+
+    padding:45px 75px 70px;
+}
+
+
+/* ================= HERO ================= */
+
+.hero{
+    max-width:700px;
+}
+
+.badge{
+    display:inline-flex;
+
+    align-items:center;
+    gap:11px;
+
+    padding:11px 20px;
+
+    border:1px solid #b8dcfa;
+    border-radius:30px;
+
+    background:rgba(255,255,255,.68);
+
+    backdrop-filter:blur(12px);
+
+    color:#087bd6;
+
+    font-size:11px;
+    font-weight:800;
+
+    margin-bottom:38px;
+}
+
+.badge span{
+    color:#91a5c0;
+}
+
+
+/* HERO HEADING */
+
+.hero h1{
+    font-size:clamp(55px,5.5vw,78px);
+
+    line-height:.96;
+    letter-spacing:-4px;
+
+    color:#0b1d47;
+
+    margin-bottom:28px;
+}
+
+.hero h1 strong{
+    color:#087fe0;
+}
+
+
+/* DESCRIPTION */
+
+.description{
+    max-width:650px;
+
+    color:#425d86;
+
+    font-size:17px;
+    line-height:1.65;
+
+    margin-bottom:38px;
+}
+
+
+/* ================= FEATURES ================= */
+
+.features{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+    max-width:650px;
+}
+
+.feature{
+    min-height:150px;
+
+    padding:22px 19px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(211,226,243,.90);
+
+    background:rgba(255,255,255,.80);
+
+    backdrop-filter:blur(15px);
+
+    box-shadow:
+        0 15px 35px rgba(34,86,140,.08);
+
+    transition:.25s;
+}
+
+.feature:hover{
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 20px 40px rgba(34,86,140,.13);
+}
+
+.icon{
+    width:43px;
+    height:43px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:#e2f3ff;
+
+    color:#087fe0;
+
+    font-size:20px;
+
+    margin-bottom:14px;
+}
+
+.feature:nth-child(2) .icon{
+    background:#eee6ff;
+    color:#7046db;
+}
+
+.feature:nth-child(3) .icon{
+    background:#e3faf4;
+    color:#10b58f;
+}
+
+.feature h3{
+    font-size:14px;
+    color:#14294e;
+
+    margin-bottom:7px;
+}
+
+.feature p{
+    font-size:11px;
+    line-height:1.5;
+
+    color:#647796;
+}
+
+
+/* ================= QUOTE ================= */
+
+.quote{
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-top:35px;
+
+    color:#607393;
+
+    font-size:13px;
+}
+
+.quote-line{
+    width:43px;
+    height:2px;
+
+    background:#398dd1;
+}
+
+.quote small{
+    font-size:11px;
+    color:#7183a0;
+}
+
+
+/* ================= LEARN ================= */
+
+.learn{
+    margin-top:28px;
+
+    width:170px;
+
+    font-size:29px;
+    line-height:.92;
+
+    font-style:italic;
+
+    color:rgba(54,132,220,.34);
+
+    transform:rotate(-5deg);
+}
+
+
+/* ================= LOGIN AREA ================= */
+
+.login-area{
+    display:flex;
+    justify-content:center;
+}
+
+.login-card{
+    width:100%;
+    max-width:500px;
+
+    padding:35px 37px 29px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,.96);
+
+    border:1px solid rgba(205,221,239,.90);
+
+    box-shadow:
+        0 30px 75px rgba(25,75,125,.13),
+        0 5px 20px rgba(25,75,125,.07);
+
+    backdrop-filter:blur(25px);
+}
+
+
+/* ================= LOGIN BRAND ================= */
+
+.login-brand{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding-bottom:23px;
+
+    border-bottom:1px solid #e0e8f2;
+
+    margin-bottom:27px;
+}
+
+.institute{
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+}
+
+.institute img{
+    width:58px;
+    height:58px;
+
+    object-fit:contain;
+}
+
+.institute h3{
+    font-size:14px;
+    color:#172849;
+}
+
+.institute p{
+    margin-top:4px;
+
+    font-size:11px;
+    color:#078de5;
+}
+
+.secure{
+    padding:10px 12px;
+
+    border-radius:11px;
+
+    background:#e6faf5;
+
+    color:#128b73;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    text-align:center;
+}
+
+
+/* ================= LOGIN TITLE ================= */
+
+.login-card h2{
+    font-size:29px;
+
+    color:#102143;
+
+    margin-bottom:6px;
+}
+
+.subtitle{
+    color:#71819b;
+
+    font-size:12px;
+
+    margin-bottom:22px;
+}
+
+
+/* ================= TABS ================= */
+
+.tabs{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    padding:3px;
+
+    background:#eff4fa;
+
+    border:1px solid #dce5f0;
+
+    border-radius:13px;
+
+    margin-bottom:22px;
+}
+
+.tab{
+    border:none;
+
+    background:transparent;
+
+    color:#61718d;
+
+    padding:11px;
+
+    border-radius:10px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.tab.active{
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #17a7ef,
+            #087ee1
+        );
+
+    box-shadow:
+        0 7px 18px rgba(8,126,225,.22);
+}
+
+
+/* ================= FORM ================= */
+
+.group{
+    margin-bottom:18px;
+}
+
+.group label{
+    display:block;
+
+    color:#253655;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    margin-bottom:8px;
+}
+
+.input-wrap{
+    position:relative;
+}
+
+.input-wrap input{
+    width:100%;
+    height:50px;
+
+    padding:0 45px;
+
+    border:1px solid #d6e2ef;
+
+    border-radius:13px;
+
+    background:#f9fcff;
+
+    outline:none;
+
+    color:#1b2e50;
+
+    font-size:13px;
+}
+
+.input-wrap input:focus{
+    background:white;
+
+    border-color:#1599eb;
+
+    box-shadow:
+        0 0 0 4px rgba(21,153,235,.08);
+}
+
+.left-icon{
+    position:absolute;
+
+    left:16px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#7286a3;
+}
+
+.eye{
+    position:absolute;
+
+    right:16px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#7286a3;
+
+    cursor:pointer;
+}
+
+.error{
+    display:none;
+
+    color:#e53935;
+
+    font-size:11px;
+
+    margin-top:7px;
+}
+
+
+/* ================= OPTIONS ================= */
+
+.options{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:11px;
+
+    margin:4px 0 20px;
+}
+
+.remember{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    color:#667795;
+}
+
+.remember input{
+    accent-color:#087fe0;
+}
+
+.forgot{
+    color:#0878d8;
+
+    font-weight:700;
+
+    text-decoration:none;
+}
+
+
+/* ================= LOGIN BUTTON ================= */
+
+.login-btn{
+    width:100%;
+    height:51px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #17a8f2,
+            #087de1
+        );
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 12px 27px rgba(8,126,225,.25);
+
+    transition:.2s;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 15px 30px rgba(8,126,225,.30);
+}
+
+
+/* ================= REGISTER ================= */
+
+.divider-text{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:23px 0 15px;
+
+    color:#7d8da6;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:1.4px;
+}
+
+.divider-text::before,
+.divider-text::after{
+    content:"";
+
+    height:1px;
+
+    background:#dce5ef;
+
+    flex:1;
+}
+
+.registers{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+}
+
+.register{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    border:1px solid #dbe5f0;
+
+    border-radius:12px;
+
+    background:#fbfdff;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    transition:.2s;
+}
+
+.register:hover{
+    transform:translateY(-2px);
+
+    border-color:#8ccdf2;
+}
+
+.register-icon{
+    width:35px;
+    height:35px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:#e4f4ff;
+
+    color:#087fe0;
+}
+
+.register.student .register-icon{
+    background:#e3faf4;
+
+    color:#0da987;
+}
+
+.register strong{
+    display:block;
+
+    font-size:10px;
+
+    color:#243654;
+}
+
+.register small{
+    display:block;
+
+    margin-top:2px;
+
+    font-size:8px;
+
+    color:#8391a7;
+}
+
+.card-footer{
+    text-align:center;
+
+    margin-top:19px;
+
+    font-size:9px;
+
+    color:#8492a8;
+}
+
+
+/* ================= FOOTER ================= */
+
+footer{
+    position:absolute;
+
+    z-index:8;
+
+    left:0;
+    right:0;
+
+    bottom:17px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:0 75px;
+
+    color:#71829e;
+
+    font-size:8px;
+
+    letter-spacing:1.5px;
+
+    font-weight:700;
+}
+
+.heart{
+    color:#e95370;
+
+    font-size:12px;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1100px){
+
+    header{
+        padding:0 25px;
+    }
+
+    nav{
+        display:none;
+    }
+
+    main{
+        grid-template-columns:1fr;
+
+        padding:45px 35px 100px;
+    }
+
+    .hero{
+        max-width:750px;
+        margin:auto;
+    }
+
+    .login-area{
+        margin-top:15px;
+    }
+
+    .bg-building{
+        height:40%;
+    }
+
+    footer{
+        padding:0 30px;
+    }
+}
+
+
+@media(max-width:600px){
+
+    header{
+        height:75px;
+
+        padding:0 15px;
+    }
+
+    .srm-logo{
+        width:95px;
+    }
+
+    .separator{
+        height:35px;
+    }
+
+    .snapdex-name{
+        font-size:18px;
+    }
+
+    .snapdex-tag{
+        font-size:7px;
+    }
+
+    .portal{
+        display:none;
+    }
+
+    main{
+        padding:30px 17px 90px;
+    }
+
+    .hero h1{
+        font-size:48px;
+        letter-spacing:-2px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .login-card{
+        padding:25px 21px;
+    }
+
+    .bg-seal{
+        width:550px;
+        height:550px;
+    }
+
+    .bg-building{
+        height:32%;
+    }
+
+    footer{
+        position:relative;
+
+        bottom:auto;
+
+        padding:0 18px 20px;
+
+        flex-direction:column;
+
+        gap:8px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- ================= BACKGROUND ================= -->
+
+<img
+    src="srm_seal.png"
+    class="bg-seal"
+    alt=""
+>
+
+<img
+    src="srm_building.png"
+    class="bg-building"
+    alt=""
+>
+
+<div class="bg-building-overlay"></div>
+
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div class="brand">
+
+        <img
+            src="srm_logo.png"
+            class="srm-logo"
+            alt="SRM Institute of Science and Technology"
+        >
+
+        <div class="separator"></div>
+
+        <div class="snapdex">
+
+            <div class="snapdex-name">
+                SnapDex<span>●</span>
+            </div>
+
+            <div class="snapdex-tag">
+                SMART ATTENDANCE
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a href="#" class="active">
+            Home
+        </a>
+
+        <a href="#">
+            About
+        </a>
+
+        <a href="#">
+            SRMIST Portal
+        </a>
+
+        <a href="#">
+            Classrooms
+        </a>
+
+        <a href="#">
+            Help &amp; Support
+        </a>
+
+    </nav>
+
+
+    <div class="portal">
+
+        <div class="portal-dot"></div>
+
+        SRMIST Portal Active
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main>
+
+
+    <!-- ================= LEFT ================= -->
+
+    <section class="hero">
+
+
+        <div class="badge">
+
+            SRMIST
+
+            <span>•</span>
+
+            SMART CAMPUS INITIATIVE
+
+        </div>
+
+
+        <h1>
+
+            Attendance,<br>
+
+            <strong>
+                made smarter.
+            </strong>
+
+        </h1>
+
+
+        <p class="description">
+
+            SnapDex is a modern attendance management platform for
+            SRM Institute of Science and Technology. Faculty can
+            manage classes, capture attendance and verify records
+            while students can track their attendance effortlessly.
+
+        </p>
+
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="icon">
+                    🎓
+                </div>
+
+                <h3>
+                    Smart Workflow
+                </h3>
+
+                <p>
+                    Quick and organized
+                    attendance process
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">
+                    👥
+                </div>
+
+                <h3>
+                    Faculty Control
+                </h3>
+
+                <p>
+                    Verified and secure
+                    attendance records
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">
+                    ▥
+                </div>
+
+                <h3>
+                    Clear Insights
+                </h3>
+
+                <p>
+                    Track your academic
+                    progress easily
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="quote">
+
+            <div class="quote-line"></div>
+
+            <div>
+
+                <em>
+                    "A Smarter Campus for a Brighter Tomorrow"
+                </em>
+
+                <br>
+
+                <small>
+                    SRM Institute of Science and Technology
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="learn">
+
+            Learn<br>
+            Innovate<br>
+            Lead
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ================= LOGIN ================= -->
+
+    <section class="login-area">
+
+        <div class="login-card">
+
+
+            <div class="login-brand">
+
+
+                <div class="institute">
+
+                    <img
+                        src="srm_seal.png"
+                        alt="SRM"
+                    >
+
+                    <div>
+
+                        <h3>
+                            SRM Institute of Science &amp; Technology
+                        </h3>
+
+                        <p>
+                            Smart Attendance Portal
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="secure">
+
+                    🛡 Secure<br>
+                    Access
+
+                </div>
+
+
+            </div>
+
+
+            <h2 id="loginTitle">
+                Faculty Login
+            </h2>
+
+
+            <p class="subtitle">
+                Sign in using your official SRM account
+            </p>
+
+
+            <div class="tabs">
+
+
+                <button
+                    type="button"
+                    class="tab active"
+                    id="facultyTab"
+                    onclick="switchLogin('faculty')">
+
+                    👤 &nbsp; Faculty
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="tab"
+                    id="studentTab"
+                    onclick="switchLogin('student')">
+
+                    👥 &nbsp; Student
+
+                </button>
+
+
+            </div>
+
+
+            <form id="loginForm">
+
+
+                <div class="group">
+
+                    <label>
+                        Official SRM Email
+                    </label>
+
+
+                    <div class="input-wrap">
+
+                        <span class="left-icon">
+                            ✉
+                        </span>
+
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="example@srmist.edu.in"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="error"
+                        id="emailError">
+                    </div>
+
+                </div>
+
+
+                <div class="group">
+
+                    <label>
+                        Password
+                    </label>
+
+
+                    <div class="input-wrap">
+
+                        <span class="left-icon">
+                            🔒
+                        </span>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+
+                        <span
+                            class="eye"
+                            onclick="togglePassword()">
+
+                            ◉
+
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="error"
+                        id="passwordError">
+                    </div>
+
+                </div>
+
+
+                <div class="options">
+
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            id="remember"
+                        >
+
+                        Remember this device
+
+                    </label>
+
+
+                    <a
+                        href="#"
+                        class="forgot"
+                        onclick="return false;">
+
+                        Forgot password?
+
+                    </a>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-btn">
+
+                    ↪ &nbsp; SIGN IN TO SNAPDEX
+
+                </button>
+
+
+            </form>
+
+
+            <div class="divider-text">
+
+                NEW TO SNAPDEX?
+
+            </div>
+
+
+            <div class="registers">
+
+
+                <button
+                    type="button"
+                    class="register"
+                    onclick="goFacultyRegister()">
+
+                    <div class="register-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Create Faculty Profile
+                        </strong>
+
+                        <small>
+                            SRM Faculty
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="register student"
+                    onclick="goStudentRegister()">
+
+                    <div class="register-icon">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Create Student Profile
+                        </strong>
+
+                        <small>
+                            SRM Student
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+            </div>
+
+
+            <div class="card-footer">
+
+                Authorized SRM users only
+                &nbsp; | &nbsp;
+                SnapDex Smart Attendance
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div>
+
+        EDUCATION &nbsp; | &nbsp;
+        RESEARCH &nbsp; | &nbsp;
+        INNOVATION &nbsp; | &nbsp;
+        IMPACT
+
+    </div>
+
+
+    <div>
+
+        Built for SRMIST
+
+        <span class="heart">
+            ♥
+        </span>
+
+        By Students, For a Smarter Tomorrow
+
+    </div>
+
+</footer>
+
+
+<script>
+
+/* ================= LOGIN TYPE ================= */
+
+let loginType = "faculty";
+
+
+function switchLogin(type){
+
+    loginType = type;
+
+    const facultyTab =
+        document.getElementById("facultyTab");
+
+    const studentTab =
+        document.getElementById("studentTab");
+
+    const title =
+        document.getElementById("loginTitle");
+
+    const email =
+        document.getElementById("email");
+
+
+    if(type === "faculty"){
+
+        facultyTab.classList.add("active");
+
+        studentTab.classList.remove("active");
+
+        title.textContent =
+            "Faculty Login";
+
+        email.placeholder =
+            "example@srmist.edu.in";
+
+    }else{
+
+        studentTab.classList.add("active");
+
+        facultyTab.classList.remove("active");
+
+        title.textContent =
+            "Student Login";
+
+        email.placeholder =
+            "example@srmist.edu.in";
+
+    }
+}
+
+
+/* ================= PASSWORD ================= */
+
+function togglePassword(){
+
+    const password =
+        document.getElementById("password");
+
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+    }else{
+
+        password.type = "password";
+
+    }
+}
+
+
+/* ================= REGISTRATION ================= */
+
+function goFacultyRegister(){
+
+    window.location.href =
+        "facultyregister.html";
+
+}
+
+
+function goStudentRegister(){
+
+    window.location.href =
+        "studentregister.html";
+
+}
+
+
+/* ================= LOGIN ================= */
+
+document
+.getElementById("loginForm")
+.addEventListener(
+    "submit",
+    function(e){
+
+        e.preventDefault();
+
+
+        const email =
+            document
+            .getElementById("email")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+        const password =
+            document
+            .getElementById("password")
+            .value;
+
+
+        const emailError =
+            document
+            .getElementById("emailError");
+
+
+        const passwordError =
+            document
+            .getElementById("passwordError");
+
+
+        emailError.style.display =
+            "none";
+
+        passwordError.style.display =
+            "none";
+
+
+        /* ================= FACULTY ================= */
+
+        if(loginType === "faculty"){
+
+            const faculty =
+                JSON.parse(
+                    localStorage.getItem(
+                        "snapdexFaculty"
+                    )
+                );
+
+
+            if(!faculty){
+
+                emailError.textContent =
+                    "Faculty profile not found. Please create your profile first.";
+
+                emailError.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            if(
+                !faculty.email ||
+                email !==
+                faculty.email.toLowerCase()
+            ){
+
+                emailError.textContent =
+                    "Please enter your registered SRM email.";
+
+                emailError.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            if(password !== faculty.password){
+
+                passwordError.textContent =
+                    "Incorrect password.";
+
+                passwordError.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "snapdexLoggedIn",
+                "faculty"
+            );
+
+
+            window.location.href =
+                "facultydashboard.html";
+
+
+            return;
+
+        }
+
+
+        /* ================= STUDENT ================= */
+
+        let students =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudents"
+                ) || "[]"
+            );
+
+
+        const oldStudent =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudent"
+                )
+            );
+
+
+        if(
+            students.length === 0 &&
+            oldStudent
+        ){
+
+            students = [oldStudent];
+
+        }
+
+
+        const student =
+            students.find(
+                s =>
+                    s.email &&
+                    s.email.toLowerCase() ===
+                    email
+            );
+
+
+        if(!student){
+
+            emailError.textContent =
+                "Student profile not found. Please create your profile first.";
+
+            emailError.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        if(
+            student.password &&
+            password !== student.password
+        ){
+
+            passwordError.textContent =
+                "Incorrect password.";
+
+            passwordError.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        localStorage.setItem(
+            "snapdexLoggedIn",
+            "student"
+        );
+
+
+        localStorage.setItem(
+            "snapdexCurrentStudent",
+            JSON.stringify(student)
+        );
+
+
+        window.location.href =
+            "studentdashboard.html";
+
+    }
+);
+
+</script>
+
+</body>
+</html>

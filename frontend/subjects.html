@@ -1,0 +1,2378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SnapDex - Subjects</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<style>
+
+:root{
+    --navy:#0d2450;
+    --blue:#087fe0;
+    --blue-dark:#075fc7;
+    --blue-soft:#eaf4ff;
+    --bg:#f3f7fc;
+    --white:#fff;
+    --border:#dce6f0;
+    --text:#10244a;
+    --muted:#71839d;
+    --green:#07966b;
+    --orange:#e87512;
+    --shadow:0 12px 35px rgba(31,76,120,.08);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+html,
+body{
+    min-height:100%;
+}
+
+body{
+    font-family:
+        "Plus Jakarta Sans",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--text);
+
+    background:
+        radial-gradient(
+            circle at 75% 20%,
+            rgba(71,167,239,.10),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 15% 80%,
+            rgba(87,184,238,.08),
+            transparent 28%
+        ),
+        var(--bg);
+
+    -webkit-font-smoothing:antialiased;
+}
+
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.layout{
+    min-height:100vh;
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+    width:280px;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    padding:24px 16px;
+
+    color:var(--text);
+
+    background:rgba(238,244,251,.97);
+
+    backdrop-filter:blur(18px);
+
+    border-right:1px solid #d5e0eb;
+
+    box-shadow:
+        5px 0 25px rgba(28,73,118,.05);
+
+    z-index:100;
+
+    overflow-y:auto;
+}
+
+
+/* =====================================================
+   SIDEBAR BRAND
+===================================================== */
+
+.sidebar-brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:4px 12px 24px;
+
+    margin-bottom:22px;
+
+    border-bottom:1px solid #d9e3ed;
+}
+
+.sidebar-logo{
+    width:92px;
+    height:60px;
+
+    object-fit:contain;
+
+    object-position:center;
+
+    flex-shrink:0;
+
+    display:block;
+}
+
+.sidebar-brand-text{
+    display:flex;
+
+    flex-direction:column;
+}
+
+.sidebar-brand-name{
+    font-size:23px;
+
+    line-height:1;
+
+    letter-spacing:-.8px;
+
+    font-weight:800;
+
+    color:#102653;
+}
+
+.sidebar-brand-name span{
+    color:#087fe0;
+}
+
+.sidebar-brand-sub{
+    margin-top:5px;
+
+    font-size:8px;
+
+    color:#637894;
+
+    letter-spacing:1.25px;
+
+    font-weight:800;
+}
+
+
+/* =====================================================
+   MENU TITLE
+===================================================== */
+
+.menu-title{
+    padding:0 12px;
+
+    margin:18px 0 8px;
+
+    color:#71839c;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:1.3px;
+
+    text-transform:uppercase;
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.menu{
+    display:flex;
+
+    flex-direction:column;
+}
+
+.menu a{
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    width:100%;
+
+    padding:11px 13px;
+
+    margin:5px 0;
+
+    min-height:46px;
+
+    border-radius:13px;
+
+    color:#18345d;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:650;
+
+    transition:.2s ease;
+}
+
+.menu a:hover{
+    color:#087fe0;
+
+    background:#e7f2ff;
+
+    transform:translateX(2px);
+}
+
+.menu a.active{
+    color:#075fc7;
+
+    background:#dcecff;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(8,127,224,.04);
+}
+
+
+/* =====================================================
+   MENU ICON
+===================================================== */
+
+.menu-icon{
+    width:32px;
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:#e6eef7;
+
+    color:#45617f;
+
+    font-size:14px;
+
+    flex-shrink:0;
+}
+
+.menu a.active .menu-icon{
+    background:#cbe4ff;
+
+    color:#087fe0;
+}
+
+
+/* =====================================================
+   ACCOUNT
+===================================================== */
+
+.account-title{
+    margin-top:18px;
+}
+
+.logout{
+    color:#b53d3d !important;
+}
+
+.logout:hover{
+    background:#fff0f0 !important;
+
+    color:#d22f2f !important;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+    margin-left:280px;
+
+    min-height:100vh;
+
+    position:relative;
+
+    z-index:2;
+}
+
+
+/* =====================================================
+   SRM WATERMARK
+===================================================== */
+
+.bg-srm-logo{
+    position:fixed;
+
+    width:620px;
+    height:620px;
+
+    object-fit:contain;
+
+    left:61%;
+    top:58%;
+
+    transform:translate(-50%,-50%);
+
+    opacity:.045;
+
+    filter:blur(1px);
+
+    pointer-events:none;
+
+    user-select:none;
+
+    z-index:0;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    height:96px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 36px;
+
+    background:rgba(255,255,255,.94);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid #dce6f0;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:20;
+}
+
+
+/* =====================================================
+   HEADER BRAND
+===================================================== */
+
+.brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+}
+
+.srm-box{
+    width:50px;
+    height:50px;
+
+    background:transparent;
+
+    border-radius:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    flex-shrink:0;
+}
+
+.srm-box img{
+    width:50px;
+    height:50px;
+
+    object-fit:contain;
+}
+
+.brand-name{
+    font-size:23px;
+
+    line-height:1;
+
+    font-weight:800;
+
+    color:#102653;
+
+    letter-spacing:-.6px;
+}
+
+.brand-name span{
+    color:#087fe0;
+}
+
+.brand-sub{
+    margin-top:5px;
+
+    font-size:10px;
+
+    color:#71839d;
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+.profile{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.profile-text{
+    text-align:right;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.profile-name{
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#13264b;
+}
+
+.profile-id{
+    margin-top:3px;
+
+    font-size:10px;
+
+    color:#74869f;
+}
+
+.profile-photo{
+    width:50px;
+    height:50px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid #e3edf7;
+
+    background:#edf4fb;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.content{
+    padding:36px 38px 70px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.page-title{
+    font-size:34px;
+
+    line-height:1.1;
+
+    font-weight:800;
+
+    letter-spacing:-1.2px;
+
+    color:#0e2044;
+
+    margin-bottom:6px;
+}
+
+.page-subtitle{
+    margin-top:0;
+
+    margin-bottom:27px;
+
+    font-size:14px;
+
+    font-weight:400;
+
+    color:#71839d;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:19px;
+
+    margin-bottom:32px;
+}
+
+.stat{
+    min-height:157px;
+
+    padding:24px;
+
+    background:rgba(255,255,255,.95);
+
+    border:1px solid #dce6ef;
+
+    border-radius:19px;
+
+    box-shadow:var(--shadow);
+}
+
+.stat-title{
+    margin-bottom:14px;
+
+    font-size:12px;
+
+    font-weight:400;
+
+    color:#617590;
+}
+
+.stat-number{
+    font-size:30px;
+
+    line-height:1;
+
+    font-weight:800;
+}
+
+.blue{
+    color:#087fe0;
+}
+
+.green{
+    color:#079d7b;
+}
+
+.orange{
+    color:#e87512;
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.toolbar{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:20px;
+
+    margin-bottom:27px;
+
+    background:rgba(255,255,255,.96);
+
+    border:1px solid #dce6ef;
+
+    border-radius:21px;
+
+    box-shadow:var(--shadow);
+}
+
+.search-box{
+    flex:1;
+
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+
+    height:54px;
+
+    padding:13px 16px 13px 48px;
+
+    border:1px solid #d8e3ed;
+
+    border-radius:10px;
+
+    outline:none;
+
+    background:#fbfdff;
+
+    color:#263a5c;
+
+    font-size:12px;
+
+    font-family:
+        "Plus Jakarta Sans",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+.search-box input::placeholder{
+    color:#71839d;
+}
+
+.search-box input:focus{
+    border-color:#179be8;
+
+    box-shadow:
+        0 0 0 3px rgba(23,155,232,.08);
+}
+
+.search-icon{
+    position:absolute;
+
+    left:17px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#496789;
+
+    font-size:18px;
+}
+
+.filter-select{
+    width:180px;
+
+    height:54px;
+
+    padding:0 15px;
+
+    border:1px solid #d8e3ed;
+
+    border-radius:10px;
+
+    background:#fbfdff;
+
+    color:#263a5c;
+
+    font-size:12px;
+
+    font-family:
+        "Plus Jakarta Sans",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    outline:none;
+
+    cursor:pointer;
+}
+
+.filter-select:focus{
+    border-color:#179be8;
+
+    box-shadow:
+        0 0 0 3px rgba(23,155,232,.08);
+}
+
+
+/* =====================================================
+   SUBJECT GRID
+===================================================== */
+
+.subject-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:19px;
+}
+
+
+/* =====================================================
+   SUBJECT CARD
+===================================================== */
+
+.subject-card{
+    background:rgba(255,255,255,.96);
+
+    border:1px solid #dce6ef;
+
+    border-radius:19px;
+
+    padding:24px;
+
+    box-shadow:var(--shadow);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.subject-card:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 16px 38px rgba(31,76,120,.10);
+}
+
+
+/* =====================================================
+   SUBJECT TOP
+===================================================== */
+
+.subject-top{
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.subject-icon{
+    width:44px;
+    height:44px;
+
+    border-radius:13px;
+
+    background:#e8f4ff;
+
+    color:#087fe0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:18px;
+
+    flex-shrink:0;
+}
+
+.subject-name{
+    flex:1;
+
+    padding-top:1px;
+}
+
+.subject-name h2{
+    font-size:19px;
+
+    line-height:1.2;
+
+    font-weight:800;
+
+    color:#12274d;
+
+    margin-bottom:5px;
+}
+
+.subject-name p{
+    font-size:11px;
+
+    font-weight:400;
+
+    color:#71839d;
+}
+
+.status{
+    padding:7px 11px;
+
+    border-radius:20px;
+
+    background:#e5faf4;
+
+    color:#07966b;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:.3px;
+
+    white-space:nowrap;
+}
+
+
+/* =====================================================
+   SUBJECT INFO
+===================================================== */
+
+.subject-info{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
+}
+
+.info-item{
+    padding:13px;
+
+    background:#f4f7fb;
+
+    border-radius:10px;
+}
+
+.info-label{
+    font-size:10px;
+
+    font-weight:400;
+
+    color:#71839d;
+
+    margin-bottom:5px;
+}
+
+.info-value{
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#12274d;
+}
+
+
+/* =====================================================
+   SUBJECT FOOTER
+===================================================== */
+
+.subject-footer{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-top:19px;
+
+    padding-top:16px;
+
+    border-top:1px solid #e1e8f0;
+}
+
+.class-text{
+    font-size:11px;
+
+    line-height:1.5;
+
+    font-weight:400;
+
+    color:#617590;
+}
+
+.attendance-link{
+    color:#087fe0;
+
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+.attendance-link:hover{
+    text-decoration:underline;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+    grid-column:1/-1;
+
+    background:rgba(255,255,255,.96);
+
+    border:1px solid #dce6ef;
+
+    border-radius:19px;
+
+    text-align:center;
+
+    padding:55px 20px;
+
+    color:#72849d;
+
+    font-size:13px;
+
+    box-shadow:var(--shadow);
+}
+
+.empty-icon{
+    font-size:32px;
+
+    margin-bottom:10px;
+}
+
+.empty h2{
+    color:#12264b;
+
+    font-size:19px;
+
+    font-weight:800;
+
+    margin-bottom:7px;
+}
+
+.empty p{
+    font-size:12px;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.sidebar::-webkit-scrollbar{
+    width:7px;
+}
+
+.sidebar::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+    background:#b8c9dc;
+
+    border-radius:10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1150px){
+
+    .sidebar{
+        width:250px;
+    }
+
+    .main{
+        margin-left:250px;
+    }
+
+    .stats{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+
+@media(max-width:900px){
+
+    .subject-grid{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        padding:0 25px;
+    }
+
+    .content{
+        padding:30px 25px 60px;
+    }
+}
+
+
+@media(max-width:800px){
+
+    .sidebar{
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+        bottom:auto;
+
+        border-right:0;
+
+        border-bottom:1px solid #d5e0eb;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .header{
+        position:relative;
+
+        padding:14px 20px;
+    }
+
+    .content{
+        padding:26px 20px 60px;
+    }
+}
+
+
+@media(max-width:620px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .toolbar{
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .filter-select{
+        width:100%;
+    }
+
+    .subject-info{
+        grid-template-columns:1fr;
+    }
+
+    .subject-footer{
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .bg-srm-logo{
+        width:380px;
+        height:380px;
+
+        left:58%;
+
+        opacity:.035;
+    }
+
+    .profile-text{
+        display:none;
+    }
+
+    .srm-box{
+        width:44px;
+        height:44px;
+    }
+
+    .srm-box img{
+        width:44px;
+        height:44px;
+    }
+}
+
+
+@media(max-width:480px){
+
+    .sidebar-brand-name{
+        font-size:22px;
+    }
+
+    .sidebar-logo{
+        width:80px;
+        height:55px;
+    }
+
+    .page-title{
+        font-size:30px;
+    }
+
+    .subject-card{
+        padding:20px;
+    }
+
+    .subject-top{
+        flex-wrap:wrap;
+    }
+
+    .status{
+        margin-left:auto;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="layout">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+
+    <div class="sidebar-brand">
+
+        <img
+            src="srm_logo.png"
+            class="sidebar-logo"
+            alt="SRM Institute of Science and Technology"
+        >
+
+        <div class="sidebar-brand-text">
+
+            <div class="sidebar-brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+            <div class="sidebar-brand-sub">
+                SMART ATTENDANCE
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <nav class="menu">
+
+
+        <a href="facultydashboard.html">
+
+            <span class="menu-icon">
+                ⌂
+            </span>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="facultydashboard.html">
+
+            <span class="menu-icon">
+                ▦
+            </span>
+
+            <span>
+                My Classes
+            </span>
+
+        </a>
+
+
+        <a
+            href="subjects.html"
+            class="active"
+        >
+
+            <span class="menu-icon">
+                ▤
+            </span>
+
+            <span>
+                Subjects
+            </span>
+
+        </a>
+
+
+        <a href="students.html">
+
+            <span class="menu-icon">
+                ♙
+            </span>
+
+            <span>
+                Students
+            </span>
+
+        </a>
+
+
+        <a href="takeattendance.html">
+
+            <span class="menu-icon">
+                ◉
+            </span>
+
+            <span>
+                Take Attendance
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+    <div class="menu-title">
+        ANALYTICS
+    </div>
+
+
+    <nav class="menu">
+
+
+        <a href="attendancehistory.html">
+
+            <span class="menu-icon">
+                ◷
+            </span>
+
+            <span>
+                Attendance History
+            </span>
+
+        </a>
+
+
+        <a href="reports.html">
+
+            <span class="menu-icon">
+                ▥
+            </span>
+
+            <span>
+                Reports
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+    <div class="menu-title account-title">
+        ACCOUNT
+    </div>
+
+
+    <nav class="menu">
+
+
+        <a href="facultyprofile.html">
+
+            <span class="menu-icon">
+                ♙
+            </span>
+
+            <span>
+                My Profile
+            </span>
+
+        </a>
+
+
+        <a
+            href="index.html"
+            class="logout"
+            onclick="return logout();"
+        >
+
+            <span class="menu-icon">
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+    <!-- SRM WATERMARK -->
+
+    <img
+        src="srm_logo.png"
+        class="bg-srm-logo"
+        alt=""
+        aria-hidden="true"
+    >
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <header class="header">
+
+
+        <div class="brand">
+
+
+            <div class="srm-box">
+
+                <img
+                    src="srm_logo.png"
+                    alt="SRM"
+                >
+
+            </div>
+
+
+            <div>
+
+                <div class="brand-name">
+                    Snap<span>Dex</span>
+                </div>
+
+                <div class="brand-sub">
+                    Smart Attendance • SRM Institute of Science and Technology
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="profile">
+
+
+            <div class="profile-text">
+
+                <div
+                    class="profile-name"
+                    id="facultyName"
+                >
+                    Faculty
+                </div>
+
+
+                <div
+                    class="profile-id"
+                    id="facultyId"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <img
+                id="facultyPhoto"
+                class="profile-photo"
+                src="srm_logo.png"
+                alt="Faculty"
+            >
+
+
+        </div>
+
+
+    </header>
+
+
+    <!-- =================================================
+         CONTENT
+    ================================================= -->
+
+    <section class="content">
+
+
+        <h1 class="page-title">
+            Subjects
+        </h1>
+
+
+        <p class="page-subtitle">
+            View the subjects and classes assigned to you.
+        </p>
+
+
+        <!-- =================================================
+             STATS
+        ================================================= -->
+
+        <div class="stats">
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Total Subjects
+                </div>
+
+
+                <div
+                    class="stat-number blue"
+                    id="totalSubjects"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Total Classes
+                </div>
+
+
+                <div
+                    class="stat-number green"
+                    id="totalClasses"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Sections Covered
+                </div>
+
+
+                <div
+                    class="stat-number orange"
+                    id="totalSections"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             SEARCH / FILTER
+        ================================================= -->
+
+        <div class="toolbar">
+
+
+            <div class="search-box">
+
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search subject, section or program..."
+                    oninput="renderSubjects()"
+                >
+
+
+            </div>
+
+
+            <select
+                id="sectionFilter"
+                class="filter-select"
+                onchange="renderSubjects()"
+            >
+
+                <option value="ALL">
+                    All Sections
+                </option>
+
+            </select>
+
+
+        </div>
+
+
+        <!-- =================================================
+             SUBJECT GRID
+        ================================================= -->
+
+        <div
+            id="subjectGrid"
+            class="subject-grid"
+        ></div>
+
+
+    </section>
+
+
+</main>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SNAPDEX SUBJECTS
+===================================================== */
+
+
+/* =====================================================
+   FACULTY
+===================================================== */
+
+let faculty = null;
+
+try{
+
+    faculty =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexFaculty"
+            ) || "null"
+        );
+
+}catch(error){
+
+    faculty = null;
+
+}
+
+
+/* =====================================================
+   FACULTY HEADER
+===================================================== */
+
+function loadFaculty(){
+
+    if(!faculty){
+        return;
+    }
+
+
+    const facultyId =
+        faculty.id ||
+        faculty.facultyId ||
+        "-";
+
+
+    document.getElementById(
+        "facultyName"
+    ).textContent =
+        faculty.name ||
+        "Faculty";
+
+
+    document.getElementById(
+        "facultyId"
+    ).textContent =
+        facultyId;
+
+
+    if(
+        faculty.profilePhoto
+    ){
+
+        document.getElementById(
+            "facultyPhoto"
+        ).src =
+            faculty.profilePhoto;
+
+    }
+
+}
+
+
+/* =====================================================
+   GET CLASSES
+===================================================== */
+
+function getClasses(){
+
+    try{
+
+        const classes =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexClasses"
+                ) || "[]"
+            );
+
+
+        if(
+            !Array.isArray(
+                classes
+            )
+        ){
+
+            return [];
+
+        }
+
+
+        if(!faculty){
+
+            return classes;
+
+        }
+
+
+        const facultyId =
+            faculty.id ||
+            faculty.facultyId ||
+            "";
+
+
+        return classes.filter(
+            item => {
+
+                if(
+                    !item.facultyId
+                ){
+
+                    return true;
+
+                }
+
+
+                return String(
+                    item.facultyId
+                ) ===
+                String(
+                    facultyId
+                );
+
+            }
+        );
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   NORMALIZE
+===================================================== */
+
+function normalize(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+/* =====================================================
+   SUBJECT DATA
+===================================================== */
+
+function getSubjectData(){
+
+    const classes =
+        getClasses();
+
+
+    const subjects =
+        new Map();
+
+
+    classes.forEach(
+        item => {
+
+            const subject =
+                String(
+                    item.subject ||
+                    "Unknown Subject"
+                ).trim();
+
+
+            const subjectKey =
+                normalize(
+                    subject
+                );
+
+
+            if(
+                !subjects.has(
+                    subjectKey
+                )
+            ){
+
+                subjects.set(
+                    subjectKey,
+                    {
+                        subject:
+                            subject,
+
+                        classes:
+                            [],
+
+                        sections:
+                            new Set()
+                    }
+                );
+
+            }
+
+
+            const data =
+                subjects.get(
+                    subjectKey
+                );
+
+
+            data.classes.push(
+                item
+            );
+
+
+            if(
+                item.section
+            ){
+
+                data.sections.add(
+                    String(
+                        item.section
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    return [
+        ...subjects.values()
+    ];
+
+}
+
+
+/* =====================================================
+   UPDATE STATS
+===================================================== */
+
+function updateStats(){
+
+    const classes =
+        getClasses();
+
+
+    const subjects =
+        getSubjectData();
+
+
+    const sections =
+        new Set();
+
+
+    classes.forEach(
+        item => {
+
+            if(
+                item.section
+            ){
+
+                sections.add(
+                    normalize(
+                        item.section
+                    )
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "totalSubjects"
+    ).textContent =
+        subjects.length;
+
+
+    document.getElementById(
+        "totalClasses"
+    ).textContent =
+        classes.length;
+
+
+    document.getElementById(
+        "totalSections"
+    ).textContent =
+        sections.size;
+
+}
+
+
+/* =====================================================
+   SECTION FILTER
+===================================================== */
+
+function loadSectionFilter(){
+
+    const select =
+        document.getElementById(
+            "sectionFilter"
+        );
+
+
+    const currentValue =
+        select.value;
+
+
+    select.innerHTML =
+        `
+        <option value="ALL">
+            All Sections
+        </option>
+        `;
+
+
+    const sections =
+        new Set();
+
+
+    getClasses().forEach(
+        item => {
+
+            if(
+                item.section
+            ){
+
+                sections.add(
+                    String(
+                        item.section
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    [...sections]
+        .sort()
+        .forEach(
+            section => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    section;
+
+
+                option.textContent =
+                    normalize(
+                        section
+                    ).startsWith(
+                        "section"
+                    )
+                    ? section
+                    : "Section " +
+                      section;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    if(
+        [...select.options]
+        .some(
+            option =>
+                option.value ===
+                currentValue
+        )
+    ){
+
+        select.value =
+            currentValue;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER SUBJECTS
+===================================================== */
+
+function renderSubjects(){
+
+    const grid =
+        document.getElementById(
+            "subjectGrid"
+        );
+
+
+    const search =
+        normalize(
+            document.getElementById(
+                "searchInput"
+            ).value
+        );
+
+
+    const sectionFilter =
+        document.getElementById(
+            "sectionFilter"
+        ).value;
+
+
+    const subjects =
+        getSubjectData();
+
+
+    const filtered =
+        subjects.filter(
+            data => {
+
+                const searchMatch =
+                    !search ||
+                    normalize(
+                        data.subject
+                    ).includes(
+                        search
+                    ) ||
+                    data.classes.some(
+                        item =>
+                            normalize(
+                                item.program
+                            ).includes(
+                                search
+                            ) ||
+                            normalize(
+                                item.section
+                            ).includes(
+                                search
+                            )
+                    );
+
+
+                const sectionMatch =
+                    sectionFilter ===
+                    "ALL" ||
+                    data.classes.some(
+                        item =>
+                            normalize(
+                                item.section
+                            ) ===
+                            normalize(
+                                sectionFilter
+                            )
+                    );
+
+
+                return (
+                    searchMatch &&
+                    sectionMatch
+                );
+
+            }
+        );
+
+
+    grid.innerHTML =
+        "";
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        grid.innerHTML = `
+
+            <div
+                class="empty"
+                style="grid-column:1/-1;"
+            >
+
+                <div class="empty-icon">
+                    ▤
+                </div>
+
+                <h2>
+                    No Subjects Found
+                </h2>
+
+                <p>
+                    No subject or class matches your search.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        data => {
+
+
+            const classes =
+                data.classes;
+
+
+            const sections =
+                [...data.sections];
+
+
+            const first =
+                classes[0] || {};
+
+
+            const year =
+                first.year ||
+                "-";
+
+
+            const semester =
+                first.semester ||
+                "-";
+
+
+            const department =
+                first.department ||
+                "-";
+
+
+            const program =
+                first.program ||
+                "-";
+
+
+            const sectionText =
+                sections.length === 0
+                ? "-"
+                : sections
+                    .map(
+                        section =>
+                            normalize(
+                                section
+                            ).startsWith(
+                                "section"
+                            )
+                            ? section
+                            : "Section " +
+                              section
+                    )
+                    .join(
+                        ", "
+                    );
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "subject-card";
+
+
+            card.innerHTML = `
+
+                <div class="subject-top">
+
+
+                    <div class="subject-icon">
+                        ▤
+                    </div>
+
+
+                    <div class="subject-name">
+
+                        <h2>
+                            ${escapeHTML(
+                                data.subject
+                            )}
+                        </h2>
+
+
+                        <p>
+                            ${escapeHTML(
+                                department
+                            )}
+                        </p>
+
+                    </div>
+
+
+                    <span class="status">
+                        ACTIVE
+                    </span>
+
+
+                </div>
+
+
+                <div class="subject-info">
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            YEAR
+                        </div>
+
+                        <div class="info-value">
+                            ${escapeHTML(
+                                year
+                            )}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            SEMESTER
+                        </div>
+
+                        <div class="info-value">
+                            ${escapeHTML(
+                                semester
+                            )}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            CLASSES
+                        </div>
+
+                        <div class="info-value">
+                            ${classes.length}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="subject-footer">
+
+
+                    <div class="class-text">
+
+                        ${escapeHTML(
+                            program
+                        )}
+
+                        <br>
+
+                        ${escapeHTML(
+                            sectionText
+                        )}
+
+                    </div>
+
+
+                    <a
+                        href="takeattendance.html"
+                        class="attendance-link"
+                    >
+                        Take Attendance →
+                    </a>
+
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    return confirm(
+        "Are you sure you want to logout?"
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+function initialize(){
+
+    loadFaculty();
+
+    updateStats();
+
+    loadSectionFilter();
+
+    renderSubjects();
+
+}
+
+initialize();
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function(){
+
+        try{
+
+            faculty =
+                JSON.parse(
+                    localStorage.getItem(
+                        "snapdexFaculty"
+                    ) || "null"
+                );
+
+        }catch(error){
+
+            faculty = null;
+
+        }
+
+
+        loadFaculty();
+
+        updateStats();
+
+        loadSectionFilter();
+
+        renderSubjects();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

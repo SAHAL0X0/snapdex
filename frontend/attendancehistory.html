@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapDex - Attendance History</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 75% 20%,rgba(71,167,239,.10),transparent 27%),
+                radial-gradient(circle at 15% 80%,rgba(87,184,238,.08),transparent 28%),
+                #f3f7fc;
+            color: #10244a;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: rgba(238,244,251,.97);
+            border-right: 1px solid #d5e0eb;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            padding: 24px 16px;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            margin: 4px 12px 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #d9e3ed;
+            color: #102653;
+            letter-spacing: -.8px;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 700;
+            margin: 18px 12px 8px;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: block;
+            text-decoration: none;
+            color: #0f172a;
+            padding: 11px 13px;
+            border-radius: 10px;
+            margin-bottom: 0;
+            min-height: 46px;
+            font-size: 13px;
+            font-weight: 650;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: #e7f2ff;
+        }
+
+        .nav-item.active {
+            background: #dcecff;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e6eef7;
+            color: #45617f;
+        }
+
+        .nav-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .account-title {
+            margin-top: 35px;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+        }
+
+        .header {
+            height: 96px;
+            background: rgba(255,255,255,.94);
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 36px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .srm-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .brand h2 {
+            font-size: 23px;
+            color: #0f172a;
+        }
+
+        .brand p {
+            color: #64748b;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .faculty-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .faculty-details {
+            text-align: right;
+        }
+
+        .faculty-details strong {
+            display: block;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        .faculty-details span {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .faculty-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2563eb;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 36px 38px 70px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 34px;
+            color: #0f172a;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* SUMMARY */
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 19px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #dbe4f0;
+            border-radius: 19px;
+            padding: 24px;
+            box-shadow: 0 12px 35px rgba(31,76,120,.08);
+        }
+
+        .summary-card h2 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .summary-card p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .blue {
+            color: #2563eb;
+        }
+
+        .green {
+            color: #16a34a;
+        }
+
+        .red {
+            color: #dc2626;
+        }
+
+        .orange {
+            color: #ea580c;
+        }
+
+        /* HISTORY */
+        .history-card {
+            background: white;
+            border: 1px solid #dbe4f0;
+            border-radius: 21px;
+            box-shadow: 0 12px 35px rgba(31,76,120,.08);
+            overflow: hidden;
+        }
+
+        .history-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .history-header h2 {
+            font-size: 19px;
+            color: #0f172a;
+        }
+
+        .history-header p {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f6f9fc;
+            color: #637792;
+            font-size: 10px;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 14px 15px;
+        }
+
+        td {
+            padding: 17px 15px;
+            border-bottom: 1px solid #edf1f5;
+            font-size: 12px;
+            color: #263b5d;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .subject {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-finalized {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .view-btn {
+            background: #e0ecff;
+            color: #1d4ed8;
+            border: none;
+            padding: 8px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .view-btn:hover {
+            background: #c7dcff;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            color: #1769e8;
+            display: inline-flex;
+            margin-bottom: 12px;
+        }
+
+        .empty-icon svg {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 850px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 19px;
+        }
+
+        .close-btn {
+            border: none;
+            background: transparent;
+            font-size: 25px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .session-info {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .session-info p {
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .modal-table th,
+        .modal-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            Snap<span>Dex</span>
+        </div>
+
+        <div class="menu-title">
+            MAIN MENU
+        </div>
+
+        <a href="facultydashboard.html" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3.5 10.5L12 3.5l8.5 7"></path>
+                    <path d="M5.5 9.5V20h13V9.5"></path>
+                    <path d="M9 20v-6h6v6"></path>
+                </svg>
+            </span>
+            Dashboard
+        </a>
+
+        <a href="facultydashboard.html#classes" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                    <path d="M8 3v4"></path>
+                    <path d="M16 3v4"></path>
+                    <path d="M4 10h16"></path>
+                </svg>
+            </span>
+            My Classes
+        </a>
+
+        <a href="subjects.html" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="5" y="3.5" width="14" height="17" rx="1.5"></rect>
+                    <path d="M8 7h8"></path>
+                    <path d="M8 11h8"></path>
+                    <path d="M8 15h5"></path>
+                </svg>
+            </span>
+            Subjects
+        </a>
+
+        <a href="students.html" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="9" cy="8" r="3"></circle>
+                    <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"></path>
+                    <circle cx="17" cy="9" r="2.5"></circle>
+                    <path d="M15 15.5c2.8-.1 4.8 1.5 5.5 4.5"></path>
+                </svg>
+            </span>
+            Students
+        </a>
+
+        <a href="takeattendance.html" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="5" width="17" height="14" rx="2"></rect>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M8 5l1-2h6l1 2"></path>
+                </svg>
+            </span>
+            Take Attendance
+        </a>
+
+        <a href="attendancehistory.html" class="nav-item active">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7v5l3 2"></path>
+                </svg>
+            </span>
+            Attendance History
+        </a>
+
+        <a href="reports.html" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 20V10"></path>
+                    <path d="M12 20V5"></path>
+                    <path d="M19 20v-8"></path>
+                </svg>
+            </span>
+            Reports
+        </a>
+
+        <div class="menu-title account-title">
+            ACCOUNT
+        </div>
+
+        <a href="facultyprofile.html" class="nav-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5 20.5c.6-3.5 3-5.5 7-5.5s6.4 2 7 5.5"></path>
+                </svg>
+            </span>
+            My Profile
+        </a>
+
+        <a href="#" class="nav-item" onclick="logout()">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5"></path>
+                    <path d="M15 12H3"></path>
+                    <path d="M21 4v16"></path>
+                </svg>
+            </span>
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <div class="header-left">
+
+                <img
+                    src="srm-logo.png"
+                    class="srm-logo"
+                    alt="SRM Logo"
+                    onerror="this.style.display='none'"
+                >
+
+                <div class="brand">
+                    <h2>SnapDex</h2>
+                    <p>SRM Institute of Science and Technology</p>
+                </div>
+
+            </div>
+
+
+            <div class="faculty-info">
+
+                <div class="faculty-details">
+                    <strong id="facultyName">
+                        Faculty
+                    </strong>
+
+                    <span id="facultyId">
+                        Faculty ID
+                    </span>
+                </div>
+
+                <img
+                    id="facultyPhoto"
+                    class="faculty-photo"
+                    alt="Faculty Photo"
+                >
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <div class="page-title">
+
+                <h1>Attendance History</h1>
+
+                <p>
+                    View all finalized attendance sessions.
+                </p>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+            <div class="summary">
+
+                <div class="summary-card">
+                    <h2
+                        id="totalSessions"
+                        class="blue"
+                    >
+                        0
+                    </h2>
+
+                    <p>
+                        Total Sessions
+                    </p>
+                </div>
+
+
+                <div class="summary-card">
+                    <h2
+                        id="totalStudents"
+                        class="blue"
+                    >
+                        0
+                    </h2>
+
+                    <p>
+                        Student Records
+                    </p>
+                </div>
+
+
+                <div class="summary-card">
+                    <h2
+                        id="totalPresent"
+                        class="green"
+                    >
+                        0
+                    </h2>
+
+                    <p>
+                        Total Present
+                    </p>
+                </div>
+
+
+                <div class="summary-card">
+                    <h2
+                        id="totalAbsent"
+                        class="red"
+                    >
+                        0
+                    </h2>
+
+                    <p>
+                        Total Absent
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- HISTORY TABLE -->
+            <section class="history-card">
+
+                <div class="history-header">
+
+                    <h2>
+                        Attendance Sessions
+                    </h2>
+
+                    <p>
+                        Your finalized attendance records are shown below.
+                    </p>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Date & Time
+                                </th>
+
+                                <th>
+                                    Subject
+                                </th>
+
+                                <th>
+                                    Class
+                                </th>
+
+                                <th>
+                                    Students
+                                </th>
+
+                                <th>
+                                    Present
+                                </th>
+
+                                <th>
+                                    Absent
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="historyBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- DETAILS MODAL -->
+<div
+    class="modal-overlay"
+    id="detailsModal"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>
+                Attendance Details
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div
+                class="session-info"
+                id="sessionInfo"
+            >
+            </div>
+
+
+            <table class="modal-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Student
+                        </th>
+
+                        <th>
+                            Registration Number
+                        </th>
+
+                        <th>
+                            Attendance
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="detailsBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       FACULTY
+    ========================== */
+
+    const faculty =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexFaculty"
+            ) || "null"
+        );
+
+
+    /* =========================
+       PAGE LOAD
+    ========================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            loadFaculty();
+
+            loadHistory();
+
+        }
+    );
+
+
+    /* =========================
+       LOAD FACULTY
+    ========================== */
+
+    function loadFaculty() {
+
+        if (!faculty) {
+            return;
+        }
+
+
+        document.getElementById(
+            "facultyName"
+        ).textContent =
+            faculty.name || "Faculty";
+
+
+        document.getElementById(
+            "facultyId"
+        ).textContent =
+            faculty.id || "Faculty ID";
+
+
+        const photo =
+            document.getElementById(
+                "facultyPhoto"
+            );
+
+
+        if (faculty.profilePhoto) {
+
+            photo.src =
+                faculty.profilePhoto;
+
+        } else {
+
+            photo.src =
+                "https://via.placeholder.com/100";
+
+        }
+
+    }
+
+
+    /* =========================
+       LOAD HISTORY
+    ========================== */
+
+    function loadHistory() {
+
+        /*
+         IMPORTANT:
+         attendancereview.html saves
+         finalized sessions in:
+
+         snapdexAttendanceHistory
+        */
+
+        const allHistory =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexAttendanceHistory"
+                ) || "[]"
+            );
+
+
+        /*
+         Only show current faculty's
+         attendance sessions.
+        */
+
+        let history =
+            allHistory;
+
+
+        if (faculty) {
+
+            history =
+                allHistory.filter(
+                    function (session) {
+
+                        /*
+                         If session has facultyId,
+                         make sure it belongs to
+                         current faculty.
+                        */
+
+                        if (
+                            session.facultyId
+                        ) {
+
+                            return String(
+                                session.facultyId
+                            ) === String(
+                                faculty.id
+                            );
+
+                        }
+
+
+                        /*
+                         Older records without
+                         facultyId are also allowed.
+                        */
+
+                        return true;
+
+                    }
+                );
+
+        }
+
+
+        /*
+         Newest session first
+        */
+
+        history.sort(
+            function (a, b) {
+
+                const dateA =
+                    new Date(
+                        a.dateTime ||
+                        a.date ||
+                        0
+                    );
+
+                const dateB =
+                    new Date(
+                        b.dateTime ||
+                        b.date ||
+                        0
+                    );
+
+                return dateB - dateA;
+
+            }
+        );
+
+
+        updateSummary(history);
+
+        renderHistory(history);
+
+    }
+
+
+    /* =========================
+       SUMMARY
+    ========================== */
+
+    function updateSummary(history) {
+
+        let students = 0;
+
+        let present = 0;
+
+        let absent = 0;
+
+
+        history.forEach(
+            function (session) {
+
+                const records =
+                    Array.isArray(
+                        session.records
+                    )
+                    ? session.records
+                    : [];
+
+
+                students +=
+                    session.totalStudents ??
+                    records.length;
+
+
+                if (
+                    session.present !== undefined
+                ) {
+
+                    present +=
+                        Number(
+                            session.present
+                        ) || 0;
+
+                } else {
+
+                    present +=
+                        records.filter(
+                            function (record) {
+
+                                return (
+                                    record.attendance ===
+                                    "PRESENT"
+                                );
+
+                            }
+                        ).length;
+
+                }
+
+
+                if (
+                    session.absent !== undefined
+                ) {
+
+                    absent +=
+                        Number(
+                            session.absent
+                        ) || 0;
+
+                } else {
+
+                    absent +=
+                        records.filter(
+                            function (record) {
+
+                                return (
+                                    record.attendance ===
+                                    "ABSENT"
+                                );
+
+                            }
+                        ).length;
+
+                }
+
+            }
+        );
+
+
+        document.getElementById(
+            "totalSessions"
+        ).textContent =
+            history.length;
+
+
+        document.getElementById(
+            "totalStudents"
+        ).textContent =
+            students;
+
+
+        document.getElementById(
+            "totalPresent"
+        ).textContent =
+            present;
+
+
+        document.getElementById(
+            "totalAbsent"
+        ).textContent =
+            absent;
+
+    }
+
+
+    /* =========================
+       RENDER TABLE
+    ========================== */
+
+    function renderHistory(history) {
+
+        const tbody =
+            document.getElementById(
+                "historyBody"
+            );
+
+
+        tbody.innerHTML = "";
+
+
+        if (history.length === 0) {
+
+            tbody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty"
+                    >
+
+                        <div class="empty-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="8.5"></circle>
+                                <path d="M12 7v5l3 2"></path>
+                            </svg>
+                        </div>
+
+                        <strong>
+                            No attendance sessions found.
+                        </strong>
+
+                        <p style="margin-top:7px;">
+                            Finalized attendance sessions will appear here.
+                        </p>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        history.forEach(
+            function (session, index) {
+
+                const date =
+                    formatDate(
+                        session.dateTime ||
+                        session.date
+                    );
+
+
+                const records =
+                    Array.isArray(
+                        session.records
+                    )
+                    ? session.records
+                    : [];
+
+
+                const total =
+                    session.totalStudents ??
+                    records.length;
+
+
+                const present =
+                    session.present ??
+                    records.filter(
+                        function (record) {
+
+                            return (
+                                record.attendance ===
+                                "PRESENT"
+                            );
+
+                        }
+                    ).length;
+
+
+                const absent =
+                    session.absent ??
+                    records.filter(
+                        function (record) {
+
+                            return (
+                                record.attendance ===
+                                "ABSENT"
+                            );
+
+                        }
+                    ).length;
+
+
+                const className =
+
+                    "Year: " +
+                    (session.year || "-") +
+                    " • Sem: " +
+                    (session.semester || "-") +
+                    " • Sec: " +
+                    (session.section || "-");
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHtml(date)}
+                    </td>
+
+                    <td class="subject">
+                        ${escapeHtml(
+                            session.subject ||
+                            "Unknown Subject"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(className)}
+                    </td>
+
+                    <td>
+                        ${total}
+                    </td>
+
+                    <td>
+                        <strong
+                            style="color:#16a34a;"
+                        >
+                            ${present}
+                        </strong>
+                    </td>
+
+                    <td>
+                        <strong
+                            style="color:#dc2626;"
+                        >
+                            ${absent}
+                        </strong>
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="status status-finalized"
+                        >
+                            FINALIZED
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewDetails(${index})"
+                        >
+                            View
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+        /*
+         Store currently displayed
+         history for View button.
+        */
+
+        window.currentHistory =
+            history;
+
+    }
+
+
+    /* =========================
+       VIEW DETAILS
+    ========================== */
+
+    function viewDetails(index) {
+
+        const session =
+            window.currentHistory[index];
+
+
+        if (!session) {
+            return;
+        }
+
+
+        const date =
+            formatDate(
+                session.dateTime ||
+                session.date
+            );
+
+
+        document.getElementById(
+            "sessionInfo"
+        ).innerHTML = `
+
+            <p>
+                <strong>Subject:</strong>
+                ${escapeHtml(
+                    session.subject || "-"
+                )}
+            </p>
+
+            <p>
+                <strong>Department:</strong>
+                ${escapeHtml(
+                    session.department || "-"
+                )}
+            </p>
+
+            <p>
+                <strong>Program:</strong>
+                ${escapeHtml(
+                    session.program || "-"
+                )}
+            </p>
+
+            <p>
+                <strong>Year:</strong>
+                ${escapeHtml(
+                    session.year || "-"
+                )}
+            </p>
+
+            <p>
+                <strong>Semester:</strong>
+                ${escapeHtml(
+                    session.semester || "-"
+                )}
+            </p>
+
+            <p>
+                <strong>Section:</strong>
+                ${escapeHtml(
+                    session.section || "-"
+                )}
+            </p>
+
+            <p>
+                <strong>Date & Time:</strong>
+                ${escapeHtml(date)}
+            </p>
+
+        `;
+
+
+        const detailsBody =
+            document.getElementById(
+                "detailsBody"
+            );
+
+
+        detailsBody.innerHTML = "";
+
+
+        const records =
+            Array.isArray(
+                session.records
+            )
+            ? session.records
+            : [];
+
+
+        if (records.length === 0) {
+
+            detailsBody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="3"
+                        style="text-align:center;"
+                    >
+                        No student records available.
+                    </td>
+
+                </tr>
+
+            `;
+
+        } else {
+
+            records.forEach(
+                function (record) {
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const attendance =
+                        record.attendance ||
+                        "REVIEW";
+
+
+                    let attendanceText =
+                        attendance;
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    record.name || "-"
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                record.registrationNumber ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="status"
+                                style="
+                                    ${
+                                        attendance === "PRESENT"
+                                        ? "background:#dcfce7;color:#15803d;"
+                                        : attendance === "ABSENT"
+                                        ? "background:#fee2e2;color:#dc2626;"
+                                        : "background:#fef3c7;color:#d97706;"
+                                    }
+                                "
+                            >
+                                ${escapeHtml(
+                                    attendanceText
+                                )}
+                            </span>
+
+                        </td>
+
+                    `;
+
+
+                    detailsBody.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+
+        document
+            .getElementById(
+                "detailsModal"
+            )
+            .classList.add("show");
+
+    }
+
+
+    /* =========================
+       CLOSE MODAL
+    ========================== */
+
+    function closeModal() {
+
+        document
+            .getElementById(
+                "detailsModal"
+            )
+            .classList.remove("show");
+
+    }
+
+
+    /* =========================
+       DATE FORMAT
+    ========================== */
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "-";
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return String(value);
+
+        }
+
+
+        return date.toLocaleString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+    }
+
+
+    /* =========================
+       HTML ESCAPE
+    ========================== */
+
+    function escapeHtml(value) {
+
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
+
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    function logout() {
+
+        const confirmLogout =
+            confirm(
+                "Are you sure you want to logout?"
+            );
+
+
+        if (!confirmLogout) {
+            return;
+        }
+
+
+        localStorage.removeItem(
+            "snapdexFaculty"
+        );
+
+
+        window.location.href =
+            "index.html";
+
+    }
+
+
+    /* =========================
+       CLOSE MODAL OUTSIDE CLICK
+    ========================== */
+
+    document
+        .getElementById(
+            "detailsModal"
+        )
+        .addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === this
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+</script>
+
+</body>
+</html>
