@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SnapDex - Faculty Dashboard</title>
+<script src="config.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1100,7 +1101,7 @@ tbody tr:last-child td{border-bottom:none;}
    Java Spring Boot + MySQL
 ===================================================== */
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
 
 let faculty = null;
 

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SnapDex - Take Attendance</title>
+<script src="config.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1136,8 +1137,9 @@ if(!selectedClass && classes.length > 0){
 async function syncTakeAttendanceClasses(){
     if(!faculty) return;
     const facultyId = faculty.id || faculty.facultyId || "";
+    const apiBase = window.API_BASE_URL || "http://localhost:8080";
     try {
-        const res = await fetch(`http://localhost:8080/api/classes/faculty/${facultyId}`);
+        const res = await fetch(`${apiBase}/api/classes/faculty/${facultyId}`);
         if(res.ok) {
             const data = await res.json();
             if(Array.isArray(data) && data.length > 0) {

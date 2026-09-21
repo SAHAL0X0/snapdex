@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SnapDex - Reports</title>
+<script src="config.js"></script>
 
 <style>
 *{
@@ -2724,9 +2725,11 @@ initialize();
 
 async function syncReportsDataFromBackend(){
 
+    const apiBase = window.API_BASE_URL || "http://localhost:8080";
+
     try{
 
-        let url = "http://localhost:8080/api/attendance/history";
+        let url = apiBase + "/api/attendance/history";
 
         if(faculty){
 
@@ -2779,7 +2782,7 @@ async function syncReportsDataFromBackend(){
 
         const sRes =
             await fetch(
-                "http://localhost:8080/api/students"
+                apiBase + "/api/students"
             );
 
         if(sRes.ok){

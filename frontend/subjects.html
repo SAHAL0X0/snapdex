@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SnapDex - Subjects</title>
+<script src="config.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2291,10 +2292,11 @@ async function syncSubjectsFromBackend(){
             ? (faculty.id || faculty.facultyId)
             : null;
 
+        const apiBase = window.API_BASE_URL || "http://localhost:8080";
         const url =
             facultyId
-            ? "http://localhost:8080/api/classes/faculty/" + encodeURIComponent(facultyId)
-            : "http://localhost:8080/api/classes";
+            ? apiBase + "/api/classes/faculty/" + encodeURIComponent(facultyId)
+            : apiBase + "/api/classes";
 
         const res =
             await fetch(url);

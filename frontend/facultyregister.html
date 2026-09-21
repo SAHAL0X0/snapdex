@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Faculty Registration - SnapDex</title>
+  <script src="config.js"></script>
 
   <style>
     * {
@@ -539,7 +540,7 @@
 
 <script>
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
 
 const form =
   document.getElementById("facultyForm");

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SnapDex - My Profile</title>
+<script src="config.js"></script>
 
 <style>
 
@@ -1096,9 +1097,9 @@ async function handlePhotoUpdate(input) {
             return;
         }
 
-        try {
+            const apiBase = window.API_BASE_URL || "http://localhost:8080";
             const response = await fetch(
-                `http://localhost:8080/api/faculty/${encodeURIComponent(facultyIdentifier)}/photo`,
+                `${apiBase}/api/faculty/${encodeURIComponent(facultyIdentifier)}/photo`,
                 {
                     method: "PUT",
                     headers: {

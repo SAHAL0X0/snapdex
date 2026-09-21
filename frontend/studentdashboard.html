@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SnapDex - Student Dashboard</title>
+<script src="config.js"></script>
 
 <style>
 
@@ -3170,11 +3171,13 @@ async function syncStudentFromBackend(){
         }catch(e){}
     }
 
+    const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
+
     // 1. Sync student profile from backend
     if(regNo){
         try{
             const sRes = await fetch(
-                "http://localhost:8080/api/students/" +
+                API_BASE_URL + "/api/students/" +
                 encodeURIComponent(regNo)
             );
             if(sRes.ok){
@@ -3205,7 +3208,7 @@ async function syncStudentFromBackend(){
     try{
         const cRes =
             await fetch(
-                "http://localhost:8080/api/classes"
+                API_BASE_URL + "/api/classes"
             );
 
         if(cRes.ok){
@@ -3227,7 +3230,7 @@ async function syncStudentFromBackend(){
     try{
         const hRes =
             await fetch(
-                "http://localhost:8080/api/attendance/history"
+                API_BASE_URL + "/api/attendance/history"
             );
 
         if(hRes.ok){
@@ -3250,7 +3253,7 @@ async function syncStudentFromBackend(){
         try{
             const aRes =
                 await fetch(
-                    "http://localhost:8080/api/attendance/student/" +
+                    API_BASE_URL + "/api/attendance/student/" +
                     encodeURIComponent(regNo)
                 );
 

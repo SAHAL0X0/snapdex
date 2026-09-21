@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SnapDex - Student Registration</title>
+<script src="config.js"></script>
 
 <style>
 *{
@@ -673,7 +674,7 @@ select.valid{
 
 <script>
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
 
 /* =====================================================
    PROGRAMS
