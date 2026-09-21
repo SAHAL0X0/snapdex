@@ -1137,7 +1137,7 @@ if(!selectedClass && classes.length > 0){
 async function syncTakeAttendanceClasses(){
     if(!faculty) return;
     const facultyId = faculty.id || faculty.facultyId || "";
-    const apiBase = window.API_BASE_URL || "http://localhost:8080";
+    const apiBase = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
     try {
         const res = await fetch(`${apiBase}/api/classes/faculty/${facultyId}`);
         if(res.ok) {

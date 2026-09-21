@@ -1097,7 +1097,7 @@ async function handlePhotoUpdate(input) {
             return;
         }
 
-            const apiBase = window.API_BASE_URL || "http://localhost:8080";
+            const apiBase = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
             const response = await fetch(
                 `${apiBase}/api/faculty/${encodeURIComponent(facultyIdentifier)}/photo`,
                 {
