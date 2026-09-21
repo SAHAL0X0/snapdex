@@ -25,7 +25,6 @@ import com.snapdex.backend.repository.StudentRepository;
 
 @RestController
 @RequestMapping("/api/students")
-@CrossOrigin(origins = "*")
 public class StudentController {
 
     private final StudentRepository studentRepository;

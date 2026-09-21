@@ -28,7 +28,6 @@ import com.snapdex.backend.repository.StudentRepository;
 
 @RestController
 @RequestMapping("/api/attendance")
-@CrossOrigin(origins = "*")
 public class AttendanceController {
 
     private final AttendanceSessionRepository sessionRepository;
