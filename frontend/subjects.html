@@ -184,127 +184,100 @@ body{
 ===================================================== */
 
 .menu-title{
-    padding:0 12px;
-
-    margin:18px 0 8px;
-
-    color:#71839c;
-
-    font-size:10px;
-
+    margin:24px 12px 10px;
+    color:#10244a;
+    font-size:11px;
     font-weight:800;
-
-    letter-spacing:1.3px;
-
+    letter-spacing:1.4px;
     text-transform:uppercase;
 }
 
-
-/* =====================================================
-   MENU
-===================================================== */
-
 .menu{
     display:flex;
-
     flex-direction:column;
+    gap:6px;
 }
 
 .menu a{
     position:relative;
-
     display:flex;
-
     align-items:center;
-
-    gap:12px;
-
+    gap:14px;
     width:100%;
-
-    padding:11px 13px;
-
-    margin:5px 0;
-
-    min-height:46px;
-
-    border-radius:13px;
-
-    color:#18345d;
-
+    height:52px;
+    min-height:52px;
+    padding:5px 10px;
+    margin:4px 0;
+    border-radius:14px;
+    color:#10244a;
     text-decoration:none;
-
-    font-size:13px;
-
-    font-weight:650;
-
-    transition:.2s ease;
+    font-size:15px;
+    font-weight:700;
+    transition:background .2s ease, color .2s ease;
 }
 
 .menu a:hover{
-    color:#087fe0;
-
-    background:#e7f2ff;
-
-    transform:translateX(2px);
+    color:#075edb;
+    background:#eef5fc;
 }
 
 .menu a.active{
-    color:#075fc7;
-
-    background:#dcecff;
-
-    box-shadow:
-        inset 0 0 0 1px rgba(8,127,224,.04);
+    color:#075edb;
+    background:#e1edff;
+    font-weight:700;
 }
 
-
-/* =====================================================
-   MENU ICON
-===================================================== */
-
 .menu-icon{
-    width:32px;
-    height:32px;
-
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    min-width:42px;
     display:flex;
-
     align-items:center;
     justify-content:center;
+    border-radius:12px;
+    background:#edf5fe;
+    color:#10244a;
+    transition:background .2s ease, color .2s ease;
+}
 
-    border-radius:9px;
+.menu-icon svg{
+    width:19px;
+    height:19px;
+    display:block;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
 
-    background:#e6eef7;
-
-    color:#45617f;
-
-    font-size:14px;
-
-    flex-shrink:0;
+.menu a:hover .menu-icon{
+    background:#e3effc;
+    color:#075edb;
 }
 
 .menu a.active .menu-icon{
-    background:#cbe4ff;
-
-    color:#087fe0;
+    background:#f0f6fe;
+    color:#075edb;
 }
 
-
-/* =====================================================
-   ACCOUNT
-===================================================== */
-
 .account-title{
-    margin-top:18px;
+    margin-top:28px;
 }
 
 .logout{
-    color:#b53d3d !important;
+    color:#10244a !important;
 }
 
 .logout:hover{
-    background:#fff0f0 !important;
+    background:#fff1f1 !important;
+    color:#d32020 !important;
+}
 
-    color:#d22f2f !important;
+.logout:hover .menu-icon{
+    background:#ffe6e6 !important;
+    color:#d32020 !important;
 }
 
 
@@ -1180,155 +1153,123 @@ body{
         MAIN MENU
     </div>
 
-
     <nav class="menu">
 
+        <a href="facultydashboard.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 10.5L12 3l9 7.5V21H5V10.5z"></path>
+                    <path d="M9 21v-6h6v6"></path>
+                </svg>
+            </span>
+            <span>Dashboard</span>
+        </a>
 
         <a href="facultydashboard.html">
-
             <span class="menu-icon">
-                ⌂
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="5" width="17" height="15" rx="2.5"></rect>
+                    <path d="M8 3v4"></path>
+                    <path d="M16 3v4"></path>
+                    <path d="M3.5 10h17"></path>
+                </svg>
             </span>
-
-            <span>
-                Dashboard
-            </span>
-
+            <span>My Classes</span>
         </a>
 
-
-        <a href="facultydashboard.html">
-
+        <a href="subjects.html" class="active">
             <span class="menu-icon">
-                ▦
+                <svg viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                    <path d="M8 9h8"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h5"></path>
+                </svg>
             </span>
-
-            <span>
-                My Classes
-            </span>
-
+            <span>Subjects</span>
         </a>
-
-
-        <a
-            href="subjects.html"
-            class="active"
-        >
-
-            <span class="menu-icon">
-                ▤
-            </span>
-
-            <span>
-                Subjects
-            </span>
-
-        </a>
-
 
         <a href="students.html">
-
             <span class="menu-icon">
-                ♙
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3.2"></circle>
+                    <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"></path>
+                    <circle cx="17" cy="9" r="2.5"></circle>
+                    <path d="M15 15.5c2.8-.1 4.8 1.5 5.5 4.5"></path>
+                </svg>
             </span>
-
-            <span>
-                Students
-            </span>
-
+            <span>Students</span>
         </a>
-
 
         <a href="takeattendance.html">
-
             <span class="menu-icon">
-                ◉
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="6" width="17" height="14" rx="2.5"></rect>
+                    <circle cx="12" cy="13" r="3.5"></circle>
+                    <path d="M8 6l1-2.5h6l1 2.5"></path>
+                </svg>
             </span>
-
-            <span>
-                Take Attendance
-            </span>
-
+            <span>Take Attendance</span>
         </a>
 
-
     </nav>
-
 
     <div class="menu-title">
         ANALYTICS
     </div>
 
-
     <nav class="menu">
 
-
         <a href="attendancehistory.html">
-
             <span class="menu-icon">
-                ◷
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7.5v4.5l3 2"></path>
+                </svg>
             </span>
-
-            <span>
-                Attendance History
-            </span>
-
+            <span>Attendance History</span>
         </a>
-
 
         <a href="reports.html">
-
             <span class="menu-icon">
-                ▥
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 20h16"></path>
+                    <path d="M7 20V12"></path>
+                    <path d="M12 20V5"></path>
+                    <path d="M17 20V15"></path>
+                </svg>
             </span>
-
-            <span>
-                Reports
-            </span>
-
+            <span>Reports</span>
         </a>
 
-
     </nav>
-
 
     <div class="menu-title account-title">
         ACCOUNT
     </div>
 
-
     <nav class="menu">
 
-
         <a href="facultyprofile.html">
-
             <span class="menu-icon">
-                ♙
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5.5 20.5c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5"></path>
+                </svg>
             </span>
-
-            <span>
-                My Profile
-            </span>
-
+            <span>My Profile</span>
         </a>
 
-
-        <a
-            href="index.html"
-            class="logout"
-            onclick="return logout();"
-        >
-
+        <a href="index.html" class="logout" onclick="return logout();">
             <span class="menu-icon">
-                ↪
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 12h10"></path>
+                    <path d="M11 8l4 4-4 4"></path>
+                    <path d="M19 6v12"></path>
+                </svg>
             </span>
-
-            <span>
-                Logout
-            </span>
-
+            <span>Logout</span>
         </a>
-
 
     </nav>
 
@@ -2338,6 +2279,65 @@ initialize();
 
 
 /* =====================================================
+   BACKEND SYNC
+===================================================== */
+
+async function syncSubjectsFromBackend(){
+
+    try{
+
+        const facultyId =
+            faculty
+            ? (faculty.id || faculty.facultyId)
+            : null;
+
+        const url =
+            facultyId
+            ? "http://localhost:8080/api/classes/faculty/" + encodeURIComponent(facultyId)
+            : "http://localhost:8080/api/classes";
+
+        const res =
+            await fetch(url);
+
+        if(res.ok){
+
+            const data =
+                await res.json();
+
+            if(
+                Array.isArray(data)
+            ){
+
+                localStorage.setItem(
+                    "snapdexClasses",
+                    JSON.stringify(data)
+                );
+
+                updateStats();
+
+                loadSectionFilter();
+
+                renderSubjects();
+
+            }
+
+        }
+
+    }catch(err){
+
+        console.warn(
+            "Subjects backend sync:",
+            err
+        );
+
+    }
+
+}
+
+syncSubjectsFromBackend();
+
+
+/* =====================================================
    REFRESH
 ===================================================== */
 
@@ -2368,6 +2368,8 @@ window.addEventListener(
         loadSectionFilter();
 
         renderSubjects();
+
+        syncSubjectsFromBackend();
 
     }
 );

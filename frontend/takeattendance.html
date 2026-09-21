@@ -54,59 +54,75 @@ body{
 }
 
 .menu-title{
-    color:#71809b;
-    font-size:10px;
+    margin:24px 12px 10px;
+    color:#10244a;
+    font-size:11px;
     font-weight:800;
-    letter-spacing:1.3px;
+    letter-spacing:1.4px;
     text-transform:uppercase;
-    margin:18px 12px 8px;
 }
 
 .menu{
     display:flex;
     flex-direction:column;
-    gap:0;
+    gap:6px;
 }
 
 .menu a{
     text-decoration:none;
-    color:#18345d;
-    font-size:13px;
-    font-weight:650;
-    padding:11px 13px;
-    min-height:46px;
-    border-radius:13px;
+    color:#10244a;
+    font-size:15px;
+    font-weight:700;
+    padding:5px 10px;
+    height:52px;
+    min-height:52px;
+    border-radius:14px;
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
 }
 
 .menu a:hover{
-    background:#eef4ff;
-    color:#075ee8;
+    background:#eef5fc;
+    color:#075edb;
 }
 
 .menu a.active{
-    background:#dcecff;
-    color:#075ee8;
+    background:#e1edff;
+    color:#075edb;
     font-weight:700;
 }
 
 .menu-icon{
-    width:32px;
-    height:32px;
-    min-width:32px;
-    border-radius:9px;
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    min-width:42px;
+    border-radius:12px;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:#e6eef7;
-    color:#45617f;
+    background:#edf5fe;
+    color:#10244a;
+    transition:background .2s ease, color .2s ease;
+}
+
+.menu a:hover .menu-icon{
+    background:#e3effc;
+    color:#075edb;
+}
+
+.menu a.active .menu-icon{
+    background:#f0f6fe;
+    color:#075edb;
 }
 
 .menu-icon svg{
-    width:16px;
-    height:16px;
+    width:19px;
+    height:19px;
+    display:block;
     fill:none;
     stroke:currentColor;
     stroke-width:1.8;
@@ -115,11 +131,21 @@ body{
 }
 
 .account-title{
-    margin-top:35px;
+    margin-top:28px;
 }
 
 .logout{
-    color:#e00000 !important;
+    color:#10244a !important;
+}
+
+.logout:hover{
+    background:#fff1f1 !important;
+    color:#d32020 !important;
+}
+
+.logout:hover .menu-icon{
+    background:#ffe6e6 !important;
+    color:#d32020 !important;
 }
 
 /* ================= MAIN ================= */
@@ -659,9 +685,9 @@ button:disabled{
            onclick="return logout();">
             <span class="menu-icon">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M10 17l5-5-5-5"></path>
-                    <path d="M15 12H3"></path>
-                    <path d="M21 4v16"></path>
+                    <path d="M5 12h10"></path>
+                    <path d="M11 8l4 4-4 4"></path>
+                    <path d="M19 6v12"></path>
                 </svg>
             </span>
             <span>Logout</span>
@@ -720,7 +746,7 @@ button:disabled{
         <img
             id="facultyPhoto"
             class="profile-photo"
-            src="srm-logo.png"
+            src="srm_logo.png"
             alt="Faculty">
     </div>
 
@@ -1089,16 +1115,53 @@ try{
 }
 
 
+const urlParams = new URLSearchParams(window.location.search);
+const queryClassId = urlParams.get("classId") || sessionStorage.getItem("snapdexSelectedClassId");
+if(queryClassId && classes.length > 0){
+    const found = classes.find(c => String(c.id) === String(queryClassId));
+    if(found){
+        selectedClass = found;
+        localStorage.setItem("snapdexSelectedClass", JSON.stringify(selectedClass));
+    }
+}
+
 if(!selectedClass && classes.length > 0){
-
     selectedClass = classes[0];
-
     localStorage.setItem(
         "snapdexSelectedClass",
         JSON.stringify(selectedClass)
     );
-
 }
+
+async function syncTakeAttendanceClasses(){
+    if(!faculty) return;
+    const facultyId = faculty.id || faculty.facultyId || "";
+    try {
+        const res = await fetch(`http://localhost:8080/api/classes/faculty/${facultyId}`);
+        if(res.ok) {
+            const data = await res.json();
+            if(Array.isArray(data) && data.length > 0) {
+                classes = data;
+                localStorage.setItem("snapdexClasses", JSON.stringify(data));
+                const targetId = urlParams.get("classId") || sessionStorage.getItem("snapdexSelectedClassId");
+                if(targetId) {
+                    const found = data.find(c => String(c.id) === String(targetId));
+                    if(found) {
+                        selectedClass = found;
+                        localStorage.setItem("snapdexSelectedClass", JSON.stringify(found));
+                    }
+                } else if(!selectedClass) {
+                    selectedClass = data[0];
+                    localStorage.setItem("snapdexSelectedClass", JSON.stringify(selectedClass));
+                }
+                displayClass();
+            }
+        }
+    } catch(e) {
+        console.warn("Take attendance class sync:", e);
+    }
+}
+syncTakeAttendanceClasses();
 
 
 /* ================= DISPLAY CLASS ================= */

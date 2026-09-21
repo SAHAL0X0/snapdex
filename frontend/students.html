@@ -148,21 +148,17 @@ body{
 ===================================================== */
 
 .menu-title{
-    color:#55718f;
-
-    font-size:10px;
-
-    font-weight:700;
-
-    letter-spacing:1.3px;
-
-    margin:18px 12px 8px;
+    margin:24px 12px 10px;
+    color:#10244a;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
 }
 
 .account-title{
-    margin-top:29px;
+    margin-top:28px;
 }
-
 
 /* =====================================================
    MENU
@@ -171,112 +167,93 @@ body{
 .menu{
     display:flex;
     flex-direction:column;
-
-    gap:0;
+    gap:6px;
 }
 
 .menu a{
-    width:100%;
-    min-height:46px;
-
-    padding:11px 13px;
-
+    position:relative;
     display:flex;
     align-items:center;
-
-    gap:12px;
-
+    gap:14px;
+    width:100%;
+    height:52px;
+    min-height:52px;
+    padding:5px 10px;
+    margin:4px 0;
+    border-radius:14px;
+    color:#10244a;
     text-decoration:none;
-
-    color:#18345d;
-
-    font-size:13px;
-
-    font-weight:650;
-
-    border-radius:13px;
-
-    transition:
-        background .2s ease,
-        color .2s ease;
+    font-size:15px;
+    font-weight:700;
+    transition:background .2s ease, color .2s ease;
 }
 
 .menu a:hover{
-    background:#e1edfb;
-    color:#075ee8;
+    color:#075edb;
+    background:#eef5fc;
 }
-
-
-/* =====================================================
-   ACTIVE
-===================================================== */
 
 .menu a.active{
-    background:#cfe3ff;
-
-    color:#075ee8;
-
-    font-weight:800;
+    color:#075edb;
+    background:#e1edff;
+    font-weight:700;
 }
-
-.menu a.active .menu-icon{
-    background:#c3ddff;
-
-    color:#075ee8;
-}
-
 
 /* =====================================================
    ICON BOX
 ===================================================== */
 
 .menu-icon{
-    width:32px;
-    height:32px;
-
-    min-width:32px;
-
-    border-radius:9px;
-
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    min-width:42px;
     display:flex;
     align-items:center;
     justify-content:center;
-
-    background:#e6eef7;
-
-    color:#45617f;
+    border-radius:12px;
+    background:#edf5fe;
+    color:#10244a;
+    transition:background .2s ease, color .2s ease;
 }
 
 .menu-icon svg{
-    width:16px;
-    height:16px;
-
+    width:19px;
+    height:19px;
+    display:block;
     fill:none;
-
     stroke:currentColor;
-
     stroke-width:1.8;
-
     stroke-linecap:round;
     stroke-linejoin:round;
 }
 
+.menu a:hover .menu-icon{
+    background:#e3effc;
+    color:#075edb;
+}
+
+.menu a.active .menu-icon{
+    background:#f0f6fe;
+    color:#075edb;
+}
 
 /* =====================================================
    LOGOUT
 ===================================================== */
 
 .menu a.logout{
-    color:#d32626;
-}
-
-.menu a.logout .menu-icon{
-    color:#d32626;
+    color:#10244a;
 }
 
 .menu a.logout:hover{
-    background:#fff0f0;
-    color:#d00000;
+    background:#fff1f1;
+    color:#d32020;
+}
+
+.menu a.logout:hover .menu-icon{
+    background:#ffe6e6;
+    color:#d32020;
 }
 
 
@@ -698,6 +675,39 @@ select:focus{
 
     box-shadow:
         0 0 0 3px rgba(23,105,232,.08);
+}
+
+.class-picker-wrap{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.picker-label{
+    font-size:13px;
+    font-weight:700;
+    color:#10244a;
+    white-space:nowrap;
+}
+
+#classSelector{
+    min-width:240px;
+    max-width:340px;
+    height:46px;
+    padding:0 14px;
+    border:1px solid #cbd8e8;
+    border-radius:11px;
+    background:#ffffff;
+    color:#071b41;
+    font-size:13px;
+    font-weight:600;
+    outline:none;
+    cursor:pointer;
+}
+
+#classSelector:focus{
+    border-color:#1769e8;
+    box-shadow:0 0 0 3px rgba(23,105,232,.08);
 }
 
 
@@ -1498,13 +1508,9 @@ select:focus{
             <span class="menu-icon">
 
                 <svg viewBox="0 0 24 24">
-
-                    <path d="M10 17l5-5-5-5"></path>
-
-                    <path d="M15 12H3"></path>
-
-                    <path d="M21 4v16"></path>
-
+                    <path d="M5 12h10"></path>
+                    <path d="M11 8l4 4-4 4"></path>
+                    <path d="M19 6v12"></path>
                 </svg>
 
             </span>
@@ -1670,6 +1676,12 @@ select:focus{
 
         <div class="toolbar">
 
+            <div class="class-picker-wrap">
+                <span class="picker-label">Class:</span>
+                <select id="classSelector" onchange="onClassChanged()">
+                    <option value="">Select a Class...</option>
+                </select>
+            </div>
 
             <div class="search">
 
@@ -1747,6 +1759,9 @@ select:focus{
 ===================================================== */
 
 let faculty = null;
+let currentSelectedClassId = null;
+let currentClassStudents = [];
+let facultyClasses = [];
 
 
 function loadFaculty(){
@@ -1842,211 +1857,139 @@ function getStudentKey(student){
 
 
 /* =====================================================
-   GET STUDENTS
+   GET STUDENTS (CLASS-SCOPED)
 ===================================================== */
 
 function getStudents(){
-
-    const students =
-        new Map();
-
-
-    /* SOURCE 1 */
-
-    try{
-
-        const list =
-            JSON.parse(
-                localStorage.getItem(
-                    "snapdexStudents"
-                ) || "[]"
-            );
+    if(!currentSelectedClassId){
+        return [];
+    }
+    return currentClassStudents || [];
+}
 
 
-        if(Array.isArray(list)){
+/* =====================================================
+   LOAD FACULTY CLASSES & SCOPED STUDENTS
+===================================================== */
 
-            list.forEach(
-                student => {
+async function loadClasses(){
+    const select = document.getElementById("classSelector");
+    if(!select) return;
 
-                    if(!student){
+    select.innerHTML = '<option value="">Select a Class...</option>';
 
-                        return;
-
-                    }
-
-
-                    const key =
-                        getStudentKey(
-                            student
-                        );
-
-
-                    if(key){
-
-                        students.set(
-                            key,
-                            {
-                                ...student
-                            }
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-
-    }catch(error){
-
-        console.log(
-            "snapdexStudents error",
-            error
-        );
-
+    if(!faculty) {
+        currentSelectedClassId = null;
+        currentClassStudents = [];
+        loadSectionFilter();
+        updateStats();
+        renderStudents();
+        return;
     }
 
+    const facultyId = faculty.id || faculty.facultyId || "";
+    let classes = [];
 
-    /* SOURCE 2 */
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/classes/faculty/${facultyId}`);
+        if(res.ok){
+            classes = await res.json();
+        }
+    } catch(e){
+        console.warn("Could not load classes from backend:", e);
+    }
 
-    try{
-
-        const single =
-            JSON.parse(
-                localStorage.getItem(
-                    "snapdexStudent"
-                ) || "null"
-            );
-
-
-        if(single){
-
-            const key =
-                getStudentKey(
-                    single
-                );
-
-
-            if(key){
-
-                students.set(
-                    key,
-                    {
-                        ...students.get(key),
-                        ...single
-                    }
-                );
-
+    if(!Array.isArray(classes) || classes.length === 0){
+        try{
+            const local = JSON.parse(localStorage.getItem("snapdexClasses") || "[]");
+            if(Array.isArray(local) && local.length > 0){
+                classes = local.filter(c => String(c.facultyId) === String(facultyId));
             }
-
-        }
-
-    }catch(error){
-
-        console.log(
-            "snapdexStudent error",
-            error
-        );
-
+        }catch(e){}
     }
 
+    facultyClasses = Array.isArray(classes) ? classes : [];
 
-    /* SOURCE 3 */
+    if(facultyClasses.length === 0){
+        select.innerHTML = '<option value="">No classes created yet</option>';
+        currentSelectedClassId = null;
+        currentClassStudents = [];
+        loadSectionFilter();
+        updateStats();
+        renderStudents();
+        return;
+    }
 
+    facultyClasses.forEach(cls => {
+        const opt = document.createElement("option");
+        opt.value = cls.id;
+        opt.textContent = `${cls.subject} - ${cls.year} (${cls.semester}), Sec ${cls.section}`;
+        select.appendChild(opt);
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramClassId = urlParams.get("classId");
+    const storedClassId = sessionStorage.getItem("snapdexSelectedClassId") ||
+                          (localStorage.getItem("snapdexSelectedClass") ? JSON.parse(localStorage.getItem("snapdexSelectedClass")).id : null);
+
+    const targetClassId = paramClassId || storedClassId;
+
+    if(targetClassId && facultyClasses.some(c => String(c.id) === String(targetClassId))){
+        select.value = String(targetClassId);
+        currentSelectedClassId = String(targetClassId);
+        sessionStorage.setItem("snapdexSelectedClassId", String(targetClassId));
+        await loadClassStudents(currentSelectedClassId);
+    } else {
+        select.value = "";
+        currentSelectedClassId = null;
+        currentClassStudents = [];
+        loadSectionFilter();
+        updateStats();
+        renderStudents();
+    }
+}
+
+async function onClassChanged(){
+    const select = document.getElementById("classSelector");
+    const classId = select.value;
+
+    if(!classId){
+        currentSelectedClassId = null;
+        currentClassStudents = [];
+        sessionStorage.removeItem("snapdexSelectedClassId");
+        localStorage.removeItem("snapdexSelectedClass");
+        loadSectionFilter();
+        updateStats();
+        renderStudents();
+        return;
+    }
+
+    currentSelectedClassId = String(classId);
+    sessionStorage.setItem("snapdexSelectedClassId", String(classId));
+
+    const selectedClassObj = facultyClasses.find(c => String(c.id) === String(classId));
+    if(selectedClassObj){
+        localStorage.setItem("snapdexSelectedClass", JSON.stringify(selectedClassObj));
+    }
+
+    await loadClassStudents(classId);
+}
+
+async function loadClassStudents(classId){
+    currentClassStudents = [];
     try{
-
-        const history =
-            JSON.parse(
-                localStorage.getItem(
-                    "snapdexAttendanceHistory"
-                ) || "[]"
-            );
-
-
-        if(Array.isArray(history)){
-
-            history.forEach(
-                session => {
-
-                    const records =
-                        Array.isArray(
-                            session.records
-                        )
-                        ? session.records
-                        : [];
-
-
-                    records.forEach(
-                        record => {
-
-                            if(!record){
-
-                                return;
-
-                            }
-
-
-                            const key =
-                                getStudentKey(
-                                    record
-                                );
-
-
-                            if(!key){
-
-                                return;
-
-                            }
-
-
-                            if(
-                                students.has(
-                                    key
-                                )
-                            ){
-
-                                students.set(
-                                    key,
-                                    {
-                                        ...record,
-                                        ...students.get(key)
-                                    }
-                                );
-
-                            }
-                            else{
-
-                                students.set(
-                                    key,
-                                    {
-                                        ...record
-                                    }
-                                );
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
+        const res = await fetch(`${API_BASE_URL}/api/students/class/${classId}`);
+        if(res.ok){
+            const data = await res.json();
+            currentClassStudents = Array.isArray(data) ? data : [];
         }
-
-    }catch(error){
-
-        console.log(
-            "history error",
-            error
-        );
-
+    }catch(e){
+        console.error("Error loading class students:", e);
     }
 
-
-    return [
-        ...students.values()
-    ];
-
+    loadSectionFilter();
+    updateStats();
+    renderStudents();
 }
 
 
@@ -2336,6 +2279,24 @@ function renderStudents(){
             "studentGrid"
         );
 
+    grid.innerHTML = "";
+
+    if(!currentSelectedClassId){
+        grid.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h2>No class selected. Select a class to view students.</h2>
+                <p>Please select a class from the dropdown above to load enrolled students.</p>
+            </div>
+        `;
+        return;
+    }
 
     const search =
         normalize(
@@ -2760,19 +2721,17 @@ function logout(){
 }
 
 
+const API_BASE_URL = "http://localhost:8080";
+
 /* =====================================================
    INITIALIZE
 ===================================================== */
 
-function initialize(){
+async function initialize(){
 
     loadFaculty();
 
-    loadSectionFilter();
-
-    updateStats();
-
-    renderStudents();
+    await loadClasses();
 
 }
 
@@ -2786,15 +2745,11 @@ initialize();
 
 window.addEventListener(
     "pageshow",
-    function(){
+    async function(){
 
         loadFaculty();
 
-        loadSectionFilter();
-
-        updateStats();
-
-        renderStudents();
+        await loadClasses();
 
     }
 );

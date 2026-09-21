@@ -253,6 +253,13 @@
       box-shadow: 0 8px 20px rgba(8, 121, 209, 0.20);
     }
 
+    .create-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     @media (max-width: 700px) {
       .form-grid {
         grid-template-columns: 1fr;
@@ -282,7 +289,6 @@
 <div class="container">
 
   <div class="header">
-
     <div class="srm">
       SRM
     </div>
@@ -292,7 +298,6 @@
     <p>
       SnapDex Smart Attendance
     </p>
-
   </div>
 
 
@@ -308,7 +313,7 @@
 
       <div class="form-grid">
 
-        <div class="field">
+        <div class="field full">
 
           <label for="name">
             Full Name
@@ -321,30 +326,7 @@
             autocomplete="name"
           >
 
-          <div
-            class="error"
-            id="nameError"
-          ></div>
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="facultyId">
-            Faculty / Employee ID
-          </label>
-
-          <input
-            type="text"
-            id="facultyId"
-            placeholder="e.g. FAC-1024"
-          >
-
-          <div
-            class="error"
-            id="facultyIdError"
-          ></div>
+          <div class="error" id="nameError"></div>
 
         </div>
 
@@ -362,10 +344,7 @@
             autocomplete="email"
           >
 
-          <div
-            class="error"
-            id="emailError"
-          ></div>
+          <div class="error" id="emailError"></div>
 
         </div>
 
@@ -383,10 +362,7 @@
             autocomplete="new-password"
           >
 
-          <div
-            class="error"
-            id="passwordError"
-          ></div>
+          <div class="error" id="passwordError"></div>
 
         </div>
 
@@ -404,10 +380,7 @@
             autocomplete="new-password"
           >
 
-          <div
-            class="error"
-            id="confirmPasswordError"
-          ></div>
+          <div class="error" id="confirmPasswordError"></div>
 
         </div>
 
@@ -430,7 +403,7 @@
           class="photo-placeholder"
           id="photoPlaceholder"
         >
-          Photo Required
+          Photo (Optional)
         </div>
 
         <img
@@ -447,13 +420,10 @@
         >
 
         <div class="photo-note">
-          JPG, JPEG or PNG only • Profile photo is required
+          JPG, JPEG or PNG (Optional • You can also add or update your photo later from My Profile)
         </div>
 
-        <div
-          class="error"
-          id="photoError"
-        ></div>
+        <div class="error" id="photoError"></div>
 
       </div>
 
@@ -482,36 +452,33 @@
               Select Department
             </option>
 
-            <option>
+            <option value="Engineering and Technology">
               Engineering and Technology
             </option>
 
-            <option>
+            <option value="Management">
               Management
             </option>
 
-            <option>
+            <option value="Computer Applications">
               Computer Applications
             </option>
 
-            <option>
+            <option value="Science and Humanities">
               Science and Humanities
             </option>
 
-            <option>
+            <option value="Medicine and Health Sciences">
               Medicine and Health Sciences
             </option>
 
-            <option>
+            <option value="Hotel Management">
               Hotel Management
             </option>
 
           </select>
 
-          <div
-            class="error"
-            id="departmentError"
-          ></div>
+          <div class="error" id="departmentError"></div>
 
         </div>
 
@@ -541,10 +508,7 @@
 
     </div>
 
-    <div
-      class="error"
-      id="confirmationError"
-    ></div>
+    <div class="error" id="confirmationError"></div>
 
 
     <!-- BUTTONS -->
@@ -575,14 +539,13 @@
 
 <script>
 
+const API_BASE_URL = "http://localhost:8080";
+
 const form =
   document.getElementById("facultyForm");
 
 const nameInput =
   document.getElementById("name");
-
-const facultyIdInput =
-  document.getElementById("facultyId");
 
 const emailInput =
   document.getElementById("email");
@@ -654,7 +617,7 @@ function validateName() {
     nameInput.value.trim();
 
   const namePattern =
-    /^[A-Za-z]+(?:[.'-]?[A-Za-z]+)*(?:\s+[A-Za-z]+(?:[.'-]?[A-Za-z]+)*)+$/;
+    /^(?:[A-Za-z]+(?:[.'-][A-Za-z]+)*)(?:\s+[A-Za-z]+(?:[.'-][A-Za-z]+)*)+$/;
 
   if (!value) {
 
@@ -672,7 +635,7 @@ function validateName() {
     showError(
       nameInput,
       "nameError",
-      "Please enter a valid name. Numbers and symbols are not allowed."
+      "Please enter a valid name. Numbers and invalid symbols are not allowed."
     );
 
     return false;
@@ -681,49 +644,6 @@ function validateName() {
   showValid(
     nameInput,
     "nameError"
-  );
-
-  return true;
-}
-
-
-/* =========================
-   FACULTY ID
-========================= */
-
-function validateFacultyId() {
-
-  const value =
-    facultyIdInput.value.trim();
-
-  const idPattern =
-    /^[A-Za-z0-9-]{3,30}$/;
-
-  if (!value) {
-
-    showError(
-      facultyIdInput,
-      "facultyIdError",
-      "Please enter your Faculty / Employee ID."
-    );
-
-    return false;
-  }
-
-  if (!idPattern.test(value)) {
-
-    showError(
-      facultyIdInput,
-      "facultyIdError",
-      "ID can contain letters, numbers and hyphens only."
-    );
-
-    return false;
-  }
-
-  showValid(
-    facultyIdInput,
-    "facultyIdError"
   );
 
   return true;
@@ -891,7 +811,7 @@ function validateDepartment() {
 
 
 /* =========================
-   PHOTO
+   PHOTO (OPTIONAL)
 ========================= */
 
 function validatePhoto() {
@@ -900,13 +820,10 @@ function validatePhoto() {
     photoInput.files[0];
 
   if (!file) {
-
     document.getElementById(
       "photoError"
-    ).textContent =
-      "Please upload your profile photo.";
-
-    return false;
+    ).textContent = "";
+    return true;
   }
 
   const allowedTypes = [
@@ -1039,11 +956,6 @@ nameInput.addEventListener(
   validateName
 );
 
-facultyIdInput.addEventListener(
-  "input",
-  validateFacultyId
-);
-
 emailInput.addEventListener(
   "input",
   validateEmail
@@ -1084,15 +996,12 @@ confirmation.addEventListener(
 
 form.addEventListener(
   "submit",
-  function (event) {
+  async function (event) {
 
     event.preventDefault();
 
     const validName =
       validateName();
-
-    const validId =
-      validateFacultyId();
 
     const validEmail =
       validateEmail();
@@ -1115,7 +1024,6 @@ form.addEventListener(
 
     if (
       !validName ||
-      !validId ||
       !validEmail ||
       !validPassword ||
       !validConfirm ||
@@ -1127,89 +1035,102 @@ form.addEventListener(
       return;
     }
 
+    const createButton =
+      form.querySelector(".create-btn");
 
-    const file =
-      photoInput.files[0];
+    createButton.disabled = true;
+    createButton.textContent =
+      "Creating...";
 
-    const reader =
-      new FileReader();
+    async function sendRegistration(photoBase64) {
+      const facultyData = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim().toLowerCase(),
+        password: passwordInput.value,
+        department: departmentInput.value,
+        profilePhoto: photoBase64 || ""
+      };
 
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/faculty/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(facultyData)
+          }
+        );
 
-    reader.onload =
-      function () {
+        const resultText = await response.text();
 
-        /*
-          IMPORTANT:
-          Password is intentionally saved
-          for this frontend-only prototype
-          so index.html can authenticate.
+        if (!response.ok) {
+          throw new Error(resultText || "Faculty registration failed.");
+        }
 
-          Later Java backend will replace this
-          with secure password hashing.
-        */
+        let result;
+        try {
+          result = JSON.parse(resultText);
+        } catch (e) {
+          throw new Error("Invalid response format from server.");
+        }
 
-        const facultyData = {
+        const assignedFacultyId = result.facultyId;
 
-          id:
-            facultyIdInput.value.trim(),
-
-          name:
-            nameInput.value.trim(),
-
-          email:
-            emailInput.value.trim().toLowerCase(),
-
-          password:
-            passwordInput.value,
-
-          department:
-            departmentInput.value,
-
-          profilePhoto:
-            reader.result,
-
-          createdAt:
-            new Date().toISOString()
-
+        const frontendFaculty = {
+          id: result.id,
+          facultyId: assignedFacultyId,
+          name: result.name,
+          email: result.email,
+          department: result.department || departmentInput.value,
+          profilePhoto: result.profilePhoto || ""
         };
-
-
-        /*
-          Always replace the old local
-          faculty profile.
-
-          This means you do NOT need to
-          manually delete snapdexFaculty.
-        */
 
         localStorage.setItem(
           "snapdexFaculty",
-          JSON.stringify(facultyData)
+          JSON.stringify(frontendFaculty)
         );
-
-
-        /*
-          Also set current faculty.
-        */
 
         sessionStorage.setItem(
           "snapdexCurrentUser",
-          JSON.stringify(facultyData)
+          JSON.stringify(frontendFaculty)
         );
 
+        localStorage.setItem(
+          "snapdexLoggedIn",
+          "faculty"
+        );
 
         alert(
-          "Faculty profile created successfully!"
+          "Faculty profile created successfully!\n\n" +
+          "Your unique Faculty ID is: " + assignedFacultyId + "\n\n" +
+          "Please keep this ID for your attendance and profile records."
         );
 
+        window.location.href = "facultydashboard.html";
 
-        window.location.href =
-          "facultydashboard.html";
+      } catch (error) {
+        console.error("Faculty registration error:", error);
+        alert("Registration failed: " + (error.message || "Unable to connect to backend."));
+        createButton.disabled = false;
+        createButton.textContent = "Create Faculty Profile";
+      }
+    }
 
+    const file = photoInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        sendRegistration(reader.result);
       };
-
-
-    reader.readAsDataURL(file);
+      reader.onerror = function () {
+        sendRegistration("");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      sendRegistration("");
+    }
 
   }
 );

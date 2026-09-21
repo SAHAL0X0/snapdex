@@ -673,6 +673,8 @@ select.valid{
 
 <script>
 
+const API_BASE_URL = "http://localhost:8080";
+
 /* =====================================================
    PROGRAMS
 ===================================================== */
@@ -1578,96 +1580,77 @@ function createStudentProfile(){
     new FileReader();
 
 
+    const createBtn = document.querySelector(".create-btn");
+    createBtn.disabled = true;
+    createBtn.textContent = "Creating Profile...";
+
     reader.onload =
-    function(event){
+    async function(event){
 
-        const student = {
-
-            id:
-            "STU-" +
-            Date.now(),
-
-            name:
-            nameInput.value.trim(),
-
-            registrationNumber:
-            registrationNumberInput.value.trim(),
-
-            email:
-            emailInput.value.trim().toLowerCase(),
-
-            department:
-            departmentInput.value,
-
-            program:
-            programInput.value,
-
-            year:
-            yearInput.value,
-
-            semester:
-            semesterInput.value,
-
-            section:
-            sectionInput.value
-                .trim()
-                .toUpperCase(),
-
-            profilePhoto:
-            event.target.result,
-
-            createdAt:
-            new Date().toISOString()
-
+        const studentPayload = {
+            name: nameInput.value.trim(),
+            registrationNumber: registrationNumberInput.value.trim(),
+            email: emailInput.value.trim().toLowerCase(),
+            password: passwordInput.value,
+            department: departmentInput.value,
+            program: programInput.value,
+            year: yearInput.value,
+            semester: semesterInput.value,
+            section: sectionInput.value.trim().toUpperCase(),
+            profilePhoto: event.target.result
         };
 
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/students/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(studentPayload)
+            });
 
-        /* =================================================
-           IMPORTANT FIX:
-           APPEND STUDENT INSTEAD OF REPLACING STUDENTS
-        ================================================= */
+            const resultText = await response.text();
 
-        const allStudents =
-        getExistingStudents();
+            if (!response.ok) {
+                throw new Error(resultText || "Registration failed.");
+            }
 
+            let savedStudent;
+            try {
+                savedStudent = JSON.parse(resultText);
+            } catch (e) {
+                savedStudent = { ...studentPayload };
+            }
 
-        allStudents.push(
-            student
-        );
+            // Remove password before storing in browser storage
+            delete savedStudent.password;
 
+            const allStudents = getExistingStudents();
+            allStudents.push(savedStudent);
 
-        /* SAVE ALL STUDENTS */
+            localStorage.setItem(
+                "snapdexStudents",
+                JSON.stringify(allStudents)
+            );
 
-        localStorage.setItem(
-            "snapdexStudents",
-            JSON.stringify(
-                allStudents
-            )
-        );
+            sessionStorage.setItem("snapdexCurrentUser", JSON.stringify(savedStudent));
+            sessionStorage.setItem("snapdexUserRole", "student");
+            localStorage.setItem("snapdexLoggedInStudent", JSON.stringify(savedStudent));
+            localStorage.setItem("snapdexCurrentStudent", JSON.stringify(savedStudent));
+            localStorage.setItem("snapdexStudent", JSON.stringify(savedStudent));
+            localStorage.setItem("snapdexLoggedIn", "student");
 
+            alert("Student Profile created successfully!");
 
-        /* =================================================
-           KEEP CURRENT STUDENT FOR STUDENT DASHBOARD
-        ================================================= */
+            window.location.href = "studentdashboard.html";
 
-        localStorage.setItem(
-            "snapdexStudent",
-            JSON.stringify(
-                student
-            )
-        );
-
-
-        alert(
-            "Student Profile created successfully!"
-        );
-
-
-        window.location.href =
-        "studentdashboard.html";
-
+        } catch (error) {
+            console.error("Student registration error:", error);
+            alert("Registration failed: " + (error.message || "Could not connect to backend."));
+            createBtn.disabled = false;
+            createBtn.textContent = "Create Profile";
+        }
     };
-
 
     reader.readAsDataURL(
         photo

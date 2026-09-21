@@ -53,35 +53,71 @@ body{
 .menu{
     display:flex;
     flex-direction:column;
-    gap:7px;
+    gap:6px;
 }
 
 .menu a{
-    text-decoration:none;
-    color:#071b41;
-    font-size:18px;
-    padding:16px 20px;
-    border-radius:12px;
+    position:relative;
     display:flex;
     align-items:center;
-    gap:16px;
-    cursor:pointer;
+    gap:14px;
+    width:100%;
+    height:52px;
+    min-height:52px;
+    padding:5px 10px;
+    margin:4px 0;
+    border-radius:14px;
+    color:#10244a;
+    text-decoration:none;
+    font-size:15px;
+    font-weight:700;
+    transition:background .2s ease, color .2s ease;
 }
 
 .menu a:hover{
-    background:#eef4ff;
-    color:#005bea;
+    color:#075edb;
+    background:#eef5fc;
 }
 
 .menu a.active{
-    background:#e2edff;
-    color:#005bea;
+    color:#075edb;
+    background:#e1edff;
     font-weight:700;
 }
 
 .menu-icon{
-    width:25px;
-    text-align:center;
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    min-width:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:#edf5fe;
+    color:#10244a;
+    transition:background .2s ease, color .2s ease;
+}
+
+.menu a:hover .menu-icon{
+    background:#e3effc;
+    color:#075edb;
+}
+
+.menu a.active .menu-icon{
+    background:#f0f6fe;
+    color:#075edb;
+}
+
+.menu-icon svg{
+    width:19px;
+    height:19px;
+    display:block;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
 }
 
 .account-title{
@@ -528,38 +564,82 @@ button{
     <nav class="menu">
 
         <a href="facultydashboard.html">
-            <span class="menu-icon">🏠</span>
-            Dashboard
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 10.5L12 3l9 7.5V21H5V10.5z"></path>
+                    <path d="M9 21v-6h6v6"></path>
+                </svg>
+            </span>
+            <span>Dashboard</span>
         </a>
 
         <a href="facultydashboard.html#classes">
-            <span class="menu-icon">🏫</span>
-            My Classes
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="5" width="17" height="15" rx="2.5"></rect>
+                    <path d="M8 3v4"></path>
+                    <path d="M16 3v4"></path>
+                    <path d="M3.5 10h17"></path>
+                </svg>
+            </span>
+            <span>My Classes</span>
         </a>
 
         <a href="subjects.html">
-            <span class="menu-icon">📚</span>
-            Subjects
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                    <path d="M8 9h8"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h5"></path>
+                </svg>
+            </span>
+            <span>Subjects</span>
         </a>
 
         <a href="students.html">
-            <span class="menu-icon">👥</span>
-            Students
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3.2"></circle>
+                    <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"></path>
+                    <circle cx="17" cy="9" r="2.5"></circle>
+                    <path d="M15 15.5c2.8-.1 4.8 1.5 5.5 4.5"></path>
+                </svg>
+            </span>
+            <span>Students</span>
         </a>
 
         <a href="takeattendance.html" class="active">
-            <span class="menu-icon">📷</span>
-            Take Attendance
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="6" width="17" height="14" rx="2.5"></rect>
+                    <circle cx="12" cy="13" r="3.5"></circle>
+                    <path d="M8 6l1-2.5h6l1 2.5"></path>
+                </svg>
+            </span>
+            <span>Take Attendance</span>
         </a>
 
         <a href="attendancehistory.html">
-            <span class="menu-icon">◷</span>
-            Attendance History
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7.5v4.5l3 2"></path>
+                </svg>
+            </span>
+            <span>Attendance History</span>
         </a>
 
         <a href="reports.html">
-            <span class="menu-icon">📊</span>
-            Reports
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 20h16"></path>
+                    <path d="M7 20V12"></path>
+                    <path d="M12 20V5"></path>
+                    <path d="M17 20V15"></path>
+                </svg>
+            </span>
+            <span>Reports</span>
         </a>
 
     </nav>
@@ -571,13 +651,24 @@ button{
     <nav class="menu">
 
         <a href="facultyprofile.html">
-            <span class="menu-icon">👤</span>
-            My Profile
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5.5 20.5c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5"></path>
+                </svg>
+            </span>
+            <span>My Profile</span>
         </a>
 
-        <a href="index.html" class="logout">
-            <span class="menu-icon">↪</span>
-            Logout
+        <a href="index.html" class="logout" onclick="return logout();">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 12h10"></path>
+                    <path d="M11 8l4 4-4 4"></path>
+                    <path d="M19 6v12"></path>
+                </svg>
+            </span>
+            <span>Logout</span>
         </a>
 
     </nav>
@@ -782,6 +873,8 @@ button{
 
 
 <script>
+
+const API_BASE_URL = "http://localhost:8080";
 
 /* =====================================================
    FACULTY
@@ -1337,6 +1430,32 @@ function renderStudents(){
 
 renderStudents();
 
+async function syncClassStudents() {
+    if(!selectedClass || !selectedClass.id) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/students/class/${selectedClass.id}`);
+        if(res.ok) {
+            const backendStudents = await res.json();
+            if(Array.isArray(backendStudents) && backendStudents.length > 0) {
+                students = backendStudents;
+                attendanceRecords = students.map(student => ({
+                    studentId: student.registrationNumber || student.id || Date.now(),
+                    name: student.name || "Student",
+                    registrationNumber: student.registrationNumber || "-",
+                    profilePhoto: student.profilePhoto || "",
+                    recognition: "REVIEW",
+                    attendance: "REVIEW"
+                }));
+                renderStudents();
+                updateStats();
+            }
+        }
+    } catch(e) {
+        console.warn("Could not sync class students from backend:", e);
+    }
+}
+syncClassStudents();
+
 
 /* =====================================================
    CHANGE ATTENDANCE
@@ -1503,7 +1622,7 @@ function updateStats(){
    FINALIZE ATTENDANCE
 ===================================================== */
 
-function finalizeAttendance(){
+async function finalizeAttendance(){
 
     const review =
         attendanceRecords.filter(
@@ -1643,6 +1762,19 @@ function finalizeAttendance(){
 
     }
 
+
+    /* SEND TO BACKEND API */
+    try {
+        await fetch(`${API_BASE_URL}/api/attendance`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(session)
+        });
+    } catch (backendErr) {
+        console.warn("Backend attendance persistence error (stored locally):", backendErr);
+    }
 
     /* SAVE HISTORY */
 
