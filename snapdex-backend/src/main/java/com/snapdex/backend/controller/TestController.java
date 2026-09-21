@@ -57,4 +57,26 @@ public class TestController {
         }
         return res;
     }
+
+    @GetMapping("/test/env")
+    public Map<String, Object> testEnv() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("MYSQLHOST", System.getenv("MYSQLHOST"));
+        map.put("MYSQLPORT", System.getenv("MYSQLPORT"));
+        map.put("MYSQLDATABASE", System.getenv("MYSQLDATABASE"));
+        map.put("MYSQLUSER", System.getenv("MYSQLUSER"));
+        map.put("hasPassword", System.getenv("MYSQLPASSWORD") != null && !System.getenv("MYSQLPASSWORD").isEmpty());
+        map.put("hasMysqlUrl", System.getenv("MYSQL_URL") != null && !System.getenv("MYSQL_URL").isEmpty());
+        map.put("hasDatabaseUrl", System.getenv("DATABASE_URL") != null && !System.getenv("DATABASE_URL").isEmpty());
+        return map;
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(Throwable.class)
+    public Map<String, Object> handleTestException(Throwable t) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("error", t.getClass().getName());
+        error.put("message", t.getMessage());
+        error.put("cause", t.getCause() != null ? t.getCause().getMessage() : null);
+        return error;
+    }
 }
