@@ -529,29 +529,145 @@ main {
 }
 
 /* =====================================================
-   LOGIN CARD / RIGHT FORM CONTAINER
+   LOGIN CARD / 3D SCENE & INTERACTIVE EFFECTS
 ===================================================== */
 .login-area {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
+    perspective: 1200px;
+    perspective-origin: center center;
+    position: relative;
+    padding: 18px 0;
 }
 
+/* 3D Floating Ambient Badges */
+.floating-3d-badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 15px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 
+        0 18px 36px -8px rgba(14, 116, 144, 0.18),
+        0 6px 14px -3px rgba(15, 23, 42, 0.08),
+        inset 0 1px 1px #ffffff;
+    z-index: 10;
+    pointer-events: none;
+    user-select: none;
+    transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.badge-top-right {
+    top: -10px;
+    right: -16px;
+    animation: floatTopRight 6s ease-in-out infinite alternate;
+}
+
+.badge-bottom-left {
+    bottom: -12px;
+    left: -18px;
+    animation: floatBottomLeft 7s ease-in-out infinite alternate;
+}
+
+@keyframes floatTopRight {
+    0% { transform: translate3d(0, 0, 35px) rotateZ(-2deg); }
+    100% { transform: translate3d(-6px, -12px, 45px) rotateZ(2deg); }
+}
+
+@keyframes floatBottomLeft {
+    0% { transform: translate3d(0, 0, 30px) rotateZ(2deg); }
+    100% { transform: translate3d(6px, 12px, 40px) rotateZ(-2deg); }
+}
+
+.badge-3d-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0284c7;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.22);
+}
+
+.badge-3d-icon.badge-green {
+    background: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 100%);
+    color: #059669;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.22);
+}
+
+.badge-3d-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.badge-3d-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--navy-950);
+    letter-spacing: 0.2px;
+}
+
+.badge-3d-sub {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* 3D Backdrop Light Glow */
+.card-3d-glow {
+    position: absolute;
+    width: 420px;
+    height: 520px;
+    background: radial-gradient(circle at center, rgba(14, 165, 233, 0.2) 0%, rgba(22, 119, 255, 0.12) 45%, transparent 70%);
+    filter: blur(48px);
+    border-radius: 36px;
+    z-index: 1;
+    pointer-events: none;
+    transition: transform 0.25s ease-out;
+}
+
+/* 3D Interactive Login Card */
 .login-card {
     width: 100%;
     max-width: 480px;
-    padding: 34px 34px 28px;
-    border-radius: 24px;
-    background: var(--card-bg);
-    border: 1px solid var(--border-subtle);
+    padding: 36px 36px 30px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(225, 236, 249, 0.95);
     box-shadow:
-        0 24px 60px -12px rgba(10, 30, 65, 0.12),
-        0 8px 24px -4px rgba(10, 30, 65, 0.06),
-        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+        0 30px 70px -15px rgba(10, 30, 65, 0.16),
+        0 14px 28px -6px rgba(10, 30, 65, 0.08),
+        inset 0 1px 2px rgba(255, 255, 255, 1),
+        inset 0 -1px 2px rgba(14, 165, 233, 0.08);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
     position: relative;
-    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+    will-change: transform;
+    z-index: 5;
+}
+
+/* Dynamic Specular 3D Glare Light Reflection */
+.card-glare {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    background: radial-gradient(circle 350px at 50% 30%, rgba(255, 255, 255, 0.5), transparent 75%);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 30;
 }
 
 /* Subtle Animated Top Scan Indicator */
@@ -561,9 +677,11 @@ main {
     left: 0;
     right: 0;
     height: 3px;
+    border-radius: 28px 28px 0 0;
     background: linear-gradient(90deg, #1677ff, #0ea5e9, #10b981, #1677ff);
     background-size: 200% 100%;
     animation: scanGradient 6s linear infinite;
+    z-index: 10;
 }
 
 @keyframes scanGradient {
@@ -571,7 +689,7 @@ main {
     100% { background-position: -100% 0; }
 }
 
-/* Card Header & Security Badge */
+/* 3D Depth Planes for Card Elements */
 .login-brand {
     display: flex;
     align-items: center;
@@ -579,6 +697,8 @@ main {
     padding-bottom: 20px;
     border-bottom: 1px solid #e5edf7;
     margin-bottom: 22px;
+    transform: translateZ(28px);
+    transform-style: preserve-3d;
 }
 
 .institute {
@@ -591,6 +711,9 @@ main {
     width: 52px;
     height: 52px;
     object-fit: contain;
+    transform: translateZ(12px);
+    filter: drop-shadow(0 6px 14px rgba(14, 116, 144, 0.22));
+    transition: transform 0.3s ease;
 }
 
 .institute h3 {
@@ -619,24 +742,28 @@ main {
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.3px;
+    transform: translateZ(20px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.18);
 }
 
-/* Login Heading */
+/* Login Heading with 3D Depth */
 .login-card h2 {
     font-size: 26px;
     font-weight: 800;
     color: var(--navy-950);
     letter-spacing: -0.5px;
     margin-bottom: 5px;
+    transform: translateZ(24px);
 }
 
 .subtitle {
     color: var(--text-muted);
     font-size: 12px;
     margin-bottom: 20px;
+    transform: translateZ(20px);
 }
 
-/* Switch Role Tabs */
+/* Switch Role Tabs with 3D Depth */
 .tabs {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -645,6 +772,10 @@ main {
     border: 1px solid #dce6f3;
     border-radius: 14px;
     margin-bottom: 22px;
+    transform: translateZ(24px);
+    box-shadow: 
+        0 6px 16px -4px rgba(15, 36, 74, 0.06),
+        inset 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .tab {
@@ -673,11 +804,13 @@ main {
     color: #ffffff;
     background: linear-gradient(135deg, #1677ff 0%, #0284c7 100%);
     box-shadow: 0 4px 14px rgba(22, 119, 255, 0.28);
+    transform: translateZ(10px);
 }
 
-/* Form Groups & Inputs */
+/* Form Groups & Inputs with 3D Depth */
 .group {
     margin-bottom: 16px;
+    transform: translateZ(20px);
 }
 
 .group label {
@@ -693,6 +826,10 @@ main {
     position: relative;
     display: flex;
     align-items: center;
+    box-shadow: 
+        inset 0 2px 4px rgba(10, 30, 65, 0.04),
+        0 1px 2px rgba(255, 255, 255, 0.95);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .input-wrap input {
@@ -718,6 +855,13 @@ main {
     background: #ffffff;
     border-color: var(--accent-blue);
     box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.12);
+}
+
+.input-wrap:focus-within {
+    transform: translateZ(8px);
+    box-shadow: 
+        0 0 0 3px rgba(22, 119, 255, 0.2),
+        0 10px 24px -4px rgba(22, 119, 255, 0.16);
 }
 
 .left-icon {
@@ -804,7 +948,7 @@ main {
     text-decoration: underline;
 }
 
-/* Login Action Button */
+/* Login Action Button 3D Depth & Elevation */
 .login-btn {
     width: 100%;
     height: 48px;
@@ -816,8 +960,13 @@ main {
     font-weight: 800;
     letter-spacing: 0.4px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(22, 119, 255, 0.28);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateZ(32px);
+    box-shadow: 
+        0 12px 28px -4px rgba(22, 119, 255, 0.45),
+        0 6px 14px -2px rgba(14, 165, 233, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.7),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -831,19 +980,23 @@ main {
 }
 
 .login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 26px rgba(22, 119, 255, 0.35);
+    transform: translateZ(42px) translateY(-3px);
+    box-shadow: 
+        0 20px 42px -4px rgba(22, 119, 255, 0.55),
+        0 10px 20px -2px rgba(14, 165, 233, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.95);
     background: linear-gradient(135deg, #0958d9 0%, #0284c7 100%);
 }
 
 .login-btn:active {
-    transform: translateY(0);
+    transform: translateZ(16px) translateY(1px);
+    box-shadow: 0 6px 16px rgba(22, 119, 255, 0.3);
 }
 
 .login-btn:disabled {
     opacity: 0.7;
     cursor: not-allowed;
-    transform: none;
+    transform: translateZ(10px);
 }
 
 /* Register Options Divider */
@@ -1181,9 +1334,43 @@ footer {
         </div>
     </section>
 
-    <!-- Right Login Card Area -->
-    <section class="login-area">
-        <div class="login-card">
+    <!-- Right Login Card Area with 3D Spatial Scene -->
+    <section class="login-area" id="loginArea">
+        <!-- Floating 3D Ambient Hologram Badges -->
+        <div class="floating-3d-badge badge-top-right" id="badge3d1">
+            <div class="badge-3d-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 3v3m0 12v3M3 12h3m12 0h3"></path>
+                    <circle cx="12" cy="12" r="3" fill="#0ea5e9"></circle>
+                </svg>
+            </div>
+            <div class="badge-3d-info">
+                <span class="badge-3d-title">AI Spatial Vision</span>
+                <span class="badge-3d-sub">Live 3D Face ID</span>
+            </div>
+        </div>
+
+        <div class="floating-3d-badge badge-bottom-left" id="badge3d2">
+            <div class="badge-3d-icon badge-green">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="m9 12 2 2 4-4" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <div class="badge-3d-info">
+                <span class="badge-3d-title">Biometric Vault</span>
+                <span class="badge-3d-sub">Encrypted Sync</span>
+            </div>
+        </div>
+
+        <!-- 3D Dynamic Backdrop Glow -->
+        <div class="card-3d-glow" id="card3dGlow"></div>
+
+        <div class="login-card" id="loginCard">
+            <!-- Dynamic 3D Specular Glare Layer -->
+            <div class="card-glare" id="cardGlare"></div>
+
             <!-- Micro Scan Light Top Accent -->
             <div class="card-scan-line"></div>
 
@@ -1677,6 +1864,83 @@ if(forgotLink){
         goForgotPassword();
     });
 }
+
+/* =====================================================
+   INTERACTIVE 3D SPATIAL CARD TILT & GLARE EFFECT
+===================================================== */
+(function init3DCardTilt() {
+    const card = document.getElementById("loginCard");
+    const area = document.getElementById("loginArea");
+    const glare = document.getElementById("cardGlare");
+    const glow = document.getElementById("card3dGlow");
+    const badge1 = document.getElementById("badge3d1");
+    const badge2 = document.getElementById("badge3d2");
+
+    if (!card || !area) return;
+
+    let targetRotateX = 0;
+    let targetRotateY = 0;
+    let currentRotateX = 0;
+    let currentRotateY = 0;
+    let isHovered = false;
+
+    function handleMouseMove(e) {
+        const rect = card.getBoundingClientRect();
+        const cardCenterX = rect.left + rect.width / 2;
+        const cardCenterY = rect.top + rect.height / 2;
+
+        const mouseX = (e.clientX - cardCenterX) / (window.innerWidth / 2);
+        const mouseY = (e.clientY - cardCenterY) / (window.innerHeight / 2);
+
+        const maxAngle = 14;
+        targetRotateY = Math.max(Math.min(mouseX * maxAngle, maxAngle), -maxAngle);
+        targetRotateX = Math.max(Math.min(-mouseY * maxAngle, maxAngle), -maxAngle);
+
+        if (glare && isHovered) {
+            const relX = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+            const relY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+            glare.style.background = `radial-gradient(circle 380px at ${relX}% ${relY}%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.08) 40%, transparent 80%)`;
+            glare.style.opacity = "1";
+        }
+    }
+
+    function animate3D() {
+        currentRotateX += (targetRotateX - currentRotateX) * 0.12;
+        currentRotateY += (targetRotateY - currentRotateY) * 0.12;
+
+        const lift = isHovered ? 26 : 0;
+        card.style.transform = `rotateX(${currentRotateX.toFixed(2)}deg) rotateY(${currentRotateY.toFixed(2)}deg) translateZ(${lift}px)`;
+
+        if (glow) {
+            glow.style.transform = `translate3d(${-currentRotateY * 2.8}px, ${currentRotateX * 2.8}px, 0)`;
+        }
+
+        if (badge1) {
+            badge1.style.transform = `translate3d(${currentRotateY * 1.8}px, ${-currentRotateX * 1.8}px, 45px)`;
+        }
+
+        if (badge2) {
+            badge2.style.transform = `translate3d(${currentRotateY * 1.4}px, ${-currentRotateX * 1.4}px, 35px)`;
+        }
+
+        requestAnimationFrame(animate3D);
+    }
+
+    area.addEventListener("mouseenter", () => {
+        isHovered = true;
+        if (glare) glare.style.opacity = "1";
+    });
+
+    area.addEventListener("mouseleave", () => {
+        isHovered = false;
+        targetRotateX = 0;
+        targetRotateY = 0;
+        if (glare) glare.style.opacity = "0";
+    });
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    requestAnimationFrame(animate3D);
+})();
 </script>
 
 </body>
