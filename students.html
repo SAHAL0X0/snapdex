@@ -1873,95 +1873,112 @@ function getStudents(){
    LOAD FACULTY CLASSES & SCOPED STUDENTS
 ===================================================== */
 
+let isLoadingClasses = false;
+
 async function loadClasses(){
+    if(isLoadingClasses) return;
+    isLoadingClasses = true;
+
     const select = document.getElementById("classSelector");
-    if(!select) return;
-
-    select.innerHTML = '<option value="">Select a Class...</option>';
-
-    if(!faculty) {
-        currentSelectedClassId = null;
-        currentClassStudents = [];
-        loadSectionFilter();
-        updateStats();
-        renderStudents();
+    if(!select) {
+        isLoadingClasses = false;
         return;
     }
 
-    const facultyId = faculty.id || faculty.facultyId || "";
-    let classes = [];
-
     try {
-        const res = await fetch(`${API_BASE_URL}/api/classes/faculty/${facultyId}`);
-        if(res.ok){
-            classes = await res.json();
+        if(!faculty) {
+            currentSelectedClassId = null;
+            currentClassStudents = [];
+            select.innerHTML = '<option value="">Select a Class...</option>';
+            loadSectionFilter();
+            updateStats();
+            renderStudents();
+            return;
         }
-    } catch(e){
-        console.warn("Could not load classes from backend:", e);
-    }
 
-    if(!Array.isArray(classes) || classes.length === 0){
-        try{
-            const local = JSON.parse(localStorage.getItem("snapdexClasses") || "[]");
-            if(Array.isArray(local) && local.length > 0){
-                classes = local.filter(c => String(c.facultyId) === String(facultyId));
+        const facultyId = faculty.id || faculty.facultyId || "";
+        let classes = [];
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/classes/faculty/${facultyId}`);
+            if(res.ok){
+                classes = await res.json();
             }
-        }catch(e){}
-    }
-
-    // Deduplicate classes so identical classes never appear twice
-    const rawClasses = Array.isArray(classes) ? classes : [];
-    const uniqueClasses = [];
-    const seenClassKeys = new Set();
-    rawClasses.forEach(cls => {
-        const key = `${cls.department || ''}|${cls.program || ''}|${cls.year || ''}|${cls.semester || ''}|${cls.section || ''}|${cls.subject || ''}`.trim().toLowerCase();
-        if(!seenClassKeys.has(key)){
-            seenClassKeys.add(key);
-            uniqueClasses.push(cls);
+        } catch(e){
+            console.warn("Could not load classes from backend:", e);
         }
-    });
 
-    facultyClasses = uniqueClasses;
-    try {
-        localStorage.setItem("snapdexClasses", JSON.stringify(facultyClasses));
-    } catch(e){}
+        if(!Array.isArray(classes) || classes.length === 0){
+            try{
+                const local = JSON.parse(localStorage.getItem("snapdexClasses") || "[]");
+                if(Array.isArray(local) && local.length > 0){
+                    classes = local.filter(c => String(c.facultyId) === String(facultyId));
+                }
+            }catch(e){}
+        }
 
-    if(facultyClasses.length === 0){
-        select.innerHTML = '<option value="">No classes created yet</option>';
-        currentSelectedClassId = null;
-        currentClassStudents = [];
-        loadSectionFilter();
-        updateStats();
-        renderStudents();
-        return;
-    }
+        // Deduplicate classes so identical classes never appear twice
+        const rawClasses = Array.isArray(classes) ? classes : [];
+        const uniqueClasses = [];
+        const seenClassKeys = new Set();
+        rawClasses.forEach(cls => {
+            const key = `${cls.department || ''}|${cls.program || ''}|${cls.year || ''}|${cls.semester || ''}|${cls.section || ''}|${cls.subject || ''}`.trim().toLowerCase();
+            if(!seenClassKeys.has(key)){
+                seenClassKeys.add(key);
+                uniqueClasses.push(cls);
+            }
+        });
 
-    facultyClasses.forEach(cls => {
-        const opt = document.createElement("option");
-        opt.value = cls.id;
-        opt.textContent = `${cls.subject} - ${cls.year} (${cls.semester}), Sec ${cls.section}`;
-        select.appendChild(opt);
-    });
+        facultyClasses = uniqueClasses;
+        try {
+            localStorage.setItem("snapdexClasses", JSON.stringify(facultyClasses));
+        } catch(e){}
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const paramClassId = urlParams.get("classId");
-    const storedClassId = sessionStorage.getItem("snapdexSelectedClassId") ||
-                          (localStorage.getItem("snapdexSelectedClass") ? JSON.parse(localStorage.getItem("snapdexSelectedClass")).id : null);
+        // Clear and rebuild options atomically right before populating
+        select.innerHTML = '<option value="">Select a Class...</option>';
 
-    const targetClassId = paramClassId || storedClassId;
+        if(facultyClasses.length === 0){
+            select.innerHTML = '<option value="">No classes created yet</option>';
+            currentSelectedClassId = null;
+            currentClassStudents = [];
+            loadSectionFilter();
+            updateStats();
+            renderStudents();
+            return;
+        }
 
-    if(targetClassId && facultyClasses.some(c => String(c.id) === String(targetClassId))){
-        select.value = String(targetClassId);
-        currentSelectedClassId = String(targetClassId);
-        sessionStorage.setItem("snapdexSelectedClassId", String(targetClassId));
-        await loadClassStudents(currentSelectedClassId);
-    } else {
-        select.value = "";
-        currentSelectedClassId = null;
-        currentClassStudents = [];
-        loadSectionFilter();
-        updateStats();
-        renderStudents();
+        facultyClasses.forEach(cls => {
+            const valStr = String(cls.id);
+            if (!select.querySelector(`option[value="${valStr}"]`)) {
+                const opt = document.createElement("option");
+                opt.value = valStr;
+                opt.textContent = `${cls.subject} - ${cls.year} (${cls.semester}), Sec ${cls.section}`;
+                select.appendChild(opt);
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramClassId = urlParams.get("classId");
+        const storedClassId = sessionStorage.getItem("snapdexSelectedClassId") ||
+                              (localStorage.getItem("snapdexSelectedClass") ? JSON.parse(localStorage.getItem("snapdexSelectedClass")).id : null);
+
+        const targetClassId = paramClassId || storedClassId;
+
+        if(targetClassId && facultyClasses.some(c => String(c.id) === String(targetClassId))){
+            select.value = String(targetClassId);
+            currentSelectedClassId = String(targetClassId);
+            sessionStorage.setItem("snapdexSelectedClassId", String(targetClassId));
+            await loadClassStudents(currentSelectedClassId);
+        } else {
+            select.value = "";
+            currentSelectedClassId = null;
+            currentClassStudents = [];
+            loadSectionFilter();
+            updateStats();
+            renderStudents();
+        }
+    } finally {
+        isLoadingClasses = false;
     }
 }
 
@@ -2786,12 +2803,11 @@ initialize();
 
 window.addEventListener(
     "pageshow",
-    async function(){
-
-        loadFaculty();
-
-        await loadClasses();
-
+    async function(e){
+        if(e && e.persisted){
+            loadFaculty();
+            await loadClasses();
+        }
     }
 );
 
