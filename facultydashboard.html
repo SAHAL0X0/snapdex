@@ -1549,10 +1549,38 @@ async function getFacultyClasses() {
         );
     }
 
-    const classes = Array.isArray(result) ? result : [];
+    const rawClasses = Array.isArray(result) ? result : [];
+    const uniqueClasses = [];
+    const seenKeys = new Set();
+    rawClasses.forEach(cls => {
+        const key = `${cls.department || ''}|${cls.program || ''}|${cls.year || ''}|${cls.semester || ''}|${cls.section || ''}|${cls.subject || ''}`.trim().toLowerCase();
+        if(!seenKeys.has(key)){
+            seenKeys.add(key);
+            uniqueClasses.push(cls);
+        }
+    });
+
     // Sync to localStorage so other pages have real MySQL class data
-    localStorage.setItem("snapdexClasses", JSON.stringify(classes));
-    return classes;
+    localStorage.setItem("snapdexClasses", JSON.stringify(uniqueClasses));
+
+    // Purge dummy test students from localStorage
+    try{
+        const rawStudents = localStorage.getItem("snapdexStudents");
+        if(rawStudents){
+            const arr = JSON.parse(rawStudents);
+            if(Array.isArray(arr)){
+                const cleaned = arr.filter(s => {
+                    const name = (s.name || "").toLowerCase();
+                    const email = (s.email || "").toLowerCase();
+                    const reg = (s.registrationNumber || s.studentId || "").toUpperCase();
+                    return !name.includes("student test") && !email.startsWith("student.test") && !reg.startsWith("RA1790");
+                });
+                localStorage.setItem("snapdexStudents", JSON.stringify(cleaned));
+            }
+        }
+    }catch(e){}
+
+    return uniqueClasses;
 }
 
 /* =====================================================

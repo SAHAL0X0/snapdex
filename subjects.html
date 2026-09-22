@@ -2310,9 +2310,19 @@ async function syncSubjectsFromBackend(){
                 Array.isArray(data)
             ){
 
+                const uniqueClasses = [];
+                const seenKeys = new Set();
+                data.forEach(cls => {
+                    const key = `${cls.department || ''}|${cls.program || ''}|${cls.year || ''}|${cls.semester || ''}|${cls.section || ''}|${cls.subject || ''}`.trim().toLowerCase();
+                    if(!seenKeys.has(key)){
+                        seenKeys.add(key);
+                        uniqueClasses.push(cls);
+                    }
+                });
+
                 localStorage.setItem(
                     "snapdexClasses",
-                    JSON.stringify(data)
+                    JSON.stringify(uniqueClasses)
                 );
 
                 updateStats();

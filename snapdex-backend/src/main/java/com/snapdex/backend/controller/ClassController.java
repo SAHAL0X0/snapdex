@@ -1,6 +1,8 @@
 package com.snapdex.backend.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,26 +45,33 @@ public class ClassController {
         }
 
         String trimmedId = facultyId.trim();
-        List<ClassEntity> classes = classRepository.findByFacultyIdOrderByIdDesc(trimmedId);
+        List<ClassEntity> classes = new ArrayList<>(classRepository.findByFacultyIdOrderByIdDesc(trimmedId));
 
-        // If not found by given ID, and ID might be the numeric primary key, check faculty table
-        if (classes.isEmpty()) {
-            try {
-                Long numericId = Long.parseLong(trimmedId);
-                Faculty faculty = facultyRepository.findById(numericId).orElse(null);
-                if (faculty != null && faculty.getFacultyId() != null && !faculty.getFacultyId().equals(trimmedId)) {
-                    classes = classRepository.findByFacultyIdOrderByIdDesc(faculty.getFacultyId());
-                }
-            } catch (NumberFormatException ignored) {
-                // Also check if trimmedId is faculty_id string (e.g. I0097) and faculty has numeric ID
-                Faculty faculty = facultyRepository.findByFacultyId(trimmedId).orElse(null);
-                if (faculty != null && faculty.getId() != null) {
-                    classes = classRepository.findByFacultyIdOrderByIdDesc(String.valueOf(faculty.getId()));
-                }
+        // Also check if faculty exists by numeric ID or string facultyId and merge any classes
+        try {
+            Long numericId = Long.parseLong(trimmedId);
+            Faculty faculty = facultyRepository.findById(numericId).orElse(null);
+            if (faculty != null && faculty.getFacultyId() != null && !faculty.getFacultyId().equals(trimmedId)) {
+                classes.addAll(classRepository.findByFacultyIdOrderByIdDesc(faculty.getFacultyId()));
+            }
+        } catch (NumberFormatException ignored) {
+            Faculty faculty = facultyRepository.findByFacultyId(trimmedId).orElse(null);
+            if (faculty != null && faculty.getId() != null) {
+                classes.addAll(classRepository.findByFacultyIdOrderByIdDesc(String.valueOf(faculty.getId())));
             }
         }
 
-        return ResponseEntity.ok(classes);
+        // Deduplicate classes so the same subject/section/year is never returned twice
+        Map<String, ClassEntity> uniqueMap = new LinkedHashMap<>();
+        for (ClassEntity cls : classes) {
+            String key = (cls.getDepartment() + "|" + cls.getProgram() + "|" + cls.getYear() + "|"
+                    + cls.getSemester() + "|" + cls.getSection() + "|" + cls.getSubject()).toLowerCase();
+            if (!uniqueMap.containsKey(key)) {
+                uniqueMap.put(key, cls);
+            }
+        }
+
+        return ResponseEntity.ok(new ArrayList<>(uniqueMap.values()));
     }
 
     // =====================================================
@@ -76,13 +85,25 @@ public class ClassController {
             @RequestParam(required = false) String semester,
             @RequestParam(required = false) String section) {
 
+        List<ClassEntity> raw;
         if (department != null && program != null && year != null && semester != null && section != null) {
-            return ResponseEntity.ok(classRepository.findByDepartmentAndProgramAndYearAndSemesterAndSection(
+            raw = classRepository.findByDepartmentAndProgramAndYearAndSemesterAndSection(
                     department, program, year, semester, section
-            ));
+            );
+        } else {
+            raw = classRepository.findAll();
         }
 
-        return ResponseEntity.ok(classRepository.findAll());
+        Map<String, ClassEntity> uniqueMap = new LinkedHashMap<>();
+        for (ClassEntity cls : raw) {
+            String key = (cls.getDepartment() + "|" + cls.getProgram() + "|" + cls.getYear() + "|"
+                    + cls.getSemester() + "|" + cls.getSection() + "|" + cls.getSubject()).toLowerCase();
+            if (!uniqueMap.containsKey(key)) {
+                uniqueMap.put(key, cls);
+            }
+        }
+
+        return ResponseEntity.ok(new ArrayList<>(uniqueMap.values()));
     }
 
     // =====================================================
@@ -130,10 +151,32 @@ public class ClassController {
         String section = newClass.getSection().trim();
         String subject = newClass.getSubject().trim();
 
+        // Resolve faculty entity to check across both numeric ID and string facultyId
+        Faculty faculty = null;
+        try {
+            Long num = Long.parseLong(facultyId);
+            faculty = facultyRepository.findById(num).orElse(null);
+        } catch (NumberFormatException ignored) {
+            faculty = facultyRepository.findByFacultyId(facultyId).orElse(null);
+        }
+
         // Check for duplicate class record
         boolean exists = classRepository.existsByFacultyIdAndDepartmentAndProgramAndYearAndSemesterAndSectionAndSubject(
                 facultyId, department, program, year, semester, section, subject
         );
+
+        if (!exists && faculty != null) {
+            if (faculty.getFacultyId() != null && !faculty.getFacultyId().equals(facultyId)) {
+                exists = classRepository.existsByFacultyIdAndDepartmentAndProgramAndYearAndSemesterAndSectionAndSubject(
+                        faculty.getFacultyId(), department, program, year, semester, section, subject
+                );
+            }
+            if (!exists && faculty.getId() != null && !String.valueOf(faculty.getId()).equals(facultyId)) {
+                exists = classRepository.existsByFacultyIdAndDepartmentAndProgramAndYearAndSemesterAndSectionAndSubject(
+                        String.valueOf(faculty.getId()), department, program, year, semester, section, subject
+                );
+            }
+        }
 
         if (exists) {
             return ResponseEntity.badRequest().body("This class and subject is already added for this faculty");

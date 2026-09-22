@@ -1081,7 +1081,12 @@ function getAllStudents(){
             multiple.forEach(student => {
 
                 if(student){
-                    merged.push(student);
+                    const name = (student.name || "").toLowerCase();
+                    const email = (student.email || "").toLowerCase();
+                    const reg = (student.registrationNumber || student.studentId || "").toUpperCase();
+                    if(!name.includes("student test") && !email.startsWith("student.test") && !reg.startsWith("RA1790")){
+                        merged.push(student);
+                    }
                 }
 
             });

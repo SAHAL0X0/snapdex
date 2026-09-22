@@ -1909,7 +1909,22 @@ async function loadClasses(){
         }catch(e){}
     }
 
-    facultyClasses = Array.isArray(classes) ? classes : [];
+    // Deduplicate classes so identical classes never appear twice
+    const rawClasses = Array.isArray(classes) ? classes : [];
+    const uniqueClasses = [];
+    const seenClassKeys = new Set();
+    rawClasses.forEach(cls => {
+        const key = `${cls.department || ''}|${cls.program || ''}|${cls.year || ''}|${cls.semester || ''}|${cls.section || ''}|${cls.subject || ''}`.trim().toLowerCase();
+        if(!seenClassKeys.has(key)){
+            seenClassKeys.add(key);
+            uniqueClasses.push(cls);
+        }
+    });
+
+    facultyClasses = uniqueClasses;
+    try {
+        localStorage.setItem("snapdexClasses", JSON.stringify(facultyClasses));
+    } catch(e){}
 
     if(facultyClasses.length === 0){
         select.innerHTML = '<option value="">No classes created yet</option>';
@@ -1976,6 +1991,28 @@ async function onClassChanged(){
     await loadClassStudents(classId);
 }
 
+function isDummyTestStudentObj(s){
+    if(!s) return false;
+    const name = (s.name || "").toLowerCase();
+    const email = (s.email || "").toLowerCase();
+    const reg = (s.registrationNumber || s.studentId || "").toUpperCase();
+    return name.includes("student test") || email.startsWith("student.test") || reg.startsWith("RA1790");
+}
+
+function purgeDummyLocalStorage(){
+    try{
+        const raw = localStorage.getItem("snapdexStudents");
+        if(raw){
+            const arr = JSON.parse(raw);
+            if(Array.isArray(arr)){
+                const cleaned = arr.filter(s => !isDummyTestStudentObj(s));
+                localStorage.setItem("snapdexStudents", JSON.stringify(cleaned));
+            }
+        }
+    }catch(e){}
+}
+purgeDummyLocalStorage();
+
 async function loadClassStudents(classId){
     currentClassStudents = [];
     try{
@@ -1987,6 +2024,9 @@ async function loadClassStudents(classId){
     }catch(e){
         console.error("Error loading class students:", e);
     }
+
+    // Filter out dummy/test students
+    currentClassStudents = currentClassStudents.filter(s => !isDummyTestStudentObj(s));
 
     loadSectionFilter();
     updateStats();

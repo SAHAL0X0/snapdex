@@ -118,6 +118,8 @@ public class StudentController {
     // =====================================================
     // GET STUDENTS BY CLASS ID
     // =====================================================
+    // GET STUDENTS BY CLASS ID
+    // =====================================================
     @GetMapping("/class/{classId}")
     public ResponseEntity<?> getStudentsByClass(@PathVariable Long classId) {
         ClassEntity classEntity = classRepository.findById(classId).orElse(null);
@@ -127,6 +129,7 @@ public class StudentController {
 
         List<Student> allStudents = studentRepository.findAll();
         List<Map<String, Object>> matchedStudents = allStudents.stream()
+                .filter(s -> !isDummyTestStudent(s))
                 .filter(s -> matchesClass(s, classEntity))
                 .map(this::getSafeStudentMap)
                 .collect(Collectors.toList());
@@ -152,6 +155,7 @@ public class StudentController {
                 return ResponseEntity.ok(Collections.emptyList());
             }
             List<Map<String, Object>> safeStudents = studentRepository.findAll().stream()
+                    .filter(s -> !isDummyTestStudent(s))
                     .filter(s -> matchesClass(s, classEntity))
                     .map(this::getSafeStudentMap)
                     .collect(Collectors.toList());
@@ -163,6 +167,7 @@ public class StudentController {
 
         if (hasAcademicParams) {
             List<Map<String, Object>> safeStudents = studentRepository.findAll().stream()
+                    .filter(s -> !isDummyTestStudent(s))
                     .filter(s -> matchesAcademic(s, department, program, year, semester, section))
                     .map(this::getSafeStudentMap)
                     .collect(Collectors.toList());
@@ -172,6 +177,14 @@ public class StudentController {
         // If parameters are missing or incomplete:
         // DO NOT return all students. Return an empty list [] to prevent cross-class leakage.
         return ResponseEntity.ok(Collections.emptyList());
+    }
+
+    private boolean isDummyTestStudent(Student s) {
+        if (s == null) return false;
+        String name = s.getName() != null ? s.getName().toLowerCase() : "";
+        String email = s.getEmail() != null ? s.getEmail().toLowerCase() : "";
+        String reg = s.getRegistrationNumber() != null ? s.getRegistrationNumber().toUpperCase() : "";
+        return name.contains("student test") || email.startsWith("student.test") || reg.startsWith("RA1790");
     }
 
     private boolean hasText(String s) {
@@ -230,7 +243,7 @@ public class StudentController {
     @GetMapping("/{registrationNumber}")
     public ResponseEntity<?> getStudentByRegNo(@PathVariable String registrationNumber) {
         Student student = studentRepository.findByRegistrationNumber(registrationNumber.trim()).orElse(null);
-        if (student == null) {
+        if (student == null || isDummyTestStudent(student)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found");
         }
         return ResponseEntity.ok(getSafeStudentMap(student));

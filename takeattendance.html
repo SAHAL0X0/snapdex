@@ -1143,17 +1143,26 @@ async function syncTakeAttendanceClasses(){
         if(res.ok) {
             const data = await res.json();
             if(Array.isArray(data) && data.length > 0) {
-                classes = data;
-                localStorage.setItem("snapdexClasses", JSON.stringify(data));
+                const uniqueClasses = [];
+                const seenKeys = new Set();
+                data.forEach(cls => {
+                    const key = `${cls.department || ''}|${cls.program || ''}|${cls.year || ''}|${cls.semester || ''}|${cls.section || ''}|${cls.subject || ''}`.trim().toLowerCase();
+                    if(!seenKeys.has(key)){
+                        seenKeys.add(key);
+                        uniqueClasses.push(cls);
+                    }
+                });
+                classes = uniqueClasses;
+                localStorage.setItem("snapdexClasses", JSON.stringify(uniqueClasses));
                 const targetId = urlParams.get("classId") || sessionStorage.getItem("snapdexSelectedClassId");
                 if(targetId) {
-                    const found = data.find(c => String(c.id) === String(targetId));
+                    const found = uniqueClasses.find(c => String(c.id) === String(targetId));
                     if(found) {
                         selectedClass = found;
                         localStorage.setItem("snapdexSelectedClass", JSON.stringify(found));
                     }
                 } else if(!selectedClass) {
-                    selectedClass = data[0];
+                    selectedClass = uniqueClasses[0];
                     localStorage.setItem("snapdexSelectedClass", JSON.stringify(selectedClass));
                 }
                 displayClass();
