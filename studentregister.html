@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SnapDex - Student Registration</title>
+<script src="config.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172554;
+    min-height:100vh;
+    padding:30px 20px;
+}
+
+.container{
+    width:100%;
+    max-width:760px;
+    margin:auto;
+}
+
+.brand{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.srm-logo{
+    width:55px;
+    height:55px;
+    margin:0 auto 10px;
+    border-radius:12px;
+    background:#eaf2ff;
+    color:#0758a6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:16px;
+}
+
+.brand h1{
+    color:#0758a6;
+    font-size:30px;
+}
+
+.brand p{
+    color:#64748b;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.card{
+    background:white;
+    border:1px solid #dce5ef;
+    border-radius:18px;
+    padding:32px;
+    box-shadow:0 12px 35px rgba(15,23,42,.08);
+}
+
+.card-title{
+    margin-bottom:25px;
+}
+
+.card-title h2{
+    font-size:24px;
+    color:#122a52;
+    margin-bottom:6px;
+}
+
+.card-title p{
+    color:#64748b;
+    font-size:13px;
+}
+
+.form-section{
+    margin-bottom:28px;
+}
+
+.section-title{
+    font-size:16px;
+    color:#0758a6;
+    margin-bottom:17px;
+    padding-bottom:8px;
+    border-bottom:1px solid #e5eaf0;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:17px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:13px;
+    font-weight:600;
+    color:#334155;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    outline:none;
+    font-size:14px;
+    background:white;
+    color:#172033;
+}
+
+input:focus,
+select:focus{
+    border-color:#1769aa;
+    box-shadow:0 0 0 3px rgba(23,105,170,.08);
+}
+
+select:disabled{
+    background:#f1f5f9;
+    color:#94a3b8;
+}
+
+.error{
+    display:none;
+    color:#dc2626;
+    font-size:12px;
+}
+
+input.invalid,
+select.invalid{
+    border-color:#dc2626;
+    background:#fff7f7;
+}
+
+input.valid,
+select.valid{
+    border-color:#16a34a;
+}
+
+.photo-box{
+    border:1px dashed #b8c8da;
+    border-radius:10px;
+    padding:18px;
+    background:#f8fafc;
+}
+
+.photo-box input{
+    border:none;
+    padding:0;
+    background:transparent;
+}
+
+.photo-preview{
+    display:none;
+    width:105px;
+    height:105px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-top:15px;
+    border:3px solid #e2e8f0;
+}
+
+.actions{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:10px;
+}
+
+.back-btn,
+.create-btn{
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.back-btn{
+    background:white;
+    border:1px solid #cbd5e1;
+    color:#334155;
+}
+
+.create-btn{
+    border:none;
+    background:#1769aa;
+    color:white;
+    flex:1;
+}
+
+.create-btn:hover{
+    background:#0f5790;
+}
+
+.footer{
+    text-align:center;
+    color:#94a3b8;
+    font-size:11px;
+    margin-top:18px;
+}
+
+@media(max-width:650px){
+
+    body{
+        padding:15px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .create-btn{
+        flex:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="brand">
+
+    <div class="srm-logo">
+        SRM
+    </div>
+
+    <h1>SnapDex</h1>
+
+    <p>
+        Smart Attendance • SRM Institute of Science and Technology
+    </p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-title">
+
+    <h2>Student Registration</h2>
+
+    <p>
+        Create your official SnapDex student profile.
+    </p>
+
+</div>
+
+
+<!-- PERSONAL -->
+
+<div class="form-section">
+
+<h3 class="section-title">
+    Personal Information
+</h3>
+
+<div class="form-grid">
+
+<div class="field full">
+
+<label for="name">
+    Full Name
+</label>
+
+<input
+    type="text"
+    id="name"
+    placeholder="Example: Rahul Sharma"
+>
+
+<span
+    class="error"
+    id="nameError"
+></span>
+
+</div>
+
+
+<div class="field full">
+
+<label for="registrationNumber">
+    Registration Number
+</label>
+
+<input
+    type="text"
+    id="registrationNumber"
+    placeholder="Example: RA2511003012345"
+>
+
+<span
+    class="error"
+    id="registrationNumberError"
+></span>
+
+</div>
+
+
+<div class="field full">
+
+<label for="email">
+    Official SRM Email
+</label>
+
+<input
+    type="email"
+    id="email"
+    placeholder="example@srmist.edu.in"
+>
+
+<span
+    class="error"
+    id="emailError"
+></span>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ACADEMIC -->
+
+<div class="form-section">
+
+<h3 class="section-title">
+    Academic Information
+</h3>
+
+<div class="form-grid">
+
+<div class="field full">
+
+<label for="department">
+    Department
+</label>
+
+<select id="department">
+
+<option value="">
+    Select Department
+</option>
+
+<option value="Engineering and Technology">
+    Engineering and Technology
+</option>
+
+<option value="Management">
+    Management
+</option>
+
+<option value="Computer Applications">
+    Computer Applications
+</option>
+
+<option value="Science and Humanities">
+    Science and Humanities
+</option>
+
+<option value="Medicine and Health Sciences">
+    Medicine and Health Sciences
+</option>
+
+<option value="Hotel Management">
+    Hotel Management
+</option>
+
+</select>
+
+<span
+    class="error"
+    id="departmentError"
+></span>
+
+</div>
+
+
+<div class="field full">
+
+<label for="program">
+    Program / Branch
+</label>
+
+<select
+    id="program"
+    disabled
+>
+
+<option value="">
+    Select Program / Branch
+</option>
+
+</select>
+
+<span
+    class="error"
+    id="programError"
+></span>
+
+</div>
+
+
+<div class="field">
+
+<label for="year">
+    Year
+</label>
+
+<select id="year">
+
+<option value="">
+    Select Year
+</option>
+
+<option value="1st Year">
+    1st Year
+</option>
+
+<option value="2nd Year">
+    2nd Year
+</option>
+
+<option value="3rd Year">
+    3rd Year
+</option>
+
+<option value="4th Year">
+    4th Year
+</option>
+
+</select>
+
+<span
+    class="error"
+    id="yearError"
+></span>
+
+</div>
+
+
+<div class="field">
+
+<label for="semester">
+    Semester
+</label>
+
+<select id="semester">
+
+<option value="">
+    Select Semester
+</option>
+
+<option value="1">
+    Semester 1
+</option>
+
+<option value="2">
+    Semester 2
+</option>
+
+<option value="3">
+    Semester 3
+</option>
+
+<option value="4">
+    Semester 4
+</option>
+
+<option value="5">
+    Semester 5
+</option>
+
+<option value="6">
+    Semester 6
+</option>
+
+<option value="7">
+    Semester 7
+</option>
+
+<option value="8">
+    Semester 8
+</option>
+
+</select>
+
+<span
+    class="error"
+    id="semesterError"
+></span>
+
+</div>
+
+
+<div class="field full">
+
+<label for="section">
+    Section
+</label>
+
+<input
+    type="text"
+    id="section"
+    placeholder="Example: D"
+    maxlength="5"
+>
+
+<span
+    class="error"
+    id="sectionError"
+></span>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- SECURITY -->
+
+<div class="form-section">
+
+<h3 class="section-title">
+    Account Security
+</h3>
+
+<div class="form-grid">
+
+<div class="field">
+
+<label for="password">
+    Password
+</label>
+
+<input
+    type="password"
+    id="password"
+    placeholder="Minimum 8 characters"
+>
+
+<span
+    class="error"
+    id="passwordError"
+></span>
+
+</div>
+
+
+<div class="field">
+
+<label for="confirmPassword">
+    Confirm Password
+</label>
+
+<input
+    type="password"
+    id="confirmPassword"
+    placeholder="Re-enter password"
+>
+
+<span
+    class="error"
+    id="confirmPasswordError"
+></span>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- PHOTO -->
+
+<div class="form-section">
+
+<h3 class="section-title">
+    Student Profile Photo
+</h3>
+
+<div class="field">
+
+<label for="profilePhotoInput">
+    Profile Photo
+</label>
+
+<div class="photo-box">
+
+<input
+    type="file"
+    id="profilePhotoInput"
+    accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+>
+
+<img
+    id="photoPreview"
+    class="photo-preview"
+    alt="Photo Preview"
+>
+
+</div>
+
+<span
+    class="error"
+    id="photoError"
+></span>
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button
+    type="button"
+    class="back-btn"
+    onclick="goBack()"
+>
+    Back to Login
+</button>
+
+<button
+    type="button"
+    class="create-btn"
+    onclick="createStudentProfile()"
+>
+    Create Student Profile
+</button>
+
+</div>
+
+</div>
+
+
+<div class="footer">
+    SnapDex • SRM Institute of Science and Technology
+</div>
+
+</div>
+
+
+<script>
+
+const API_BASE_URL = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
+
+/* =====================================================
+   PROGRAMS
+===================================================== */
+
+const programs = {
+
+"Engineering and Technology":[
+
+"B.Tech in Computer Science & Engineering (CSE)",
+
+"B.Tech in Computer Science and Engineering (CSE) – Data Science",
+
+"B.Tech in Computer Science and Engineering (CSE) – Cyber Security",
+
+"B.Tech in Computer Science and Engineering (CSE) – Artificial Intelligence & Machine Learning",
+
+"B.Tech in Computer Science and Engineering (CSE) – Cloud Computing",
+
+"B.Tech in Electronics & Communication Engineering",
+
+"B.Tech Electronics & Communication Engineering – Data Science",
+
+"B.Tech in Electronics Engineering (VLSI Design and Technology)",
+
+"B.Tech in Mechanical Engineering",
+
+"B.Tech in Automobile Engineering"
+
+],
+
+"Management":[
+"Bachelor of Business Administration (BBA)"
+],
+
+"Computer Applications":[
+"Bachelor of Computer Applications (BCA)",
+"BCA in Data Science"
+],
+
+"Science and Humanities":[
+"B.Sc. (Computer Science)"
+],
+
+"Medicine and Health Sciences":[
+"Medicine and Health Sciences"
+],
+
+"Hotel Management":[
+"B.Sc. in Hotel and Hospitality Administration"
+]
+
+};
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const nameInput =
+document.getElementById("name");
+
+const registrationNumberInput =
+document.getElementById("registrationNumber");
+
+const emailInput =
+document.getElementById("email");
+
+const departmentInput =
+document.getElementById("department");
+
+const programInput =
+document.getElementById("program");
+
+const yearInput =
+document.getElementById("year");
+
+const semesterInput =
+document.getElementById("semester");
+
+const sectionInput =
+document.getElementById("section");
+
+const passwordInput =
+document.getElementById("password");
+
+const confirmPasswordInput =
+document.getElementById("confirmPassword");
+
+const photoInput =
+document.getElementById("profilePhotoInput");
+
+const photoPreview =
+document.getElementById("photoPreview");
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(input,errorId,message){
+
+    input.classList.remove("valid");
+
+    input.classList.add("invalid");
+
+    const error =
+    document.getElementById(errorId);
+
+    error.textContent =
+    message;
+
+    error.style.display =
+    "block";
+
+}
+
+
+function showValid(input,errorId){
+
+    input.classList.remove("invalid");
+
+    input.classList.add("valid");
+
+    const error =
+    document.getElementById(errorId);
+
+    error.textContent =
+    "";
+
+    error.style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   VALIDATION
+===================================================== */
+
+function validateName(){
+
+    const value =
+    nameInput.value.trim();
+
+    const pattern =
+    /^[A-Za-z]+(?:[.'-]?[A-Za-z]+)*(?:\s+[A-Za-z]+(?:[.'-]?[A-Za-z]+)*)+$/;
+
+    if(!value){
+
+        showError(
+            nameInput,
+            "nameError",
+            "Please enter your full name."
+        );
+
+        return false;
+    }
+
+    if(!pattern.test(value)){
+
+        showError(
+            nameInput,
+            "nameError",
+            "Please enter a valid name."
+        );
+
+        return false;
+    }
+
+    showValid(
+        nameInput,
+        "nameError"
+    );
+
+    return true;
+}
+
+
+function validateRegistrationNumber(){
+
+    const value =
+    registrationNumberInput.value.trim();
+
+    if(!value){
+
+        showError(
+            registrationNumberInput,
+            "registrationNumberError",
+            "Please enter your Registration Number."
+        );
+
+        return false;
+    }
+
+    if(!/^[A-Za-z0-9-]{4,30}$/.test(value)){
+
+        showError(
+            registrationNumberInput,
+            "registrationNumberError",
+            "Registration Number can contain letters, numbers and hyphens only."
+        );
+
+        return false;
+    }
+
+    showValid(
+        registrationNumberInput,
+        "registrationNumberError"
+    );
+
+    return true;
+}
+
+
+function validateEmail(){
+
+    const value =
+    emailInput.value.trim();
+
+    const pattern =
+    /^[A-Za-z0-9._%+-]+@srmist\.edu\.in$/i;
+
+    if(!value){
+
+        showError(
+            emailInput,
+            "emailError",
+            "Please enter your official SRM email."
+        );
+
+        return false;
+    }
+
+    if(!pattern.test(value)){
+
+        showError(
+            emailInput,
+            "emailError",
+            "Use your official @srmist.edu.in email."
+        );
+
+        return false;
+    }
+
+    showValid(
+        emailInput,
+        "emailError"
+    );
+
+    return true;
+}
+
+
+function validateDepartment(){
+
+    if(!departmentInput.value){
+
+        showError(
+            departmentInput,
+            "departmentError",
+            "Please select your department."
+        );
+
+        return false;
+    }
+
+    showValid(
+        departmentInput,
+        "departmentError"
+    );
+
+    return true;
+}
+
+
+function validateProgram(){
+
+    if(
+        !programInput.value ||
+        programInput.disabled
+    ){
+
+        showError(
+            programInput,
+            "programError",
+            "Please select your program / branch."
+        );
+
+        return false;
+    }
+
+    showValid(
+        programInput,
+        "programError"
+    );
+
+    return true;
+}
+
+
+function validateYear(){
+
+    if(!yearInput.value){
+
+        showError(
+            yearInput,
+            "yearError",
+            "Please select your year."
+        );
+
+        return false;
+    }
+
+    showValid(
+        yearInput,
+        "yearError"
+    );
+
+    return true;
+}
+
+
+function validateSemester(){
+
+    if(!semesterInput.value){
+
+        showError(
+            semesterInput,
+            "semesterError",
+            "Please select your semester."
+        );
+
+        return false;
+    }
+
+    showValid(
+        semesterInput,
+        "semesterError"
+    );
+
+    return true;
+}
+
+
+function validateSection(){
+
+    const value =
+    sectionInput.value.trim().toUpperCase();
+
+    if(!value){
+
+        showError(
+            sectionInput,
+            "sectionError",
+            "Please enter your section."
+        );
+
+        return false;
+    }
+
+    if(!/^[A-Za-z0-9-]{1,5}$/.test(value)){
+
+        showError(
+            sectionInput,
+            "sectionError",
+            "Please enter a valid section."
+        );
+
+        return false;
+    }
+
+    sectionInput.value =
+    value;
+
+    showValid(
+        sectionInput,
+        "sectionError"
+    );
+
+    return true;
+}
+
+
+function validatePassword(){
+
+    const value =
+    passwordInput.value;
+
+    if(!value){
+
+        showError(
+            passwordInput,
+            "passwordError",
+            "Please enter a password."
+        );
+
+        return false;
+    }
+
+    if(value.length < 8){
+
+        showError(
+            passwordInput,
+            "passwordError",
+            "Password must contain at least 8 characters."
+        );
+
+        return false;
+    }
+
+    if(!/[A-Za-z]/.test(value)){
+
+        showError(
+            passwordInput,
+            "passwordError",
+            "Password must contain at least one alphabet."
+        );
+
+        return false;
+    }
+
+    if(!/[0-9]/.test(value)){
+
+        showError(
+            passwordInput,
+            "passwordError",
+            "Password must contain at least one number."
+        );
+
+        return false;
+    }
+
+    showValid(
+        passwordInput,
+        "passwordError"
+    );
+
+    return true;
+}
+
+
+function validateConfirmPassword(){
+
+    if(!confirmPasswordInput.value){
+
+        showError(
+            confirmPasswordInput,
+            "confirmPasswordError",
+            "Please confirm your password."
+        );
+
+        return false;
+    }
+
+    if(
+        confirmPasswordInput.value !==
+        passwordInput.value
+    ){
+
+        showError(
+            confirmPasswordInput,
+            "confirmPasswordError",
+            "Passwords do not match."
+        );
+
+        return false;
+    }
+
+    showValid(
+        confirmPasswordInput,
+        "confirmPasswordError"
+    );
+
+    return true;
+}
+
+
+/* =====================================================
+   DEPARTMENT → PROGRAM
+===================================================== */
+
+departmentInput.addEventListener(
+"change",
+function(){
+
+    const department =
+    this.value;
+
+    programInput.innerHTML =
+    '<option value="">Select Program / Branch</option>';
+
+    programInput.classList.remove(
+        "invalid",
+        "valid"
+    );
+
+    document.getElementById(
+        "programError"
+    ).style.display =
+    "none";
+
+    if(!department){
+
+        programInput.disabled =
+        true;
+
+        return;
+    }
+
+    programs[department].forEach(
+    function(programName){
+
+        const option =
+        document.createElement("option");
+
+        option.value =
+        programName;
+
+        option.textContent =
+        programName;
+
+        programInput.appendChild(
+            option
+        );
+
+    });
+
+    programInput.disabled =
+    false;
+
+});
+
+
+/* =====================================================
+   PHOTO
+===================================================== */
+
+photoInput.addEventListener(
+"change",
+function(){
+
+    const file =
+    this.files[0];
+
+    if(!file){
+
+        photoPreview.style.display =
+        "none";
+
+        return;
+    }
+
+    const validTypes = [
+        "image/jpeg",
+        "image/png"
+    ];
+
+    if(!validTypes.includes(file.type)){
+
+        const error =
+        document.getElementById(
+            "photoError"
+        );
+
+        error.textContent =
+        "Only JPG, JPEG or PNG images are allowed.";
+
+        error.style.display =
+        "block";
+
+        photoPreview.style.display =
+        "none";
+
+        this.value =
+        "";
+
+        return;
+    }
+
+    document.getElementById(
+        "photoError"
+    ).style.display =
+    "none";
+
+    const reader =
+    new FileReader();
+
+    reader.onload =
+    function(event){
+
+        photoPreview.src =
+        event.target.result;
+
+        photoPreview.style.display =
+        "block";
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+
+/* =====================================================
+   GET ALL EXISTING STUDENTS
+===================================================== */
+
+function getExistingStudents(){
+
+    const map =
+    new Map();
+
+
+    /* NEW ARRAY */
+
+    try{
+
+        const list =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexStudents"
+            ) || "[]"
+        );
+
+        if(Array.isArray(list)){
+
+            list.forEach(student => {
+
+                if(!student){
+                    return;
+                }
+
+                const key =
+                String(
+                    student.registrationNumber ||
+                    student.regNo ||
+                    student.studentId ||
+                    student.email ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+                if(key){
+                    map.set(
+                        key,
+                        student
+                    );
+                }
+
+            });
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Student list error:",
+            error
+        );
+
+    }
+
+
+    /* OLD SINGLE STUDENT */
+
+    try{
+
+        const oldStudent =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexStudent"
+            ) || "null"
+        );
+
+        if(oldStudent){
+
+            const key =
+            String(
+                oldStudent.registrationNumber ||
+                oldStudent.email ||
+                oldStudent.id ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
+
+            if(
+                key &&
+                !map.has(key)
+            ){
+
+                map.set(
+                    key,
+                    oldStudent
+                );
+
+            }
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Old student error:",
+            error
+        );
+
+    }
+
+
+    return [
+        ...map.values()
+    ];
+
+}
+
+
+/* =====================================================
+   CREATE PROFILE
+===================================================== */
+
+function createStudentProfile(){
+
+    const validName =
+    validateName();
+
+    const validRegistration =
+    validateRegistrationNumber();
+
+    const validEmail =
+    validateEmail();
+
+    const validDepartment =
+    validateDepartment();
+
+    const validProgram =
+    validateProgram();
+
+    const validYear =
+    validateYear();
+
+    const validSemester =
+    validateSemester();
+
+    const validSection =
+    validateSection();
+
+    const validPassword =
+    validatePassword();
+
+    const validConfirm =
+    validateConfirmPassword();
+
+
+    const photo =
+    photoInput.files[0];
+
+
+    let validPhoto =
+    true;
+
+
+    if(!photo){
+
+        const error =
+        document.getElementById(
+            "photoError"
+        );
+
+        error.textContent =
+        "Please upload your profile photo.";
+
+        error.style.display =
+        "block";
+
+        validPhoto =
+        false;
+
+    }
+    else if(
+        ![
+            "image/jpeg",
+            "image/png"
+        ].includes(photo.type)
+    ){
+
+        const error =
+        document.getElementById(
+            "photoError"
+        );
+
+        error.textContent =
+        "Only JPG, JPEG or PNG images are allowed.";
+
+        error.style.display =
+        "block";
+
+        validPhoto =
+        false;
+
+    }
+
+
+    if(
+        !validName ||
+        !validRegistration ||
+        !validEmail ||
+        !validDepartment ||
+        !validProgram ||
+        !validYear ||
+        !validSemester ||
+        !validSection ||
+        !validPassword ||
+        !validConfirm ||
+        !validPhoto
+    ){
+
+        return;
+
+    }
+
+
+    /* =================================================
+       DUPLICATE CHECK
+    ================================================= */
+
+    const existingStudents =
+    getExistingStudents();
+
+
+    const registration =
+    registrationNumberInput.value
+        .trim()
+        .toLowerCase();
+
+
+    const email =
+    emailInput.value
+        .trim()
+        .toLowerCase();
+
+
+    const duplicateRegistration =
+    existingStudents.some(
+        student =>
+        String(
+            student.registrationNumber ||
+            student.regNo ||
+            student.studentId ||
+            ""
+        )
+        .trim()
+        .toLowerCase() ===
+        registration
+    );
+
+
+    if(duplicateRegistration){
+
+        showError(
+            registrationNumberInput,
+            "registrationNumberError",
+            "This Registration Number is already registered."
+        );
+
+        return;
+
+    }
+
+
+    const duplicateEmail =
+    existingStudents.some(
+        student =>
+        String(
+            student.email ||
+            ""
+        )
+        .trim()
+        .toLowerCase() ===
+        email
+    );
+
+
+    if(duplicateEmail){
+
+        showError(
+            emailInput,
+            "emailError",
+            "This email is already registered."
+        );
+
+        return;
+
+    }
+
+
+    /* =================================================
+       READ PHOTO
+    ================================================= */
+
+    const reader =
+    new FileReader();
+
+
+    const createBtn = document.querySelector(".create-btn");
+    createBtn.disabled = true;
+    createBtn.textContent = "Creating Profile...";
+
+    reader.onload =
+    async function(event){
+
+        const studentPayload = {
+            name: nameInput.value.trim(),
+            registrationNumber: registrationNumberInput.value.trim(),
+            email: emailInput.value.trim().toLowerCase(),
+            password: passwordInput.value,
+            department: departmentInput.value,
+            program: programInput.value,
+            year: yearInput.value,
+            semester: semesterInput.value,
+            section: sectionInput.value.trim().toUpperCase(),
+            profilePhoto: event.target.result
+        };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/students/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(studentPayload)
+            });
+
+            const resultText = await response.text();
+
+            if (!response.ok) {
+                throw new Error(resultText || "Registration failed.");
+            }
+
+            let savedStudent;
+            try {
+                savedStudent = JSON.parse(resultText);
+            } catch (e) {
+                savedStudent = { ...studentPayload };
+            }
+
+            // Remove password before storing in browser storage
+            delete savedStudent.password;
+
+            const allStudents = getExistingStudents();
+            allStudents.push(savedStudent);
+
+            localStorage.setItem(
+                "snapdexStudents",
+                JSON.stringify(allStudents)
+            );
+
+            sessionStorage.setItem("snapdexCurrentUser", JSON.stringify(savedStudent));
+            sessionStorage.setItem("snapdexUserRole", "student");
+            localStorage.setItem("snapdexLoggedInStudent", JSON.stringify(savedStudent));
+            localStorage.setItem("snapdexCurrentStudent", JSON.stringify(savedStudent));
+            localStorage.setItem("snapdexStudent", JSON.stringify(savedStudent));
+            localStorage.setItem("snapdexLoggedIn", "student");
+
+            alert("Student Profile created successfully!");
+
+            window.location.href = "studentdashboard.html";
+
+        } catch (error) {
+            console.error("Student registration error:", error);
+            alert("Registration failed: " + (error.message || "Could not connect to backend."));
+            createBtn.disabled = false;
+            createBtn.textContent = "Create Profile";
+        }
+    };
+
+    reader.readAsDataURL(
+        photo
+    );
+
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+    window.location.href =
+    "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

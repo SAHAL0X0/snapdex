@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Registration - SnapDex</title>
+  <script src="config.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f5f7fb;
+      color: #172033;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 850px;
+      background: #ffffff;
+      border: 1px solid #dfe5ee;
+      border-radius: 18px;
+      padding: 35px;
+      box-shadow: 0 15px 45px rgba(25, 40, 65, 0.12);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .srm {
+      display: inline-block;
+      border: 2px solid #0879d1;
+      color: #0879d1;
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #172033;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      color: #68758a;
+      font-size: 16px;
+    }
+
+    .section {
+      margin-top: 25px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      color: #0879d1;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #dfe5ee;
+      padding-bottom: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 14px;
+      color: #273449;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 9px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #172033;
+      outline: none;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    input::placeholder {
+      color: #9aa6b5;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #0879d1;
+      box-shadow: 0 0 0 3px rgba(8, 121, 209, 0.10);
+    }
+
+    input.valid,
+    select.valid {
+      border: 1px solid #16a765;
+    }
+
+    input.invalid,
+    select.invalid {
+      border: 1px solid #e5394f;
+      background: #fff7f8;
+    }
+
+    .error {
+      color: #e5394f;
+      font-size: 12px;
+      margin-top: 6px;
+      min-height: 15px;
+      font-weight: 600;
+    }
+
+    .photo-box {
+      border: 1px dashed #b8c5d4;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      background: #fafbfd;
+    }
+
+    .photo-preview {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0879d1;
+      display: none;
+      margin: 0 auto 15px;
+    }
+
+    .photo-placeholder {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      border: 2px dashed #9aaabd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #718096;
+      font-size: 13px;
+      background: #ffffff;
+    }
+
+    .photo-input {
+      border: none;
+      background: transparent;
+      padding: 5px;
+      color: #273449;
+      cursor: pointer;
+    }
+
+    .photo-input:focus {
+      box-shadow: none;
+    }
+
+    .photo-note {
+      color: #7a8798;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .confirmation {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 25px;
+      padding: 15px;
+      border: 1px solid #dfe5ee;
+      border-radius: 10px;
+      background: #fafbfd;
+    }
+
+    .confirmation.invalid {
+      border-color: #e5394f;
+      background: #fff7f8;
+    }
+
+    .confirmation input {
+      width: auto;
+      margin-top: 3px;
+      accent-color: #0879d1;
+    }
+
+    .confirmation label {
+      margin: 0;
+      line-height: 1.5;
+      color: #59677a;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 28px;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .back-btn {
+      background: #ffffff;
+      color: #526174;
+      border: 1px solid #cbd5e1;
+    }
+
+    .back-btn:hover {
+      background: #f4f6f9;
+    }
+
+    .create-btn {
+      border: none;
+      background: #0879d1;
+      color: #ffffff;
+    }
+
+    .create-btn:hover {
+      background: #066bb9;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(8, 121, 209, 0.20);
+    }
+
+    .create-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .container {
+        padding: 22px;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="srm">
+      SRM
+    </div>
+
+    <h1>Create Faculty Profile</h1>
+
+    <p>
+      SnapDex Smart Attendance
+    </p>
+  </div>
+
+
+  <form id="facultyForm">
+
+    <!-- FACULTY INFORMATION -->
+
+    <div class="section">
+
+      <div class="section-title">
+        Faculty Information
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field full">
+
+          <label for="name">
+            Full Name
+          </label>
+
+          <input
+            type="text"
+            id="name"
+            placeholder="e.g. Dr. Rahul Sharma"
+            autocomplete="name"
+          >
+
+          <div class="error" id="nameError"></div>
+
+        </div>
+
+
+        <div class="field full">
+
+          <label for="email">
+            Official SRM Email
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="example@srmist.edu.in"
+            autocomplete="email"
+          >
+
+          <div class="error" id="emailError"></div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="password">
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="password"
+            placeholder="Minimum 8 characters"
+            autocomplete="new-password"
+          >
+
+          <div class="error" id="passwordError"></div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="confirmPassword">
+            Confirm Password
+          </label>
+
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Re-enter password"
+            autocomplete="new-password"
+          >
+
+          <div class="error" id="confirmPasswordError"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PHOTO -->
+
+    <div class="section">
+
+      <div class="section-title">
+        Faculty Profile Photo
+      </div>
+
+      <div class="photo-box">
+
+        <div
+          class="photo-placeholder"
+          id="photoPlaceholder"
+        >
+          Photo (Optional)
+        </div>
+
+        <img
+          id="photoPreview"
+          class="photo-preview"
+          alt="Faculty Photo Preview"
+        >
+
+        <input
+          type="file"
+          id="profilePhoto"
+          class="photo-input"
+          accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+        >
+
+        <div class="photo-note">
+          JPG, JPEG or PNG (Optional • You can also add or update your photo later from My Profile)
+        </div>
+
+        <div class="error" id="photoError"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DEPARTMENT -->
+
+    <div class="section">
+
+      <div class="section-title">
+        Academic Identity
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field full">
+
+          <label for="department">
+            Department
+          </label>
+
+          <select id="department">
+
+            <option value="">
+              Select Department
+            </option>
+
+            <option value="Engineering and Technology">
+              Engineering and Technology
+            </option>
+
+            <option value="Management">
+              Management
+            </option>
+
+            <option value="Computer Applications">
+              Computer Applications
+            </option>
+
+            <option value="Science and Humanities">
+              Science and Humanities
+            </option>
+
+            <option value="Medicine and Health Sciences">
+              Medicine and Health Sciences
+            </option>
+
+            <option value="Hotel Management">
+              Hotel Management
+            </option>
+
+          </select>
+
+          <div class="error" id="departmentError"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CONFIRM -->
+
+    <div
+      class="confirmation"
+      id="confirmationBox"
+    >
+
+      <input
+        type="checkbox"
+        id="confirmation"
+      >
+
+      <label for="confirmation">
+
+        I confirm that the information provided above is correct
+        and that I am authorized to create this faculty profile.
+
+      </label>
+
+    </div>
+
+    <div class="error" id="confirmationError"></div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+      <button
+        type="button"
+        class="back-btn"
+        onclick="window.location.href='index.html'"
+      >
+        Back to Login
+      </button>
+
+      <button
+        type="submit"
+        class="create-btn"
+      >
+        Create Faculty Profile
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<script>
+
+const API_BASE_URL = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
+
+const form =
+  document.getElementById("facultyForm");
+
+const nameInput =
+  document.getElementById("name");
+
+const emailInput =
+  document.getElementById("email");
+
+const passwordInput =
+  document.getElementById("password");
+
+const confirmPasswordInput =
+  document.getElementById("confirmPassword");
+
+const departmentInput =
+  document.getElementById("department");
+
+const photoInput =
+  document.getElementById("profilePhoto");
+
+const photoPreview =
+  document.getElementById("photoPreview");
+
+const photoPlaceholder =
+  document.getElementById("photoPlaceholder");
+
+const confirmation =
+  document.getElementById("confirmation");
+
+const confirmationBox =
+  document.getElementById("confirmationBox");
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(input, errorId, message) {
+
+  if (input) {
+    input.classList.remove("valid");
+    input.classList.add("invalid");
+  }
+
+  document.getElementById(errorId).textContent =
+    message;
+}
+
+
+/* =========================
+   VALID
+========================= */
+
+function showValid(input, errorId) {
+
+  if (input) {
+    input.classList.remove("invalid");
+    input.classList.add("valid");
+  }
+
+  document.getElementById(errorId).textContent =
+    "";
+}
+
+
+/* =========================
+   NAME
+========================= */
+
+function validateName() {
+
+  const value =
+    nameInput.value.trim();
+
+  const namePattern =
+    /^(?:[A-Za-z]+(?:[.'-][A-Za-z]+)*)(?:\s+[A-Za-z]+(?:[.'-][A-Za-z]+)*)+$/;
+
+  if (!value) {
+
+    showError(
+      nameInput,
+      "nameError",
+      "Please enter your full name."
+    );
+
+    return false;
+  }
+
+  if (!namePattern.test(value)) {
+
+    showError(
+      nameInput,
+      "nameError",
+      "Please enter a valid name. Numbers and invalid symbols are not allowed."
+    );
+
+    return false;
+  }
+
+  showValid(
+    nameInput,
+    "nameError"
+  );
+
+  return true;
+}
+
+
+/* =========================
+   EMAIL
+========================= */
+
+function validateEmail() {
+
+  const value =
+    emailInput.value.trim();
+
+  const emailPattern =
+    /^[A-Za-z0-9._%+-]+@srmist\.edu\.in$/i;
+
+  if (!value) {
+
+    showError(
+      emailInput,
+      "emailError",
+      "Please enter your official SRM email."
+    );
+
+    return false;
+  }
+
+  if (!emailPattern.test(value)) {
+
+    showError(
+      emailInput,
+      "emailError",
+      "Use a valid @srmist.edu.in email address."
+    );
+
+    return false;
+  }
+
+  showValid(
+    emailInput,
+    "emailError"
+  );
+
+  return true;
+}
+
+
+/* =========================
+   PASSWORD
+========================= */
+
+function validatePassword() {
+
+  const value =
+    passwordInput.value;
+
+  if (value.length < 8) {
+
+    showError(
+      passwordInput,
+      "passwordError",
+      "Password must contain at least 8 characters."
+    );
+
+    return false;
+  }
+
+  if (!/[A-Za-z]/.test(value)) {
+
+    showError(
+      passwordInput,
+      "passwordError",
+      "Password must contain at least one alphabet."
+    );
+
+    return false;
+  }
+
+  if (!/[0-9]/.test(value)) {
+
+    showError(
+      passwordInput,
+      "passwordError",
+      "Password must contain at least one number."
+    );
+
+    return false;
+  }
+
+  showValid(
+    passwordInput,
+    "passwordError"
+  );
+
+  return true;
+}
+
+
+/* =========================
+   CONFIRM PASSWORD
+========================= */
+
+function validateConfirmPassword() {
+
+  if (!confirmPasswordInput.value) {
+
+    showError(
+      confirmPasswordInput,
+      "confirmPasswordError",
+      "Please confirm your password."
+    );
+
+    return false;
+  }
+
+  if (
+    confirmPasswordInput.value !==
+    passwordInput.value
+  ) {
+
+    showError(
+      confirmPasswordInput,
+      "confirmPasswordError",
+      "Passwords do not match."
+    );
+
+    return false;
+  }
+
+  showValid(
+    confirmPasswordInput,
+    "confirmPasswordError"
+  );
+
+  return true;
+}
+
+
+/* =========================
+   DEPARTMENT
+========================= */
+
+function validateDepartment() {
+
+  if (!departmentInput.value) {
+
+    showError(
+      departmentInput,
+      "departmentError",
+      "Please select your department."
+    );
+
+    return false;
+  }
+
+  showValid(
+    departmentInput,
+    "departmentError"
+  );
+
+  return true;
+}
+
+
+/* =========================
+   PHOTO (OPTIONAL)
+========================= */
+
+function validatePhoto() {
+
+  const file =
+    photoInput.files[0];
+
+  if (!file) {
+    document.getElementById(
+      "photoError"
+    ).textContent = "";
+    return true;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+
+    document.getElementById(
+      "photoError"
+    ).textContent =
+      "Only JPG, JPEG or PNG images are allowed.";
+
+    return false;
+  }
+
+  document.getElementById(
+    "photoError"
+  ).textContent = "";
+
+  return true;
+}
+
+
+/* =========================
+   CONFIRMATION
+========================= */
+
+function validateConfirmation() {
+
+  if (!confirmation.checked) {
+
+    confirmationBox.classList.add("invalid");
+
+    document.getElementById(
+      "confirmationError"
+    ).textContent =
+      "Please confirm the information before creating your profile.";
+
+    return false;
+  }
+
+  confirmationBox.classList.remove("invalid");
+
+  document.getElementById(
+    "confirmationError"
+  ).textContent = "";
+
+  return true;
+}
+
+
+/* =========================
+   PHOTO PREVIEW
+========================= */
+
+photoInput.addEventListener(
+  "change",
+  function () {
+
+    const file =
+      photoInput.files[0];
+
+    if (!file) {
+
+      photoPreview.style.display =
+        "none";
+
+      photoPlaceholder.style.display =
+        "flex";
+
+      return;
+    }
+
+    if (
+      file.type !== "image/jpeg" &&
+      file.type !== "image/png"
+    ) {
+
+      photoPreview.style.display =
+        "none";
+
+      photoPlaceholder.style.display =
+        "flex";
+
+      document.getElementById(
+        "photoError"
+      ).textContent =
+        "Only JPG, JPEG or PNG images are allowed.";
+
+      return;
+    }
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      function (event) {
+
+        photoPreview.src =
+          event.target.result;
+
+        photoPreview.style.display =
+          "block";
+
+        photoPlaceholder.style.display =
+          "none";
+
+        document.getElementById(
+          "photoError"
+        ).textContent = "";
+
+      };
+
+    reader.readAsDataURL(file);
+
+    validatePhoto();
+
+  }
+);
+
+
+/* =========================
+   LIVE VALIDATION
+========================= */
+
+nameInput.addEventListener(
+  "input",
+  validateName
+);
+
+emailInput.addEventListener(
+  "input",
+  validateEmail
+);
+
+passwordInput.addEventListener(
+  "input",
+  function () {
+
+    validatePassword();
+
+    if (confirmPasswordInput.value) {
+      validateConfirmPassword();
+    }
+
+  }
+);
+
+confirmPasswordInput.addEventListener(
+  "input",
+  validateConfirmPassword
+);
+
+departmentInput.addEventListener(
+  "change",
+  validateDepartment
+);
+
+confirmation.addEventListener(
+  "change",
+  validateConfirmation
+);
+
+
+/* =========================
+   SUBMIT
+========================= */
+
+form.addEventListener(
+  "submit",
+  async function (event) {
+
+    event.preventDefault();
+
+    const validName =
+      validateName();
+
+    const validEmail =
+      validateEmail();
+
+    const validPassword =
+      validatePassword();
+
+    const validConfirm =
+      validateConfirmPassword();
+
+    const validDepartment =
+      validateDepartment();
+
+    const validPhoto =
+      validatePhoto();
+
+    const validConfirmation =
+      validateConfirmation();
+
+
+    if (
+      !validName ||
+      !validEmail ||
+      !validPassword ||
+      !validConfirm ||
+      !validDepartment ||
+      !validPhoto ||
+      !validConfirmation
+    ) {
+
+      return;
+    }
+
+    const createButton =
+      form.querySelector(".create-btn");
+
+    createButton.disabled = true;
+    createButton.textContent =
+      "Creating...";
+
+    async function sendRegistration(photoBase64) {
+      const facultyData = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim().toLowerCase(),
+        password: passwordInput.value,
+        department: departmentInput.value,
+        profilePhoto: photoBase64 || ""
+      };
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/faculty/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(facultyData)
+          }
+        );
+
+        const resultText = await response.text();
+
+        if (!response.ok) {
+          throw new Error(resultText || "Faculty registration failed.");
+        }
+
+        let result;
+        try {
+          result = JSON.parse(resultText);
+        } catch (e) {
+          throw new Error("Invalid response format from server.");
+        }
+
+        const assignedFacultyId = result.facultyId;
+
+        const frontendFaculty = {
+          id: result.id,
+          facultyId: assignedFacultyId,
+          name: result.name,
+          email: result.email,
+          department: result.department || departmentInput.value,
+          profilePhoto: result.profilePhoto || ""
+        };
+
+        localStorage.setItem(
+          "snapdexFaculty",
+          JSON.stringify(frontendFaculty)
+        );
+
+        sessionStorage.setItem(
+          "snapdexCurrentUser",
+          JSON.stringify(frontendFaculty)
+        );
+
+        localStorage.setItem(
+          "snapdexLoggedIn",
+          "faculty"
+        );
+
+        alert(
+          "Faculty profile created successfully!\n\n" +
+          "Your unique Faculty ID is: " + assignedFacultyId + "\n\n" +
+          "Please keep this ID for your attendance and profile records."
+        );
+
+        window.location.href = "facultydashboard.html";
+
+      } catch (error) {
+        console.error("Faculty registration error:", error);
+        alert("Registration failed: " + (error.message || "Unable to connect to backend."));
+        createButton.disabled = false;
+        createButton.textContent = "Create Faculty Profile";
+      }
+    }
+
+    const file = photoInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        sendRegistration(reader.result);
+      };
+      reader.onerror = function () {
+        sendRegistration("");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      sendRegistration("");
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>

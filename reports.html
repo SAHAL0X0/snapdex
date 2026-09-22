@@ -1,0 +1,2858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SnapDex - Reports</title>
+<script src="config.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --navy:#172b4d;
+    --blue:#1261a0;
+    --bright-blue:#1769e8;
+    --bg:#f4f7fb;
+    --sidebar:#ffffff;
+    --border:#dce5ef;
+    --muted:#61758f;
+    --green:#079b3f;
+    --red:#df2020;
+}
+
+html,body{
+    min-height:100%;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--navy);
+}
+
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.layout{
+    min-height:100vh;
+    display:flex;
+}
+
+
+/* =====================================================
+   SIDEBAR — FACULTY DASHBOARD STYLE
+===================================================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:280px;
+
+    background:#fff;
+    border-right:1px solid #dce5ef;
+
+    padding:24px 16px;
+
+    overflow-y:auto;
+
+    z-index:100;
+}
+
+.sidebar::-webkit-scrollbar{
+    width:5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+    background:#cbd7e4;
+    border-radius:10px;
+}
+
+
+/* BRAND */
+
+.sidebar-brand{
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    padding:0 10px 22px;
+
+    border-bottom:1px solid #dce5ef;
+}
+
+.sidebar-logo{
+    width:52px;
+    height:52px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+}
+
+.sidebar-brand-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.sidebar-brand-name{
+    font-size:27px;
+    line-height:1;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    color:#172b4d;
+}
+
+.sidebar-brand-name span{
+    color:#1769e8;
+}
+
+.sidebar-brand-sub{
+    margin-top:6px;
+
+    font-size:9px;
+
+    letter-spacing:1.3px;
+
+    font-weight:700;
+
+    color:#60758f;
+}
+
+
+/* MENU TITLE */
+
+.menu-title{
+    margin:27px 12px 13px;
+
+    color:#385473;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+}
+
+
+/* MENU */
+
+.menu{
+    display:flex;
+    flex-direction:column;
+
+    gap:5px;
+}
+
+.menu a{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    height:52px;
+    min-height:52px;
+    padding:5px 10px;
+    margin:4px 0;
+    border-radius:14px;
+    color:#10244a;
+    text-decoration:none;
+    font-size:15px;
+    font-weight:700;
+    transition:background .2s ease, color .2s ease;
+}
+
+.menu a:hover{
+    color:#075edb;
+    background:#eef5fc;
+}
+
+.menu a.active{
+    color:#075edb;
+    background:#e1edff;
+    font-weight:700;
+}
+
+
+/* ICON */
+
+.menu-icon{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    min-width:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:#edf5fe;
+    color:#10244a;
+    transition:background .2s ease, color .2s ease;
+}
+
+.menu a:hover .menu-icon{
+    background:#e3effc;
+    color:#075edb;
+}
+
+.menu a.active .menu-icon{
+    background:#f0f6fe;
+    color:#075edb;
+}
+
+.menu-icon svg{
+    width:19px;
+    height:19px;
+    display:block;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* ACCOUNT */
+
+.account-title{
+    margin-top:30px;
+}
+
+.logout:hover{
+    background:#fff1f1 !important;
+    color:#d32020 !important;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+    margin-left:280px;
+
+    width:calc(100% - 280px);
+
+    min-height:100vh;
+
+    position:relative;
+
+    background:#f4f7fb;
+
+    overflow:hidden;
+}
+
+
+/* VERY FAINT SRM WATERMARK */
+
+.main::before{
+    content:"";
+
+    position:fixed;
+
+    width:600px;
+    height:600px;
+
+    right:30px;
+    bottom:-100px;
+
+    background-image:url("srm_logo.png");
+
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+
+    opacity:.025;
+
+    pointer-events:none;
+
+    z-index:0;
+}
+
+
+/* =====================================================
+   HEADER — FACULTY DASHBOARD STYLE
+===================================================== */
+
+.header{
+    height:88px;
+
+    background:#fff;
+
+    border-bottom:1px solid #dce5ef;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    position:relative;
+
+    z-index:5;
+}
+
+
+/* BRAND */
+
+.brand{
+    display:flex;
+    align-items:center;
+
+    gap:13px;
+}
+
+.srm-box{
+    width:52px;
+    height:52px;
+
+    border-radius:13px;
+
+    background:#edf5fc;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+}
+
+.srm-box img{
+    width:45px;
+    height:45px;
+
+    object-fit:contain;
+}
+
+.brand-name{
+    font-size:27px;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    color:#172b4d;
+}
+
+.brand-name span{
+    color:#1769e8;
+}
+
+.brand-sub{
+    margin-top:5px;
+
+    font-size:12px;
+
+    color:#61758f;
+}
+
+
+/* PROFILE */
+
+.profile{
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+}
+
+.profile-text{
+    text-align:right;
+}
+
+.profile-name{
+    font-size:14px;
+
+    font-weight:700;
+
+    color:#172b4d;
+}
+
+.profile-id{
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#70829a;
+}
+
+.profile-photo{
+    width:46px;
+    height:46px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:1px solid #dce5ef;
+
+    background:#f5f8fc;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.content{
+    padding:36px 30px 60px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+
+/* PAGE TITLE */
+
+.page-title{
+    font-size:34px;
+
+    line-height:1.15;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    color:#10213f;
+
+    margin-bottom:7px;
+}
+
+.page-subtitle{
+    font-size:15px;
+
+    color:#5c718c;
+
+    margin-bottom:26px;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+
+    margin-bottom:28px;
+}
+
+.stat{
+    min-height:130px;
+
+    padding:24px 25px;
+
+    background:#fff;
+
+    border:1px solid #dce5ef;
+
+    border-radius:16px;
+
+    box-shadow:0 5px 18px rgba(32,65,100,.025);
+}
+
+.stat-number{
+    font-size:38px;
+
+    line-height:1;
+
+    font-weight:500;
+}
+
+.stat-title{
+    margin-top:12px;
+
+    font-size:14px;
+
+    color:#5d718b;
+}
+
+.blue{
+    color:#1769e8;
+}
+
+.green{
+    color:#079b3f;
+}
+
+.red{
+    color:#df2020;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+    background:#fff;
+
+    border:1px solid #dce5ef;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    margin-bottom:25px;
+
+    box-shadow:0 5px 18px rgba(32,65,100,.025);
+}
+
+.card-header{
+    padding:23px 27px 20px;
+
+    border-bottom:1px solid #e1e7ee;
+}
+
+.card-header h2{
+    font-size:21px;
+
+    font-weight:800;
+
+    color:#10213f;
+
+    margin-bottom:6px;
+}
+
+.card-header p{
+    font-size:14px;
+
+    color:#61758f;
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filters{
+    display:flex;
+
+    align-items:flex-end;
+
+    flex-wrap:wrap;
+
+    gap:14px;
+
+    padding:20px 27px;
+
+    background:#f8fafc;
+
+    border-bottom:1px solid #e1e7ee;
+}
+
+.filter-group{
+    display:flex;
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.filter-group label{
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#526a84;
+}
+
+select{
+    width:185px;
+
+    height:42px;
+
+    padding:0 12px;
+
+    border:1px solid #ccd8e5;
+
+    border-radius:8px;
+
+    background:#fff;
+
+    color:#172b4d;
+
+    font-size:13px;
+
+    outline:none;
+}
+
+select:focus{
+    border-color:#8bb5e4;
+
+    box-shadow:0 0 0 3px rgba(18,97,160,.06);
+}
+
+.reset-btn{
+    height:42px;
+
+    padding:0 17px;
+
+    border:1px solid #ccd8e5;
+
+    border-radius:8px;
+
+    background:#fff;
+
+    color:#385473;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.reset-btn:hover{
+    background:#f0f6fc;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:780px;
+}
+
+th{
+    height:48px;
+
+    padding:0 18px;
+
+    background:#f5f8fb;
+
+    color:#123b67;
+
+    text-align:left;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.15px;
+
+    white-space:nowrap;
+}
+
+td{
+    padding:16px 18px;
+
+    border-bottom:1px solid #e5ebf1;
+
+    font-size:13px;
+
+    color:#315474;
+
+    vertical-align:middle;
+}
+
+tbody tr:last-child td{
+    border-bottom:none;
+}
+
+tbody tr:hover{
+    background:#fbfdff;
+}
+
+.subject{
+    font-weight:700;
+
+    color:#10213f;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.present-text{
+    color:#079b3f;
+
+    font-weight:700;
+}
+
+.absent-text{
+    color:#df2020;
+
+    font-weight:700;
+}
+
+.percentage{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    min-width:58px;
+
+    height:29px;
+
+    padding:0 11px;
+
+    border-radius:18px;
+
+    background:#dcf8e8;
+
+    color:#087b39;
+
+    font-size:11px;
+
+    font-weight:700;
+}
+
+.low{
+    background:#ffe3e3;
+
+    color:#d31c1c;
+}
+
+.medium{
+    background:#fff0d5;
+
+    color:#9c6500;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+    text-align:center;
+
+    padding:48px 20px;
+
+    color:#71839a;
+}
+
+.empty-icon{
+    width:55px;
+    height:55px;
+
+    margin:0 auto 14px;
+
+    border-radius:13px;
+
+    background:#edf5ff;
+
+    color:#1769e8;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.empty-icon svg{
+    width:16px;
+    height:16px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:1.7;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1200px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:950px){
+
+    .sidebar{
+        width:245px;
+    }
+
+    .main{
+        margin-left:245px;
+
+        width:calc(100% - 245px);
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .content{
+        padding:32px 25px 55px;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .layout{
+        display:block;
+    }
+
+    .sidebar{
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+
+        width:100%;
+    }
+
+    .header{
+        height:auto;
+
+        min-height:80px;
+
+        padding:15px 20px;
+    }
+
+    .content{
+        padding:28px 18px 50px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .filters{
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    select,
+    .reset-btn{
+        width:100%;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .page-title{
+        font-size:30px;
+    }
+
+    .sidebar-brand-name{
+        font-size:24px;
+    }
+
+    .card-header{
+        padding:20px;
+    }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="layout">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <img
+            src="srm_logo.png"
+            class="sidebar-logo"
+            alt="SRM Institute of Science and Technology"
+        >
+
+        <div class="sidebar-brand-text">
+
+            <div class="sidebar-brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+            <div class="sidebar-brand-sub">
+                SMART ATTENDANCE
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="facultydashboard.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 10.5L12 3l9 7.5V21H5V10.5z"></path>
+                    <path d="M9 21v-6h6v6"></path>
+                </svg>
+            </span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="facultydashboard.html#classes">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="5" width="17" height="15" rx="2.5"></rect>
+                    <path d="M8 3v4"></path>
+                    <path d="M16 3v4"></path>
+                    <path d="M3.5 10h17"></path>
+                </svg>
+            </span>
+            <span>My Classes</span>
+        </a>
+
+        <a href="subjects.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                    <path d="M8 9h8"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h5"></path>
+                </svg>
+            </span>
+            <span>Subjects</span>
+        </a>
+
+        <a href="students.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3.2"></circle>
+                    <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"></path>
+                    <circle cx="17" cy="9" r="2.5"></circle>
+                    <path d="M15 15.5c2.8-.1 4.8 1.5 5.5 4.5"></path>
+                </svg>
+            </span>
+            <span>Students</span>
+        </a>
+
+        <a href="takeattendance.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="6" width="17" height="14" rx="2.5"></rect>
+                    <circle cx="12" cy="13" r="3.5"></circle>
+                    <path d="M8 6l1-2.5h6l1 2.5"></path>
+                </svg>
+            </span>
+            <span>Take Attendance</span>
+        </a>
+
+        <a href="attendancehistory.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7.5v4.5l3 2"></path>
+                </svg>
+            </span>
+            <span>Attendance History</span>
+        </a>
+
+        <!-- ACTIVE REPORTS -->
+        <a href="reports.html" class="active">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 20h16"></path>
+                    <path d="M7 20V12"></path>
+                    <path d="M12 20V5"></path>
+                    <path d="M17 20V15"></path>
+                </svg>
+            </span>
+            <span>Reports</span>
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title account-title">
+        ACCOUNT
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="facultyprofile.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5.5 20.5c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5"></path>
+                </svg>
+            </span>
+            <span>My Profile</span>
+        </a>
+
+        <a href="index.html" class="logout" onclick="return logout();">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 12h10"></path>
+                    <path d="M11 8l4 4-4 4"></path>
+                    <path d="M19 6v12"></path>
+                </svg>
+            </span>
+            <span>Logout</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="srm-box">
+
+            <img
+                src="srm_logo.png"
+                alt="SRM"
+            >
+
+        </div>
+
+
+        <div>
+
+            <div class="brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+            <div class="brand-sub">
+                Smart Attendance • SRM Institute of Science and Technology
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile">
+
+        <div class="profile-text">
+
+            <div
+                class="profile-name"
+                id="facultyName"
+            >
+                Faculty
+            </div>
+
+            <div
+                class="profile-id"
+                id="facultyId"
+            >
+                -
+            </div>
+
+        </div>
+
+
+        <img
+            id="facultyPhoto"
+            class="profile-photo"
+            src="srm_logo.png"
+            alt="Faculty"
+        >
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<section class="content">
+
+
+    <h1 class="page-title">
+        Attendance Reports
+    </h1>
+
+
+    <p class="page-subtitle">
+        Analyze finalized attendance records for your classes.
+    </p>
+
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number blue"
+                id="totalSessions"
+            >
+                0
+            </div>
+
+            <div class="stat-title">
+                Total Sessions
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number blue"
+                id="totalRecords"
+            >
+                0
+            </div>
+
+            <div class="stat-title">
+                Student Records
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number green"
+                id="totalPresent"
+            >
+                0
+            </div>
+
+            <div class="stat-title">
+                Total Present
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number red"
+                id="totalAbsent"
+            >
+                0
+            </div>
+
+            <div class="stat-title">
+                Total Absent
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         SUBJECT REPORT
+    ================================================= -->
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <h2>
+                Subject-wise Attendance
+            </h2>
+
+            <p>
+                Attendance summary for each subject handled by you.
+            </p>
+
+        </div>
+
+
+        <div class="filters">
+
+
+            <div class="filter-group">
+
+                <label>
+                    Subject
+                </label>
+
+                <select
+                    id="subjectFilter"
+                    onchange="applyFilters()"
+                >
+
+                    <option value="ALL">
+                        All Subjects
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label>
+                    Section
+                </label>
+
+                <select
+                    id="sectionFilter"
+                    onchange="applyFilters()"
+                >
+
+                    <option value="ALL">
+                        All Sections
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="reset-btn"
+                onclick="resetFilters()"
+            >
+                Reset Filters
+            </button>
+
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>SUBJECT</th>
+                        <th>SECTION</th>
+                        <th>SESSIONS</th>
+                        <th>STUDENTS</th>
+                        <th>PRESENT</th>
+                        <th>ABSENT</th>
+                        <th>ATTENDANCE</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="reportBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         RECENT SESSIONS
+    ================================================= -->
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <h2>
+                Recent Attendance Sessions
+            </h2>
+
+            <p>
+                Latest finalized attendance sessions.
+            </p>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>DATE &amp; TIME</th>
+                        <th>SUBJECT</th>
+                        <th>CLASS</th>
+                        <th>STUDENTS</th>
+                        <th>PRESENT</th>
+                        <th>ABSENT</th>
+                        <th>STATUS</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="sessionBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</section>
+
+</main>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SNAPDEX REPORTS
+   FUNCTIONALITY KEPT SAME
+===================================================== */
+
+let faculty = null;
+
+try{
+
+    faculty =
+        JSON.parse(
+            localStorage.getItem(
+                "snapdexFaculty"
+            ) || "null"
+        );
+
+}catch(error){
+
+    faculty = null;
+
+}
+
+
+/* =====================================================
+   FACULTY HEADER
+===================================================== */
+
+function loadFaculty(){
+
+    if(!faculty){
+        return;
+    }
+
+    document.getElementById(
+        "facultyName"
+    ).textContent =
+        faculty.name ||
+        "Faculty";
+
+    document.getElementById(
+        "facultyId"
+    ).textContent =
+        faculty.id ||
+        faculty.facultyId ||
+        "-";
+
+    if(
+        faculty.profilePhoto
+    ){
+
+        document.getElementById(
+            "facultyPhoto"
+        ).src =
+            faculty.profilePhoto;
+
+    }
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function getHistory(){
+
+    try{
+
+        const history =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexAttendanceHistory"
+                ) || "[]"
+            );
+
+        return Array.isArray(
+            history
+        )
+        ? history
+        : [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   FACULTY HISTORY
+===================================================== */
+
+function getFacultyHistory(){
+
+    const allHistory =
+        getHistory();
+
+    if(!faculty){
+
+        return allHistory;
+
+    }
+
+    const facultyId =
+        faculty.id ||
+        faculty.facultyId ||
+        "";
+
+    return allHistory.filter(
+        session => {
+
+            if(
+                !session.facultyId
+            ){
+
+                return true;
+
+            }
+
+            return String(
+                session.facultyId
+            ) ===
+            String(
+                facultyId
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NORMALIZE
+===================================================== */
+
+function normalize(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+/* =====================================================
+   STUDENT KEY
+===================================================== */
+
+function getStudentKey(student){
+
+    return normalize(
+
+        student.registrationNumber ||
+
+        student.regNo ||
+
+        student.studentId ||
+
+        student.id ||
+
+        student.email ||
+
+        student.name
+
+    );
+
+}
+
+
+/* =====================================================
+   STATUS COUNT
+===================================================== */
+
+function countStatus(
+    session,
+    status
+){
+
+    const records =
+        Array.isArray(
+            session.records
+        )
+        ? session.records
+        : [];
+
+    return records.filter(
+        record => {
+
+            return normalize(
+                record.attendance
+            ) ===
+            normalize(
+                status
+            );
+
+        }
+    ).length;
+
+}
+
+
+/* =====================================================
+   GET ALL STUDENTS
+===================================================== */
+
+function getAllStudents(){
+
+    const students = [];
+
+    try{
+
+        const multiple =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudents"
+                ) || "[]"
+            );
+
+        if(
+            Array.isArray(
+                multiple
+            )
+        ){
+
+            multiple.forEach(
+                student => {
+
+                    if(student){
+
+                        students.push(
+                            student
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+    }catch(error){}
+
+
+    try{
+
+        const single =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexStudent"
+                ) || "null"
+            );
+
+        if(single){
+
+            students.push(
+                single
+            );
+
+        }
+
+    }catch(error){}
+
+
+    const unique =
+        new Map();
+
+
+    students.forEach(
+        student => {
+
+            const key =
+                getStudentKey(
+                    student
+                );
+
+            if(!key){
+
+                return;
+
+            }
+
+            if(
+                !unique.has(
+                    key
+                )
+            ){
+
+                unique.set(
+                    key,
+                    student
+                );
+
+            }
+
+        }
+    );
+
+
+    return [
+        ...unique.values()
+    ];
+
+}
+
+
+/* =====================================================
+   UNIQUE STUDENT COUNT
+===================================================== */
+
+function countUniqueStudents(
+    history
+){
+
+    const unique =
+        new Map();
+
+
+    const allStudents =
+        getAllStudents();
+
+
+    allStudents.forEach(
+        student => {
+
+            const key =
+                getStudentKey(
+                    student
+                );
+
+            if(key){
+
+                unique.set(
+                    key,
+                    student
+                );
+
+            }
+
+        }
+    );
+
+
+    history.forEach(
+        session => {
+
+            const records =
+                Array.isArray(
+                    session.records
+                )
+                ? session.records
+                : [];
+
+
+            records.forEach(
+                record => {
+
+                    const key =
+                        getStudentKey(
+                            record
+                        );
+
+                    if(key){
+
+                        unique.set(
+                            key,
+                            record
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    return unique.size;
+
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+function updateSummary(
+    history
+){
+
+    let present = 0;
+
+    let absent = 0;
+
+
+    history.forEach(
+        session => {
+
+            present +=
+                session.present !== undefined
+                ? Number(
+                    session.present
+                ) || 0
+                : countStatus(
+                    session,
+                    "PRESENT"
+                );
+
+
+            absent +=
+                session.absent !== undefined
+                ? Number(
+                    session.absent
+                ) || 0
+                : countStatus(
+                    session,
+                    "ABSENT"
+                );
+
+        }
+    );
+
+
+    const uniqueStudents =
+        countUniqueStudents(
+            history
+        );
+
+
+    document.getElementById(
+        "totalSessions"
+    ).textContent =
+        history.length;
+
+
+    document.getElementById(
+        "totalRecords"
+    ).textContent =
+        uniqueStudents;
+
+
+    document.getElementById(
+        "totalPresent"
+    ).textContent =
+        present;
+
+
+    document.getElementById(
+        "totalAbsent"
+    ).textContent =
+        absent;
+
+}
+
+
+/* =====================================================
+   FILTER OPTIONS
+===================================================== */
+
+function loadFilters(
+    history
+){
+
+    const subjectSelect =
+        document.getElementById(
+            "subjectFilter"
+        );
+
+
+    const sectionSelect =
+        document.getElementById(
+            "sectionFilter"
+        );
+
+
+    subjectSelect.innerHTML = `
+        <option value="ALL">
+            All Subjects
+        </option>
+    `;
+
+
+    sectionSelect.innerHTML = `
+        <option value="ALL">
+            All Sections
+        </option>
+    `;
+
+
+    const subjects =
+        new Set();
+
+
+    const sections =
+        new Set();
+
+
+    history.forEach(
+        session => {
+
+            if(
+                session.subject
+            ){
+
+                subjects.add(
+                    session.subject
+                );
+
+            }
+
+
+            if(
+                session.section
+            ){
+
+                sections.add(
+                    session.section
+                );
+
+            }
+
+        }
+    );
+
+
+    [...subjects]
+        .sort()
+        .forEach(
+            subject => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    subject;
+
+
+                option.textContent =
+                    subject;
+
+
+                subjectSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    [...sections]
+        .sort()
+        .forEach(
+            section => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    section;
+
+
+                option.textContent =
+                    normalize(
+                        section
+                    ).startsWith(
+                        "section"
+                    )
+                    ? section
+                    : "Section " +
+                      section;
+
+
+                sectionSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   APPLY FILTERS
+===================================================== */
+
+function applyFilters(){
+
+    const history =
+        getFacultyHistory();
+
+
+    const subject =
+        document.getElementById(
+            "subjectFilter"
+        ).value;
+
+
+    const section =
+        document.getElementById(
+            "sectionFilter"
+        ).value;
+
+
+    const filtered =
+        history.filter(
+            session => {
+
+                const subjectMatch =
+                    subject === "ALL" ||
+                    normalize(
+                        session.subject
+                    ) ===
+                    normalize(
+                        subject
+                    );
+
+
+                const sectionMatch =
+                    section === "ALL" ||
+                    normalize(
+                        session.section
+                    ) ===
+                    normalize(
+                        section
+                    );
+
+
+                return (
+                    subjectMatch &&
+                    sectionMatch
+                );
+
+            }
+        );
+
+
+    renderSubjectReport(
+        filtered
+    );
+
+
+    renderSessionReport(
+        filtered
+    );
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetFilters(){
+
+    document.getElementById(
+        "subjectFilter"
+    ).value =
+        "ALL";
+
+
+    document.getElementById(
+        "sectionFilter"
+    ).value =
+        "ALL";
+
+
+    applyFilters();
+
+}
+
+
+/* =====================================================
+   SUBJECT REPORT
+===================================================== */
+
+function renderSubjectReport(
+    history
+){
+
+    const tbody =
+        document.getElementById(
+            "reportBody"
+        );
+
+
+    tbody.innerHTML =
+        "";
+
+
+    if(
+        history.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="7">
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+
+                            <svg viewBox="0 0 24 24">
+
+                                <path d="M5 20V10"></path>
+
+                                <path d="M12 20V4"></path>
+
+                                <path d="M19 20v-7"></path>
+
+                            </svg>
+
+                        </div>
+
+                        <div>
+                            No attendance data available.
+                        </div>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    const groups = {};
+
+
+    history.forEach(
+        session => {
+
+            const subject =
+                session.subject ||
+                "Unknown Subject";
+
+
+            const section =
+                session.section ||
+                "-";
+
+
+            const key =
+                normalize(
+                    subject
+                ) +
+                "|" +
+                normalize(
+                    section
+                );
+
+
+            if(
+                !groups[key]
+            ){
+
+                groups[key] = {
+
+                    subject:
+                        subject,
+
+                    section:
+                        section,
+
+                    sessions:
+                        0,
+
+                    studentIds:
+                        new Set(),
+
+                    present:
+                        0,
+
+                    absent:
+                        0
+
+                };
+
+            }
+
+
+            const group =
+                groups[key];
+
+
+            const records =
+                Array.isArray(
+                    session.records
+                )
+                ? session.records
+                : [];
+
+
+            group.sessions++;
+
+
+            records.forEach(
+                record => {
+
+                    const studentKey =
+                        getStudentKey(
+                            record
+                        );
+
+
+                    if(
+                        studentKey
+                    ){
+
+                        group.studentIds.add(
+                            studentKey
+                        );
+
+                    }
+
+                }
+            );
+
+
+            group.present +=
+                session.present !== undefined
+                ? Number(
+                    session.present
+                ) || 0
+                : countStatus(
+                    session,
+                    "PRESENT"
+                );
+
+
+            group.absent +=
+                session.absent !== undefined
+                ? Number(
+                    session.absent
+                ) || 0
+                : countStatus(
+                    session,
+                    "ABSENT"
+                );
+
+        }
+    );
+
+
+    Object.values(
+        groups
+    ).forEach(
+        group => {
+
+            const total =
+                group.present +
+                group.absent;
+
+
+            const percentage =
+                total > 0
+                ? Math.round(
+                    (
+                        group.present /
+                        total
+                    ) * 100
+                )
+                : 0;
+
+
+            const uniqueSubjectStudents =
+                new Set(
+                    group.studentIds
+                );
+
+
+            getAllStudents().forEach(
+                student => {
+
+                    if(
+                        normalize(
+                            student.section
+                        ) ===
+                        normalize(
+                            group.section
+                        )
+                    ){
+
+                        const key =
+                            getStudentKey(
+                                student
+                            );
+
+
+                        if(key){
+
+                            uniqueSubjectStudents.add(
+                                key
+                            );
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            const studentCount =
+                uniqueSubjectStudents.size;
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            let percentageClass =
+                "";
+
+
+            if(
+                percentage >= 75
+            ){
+
+                percentageClass =
+                    "";
+
+            }
+            else if(
+                percentage >= 50
+            ){
+
+                percentageClass =
+                    "medium";
+
+            }
+            else{
+
+                percentageClass =
+                    "low";
+
+            }
+
+
+            const sectionDisplay =
+                normalize(
+                    group.section
+                ).startsWith(
+                    "section"
+                )
+                ? escapeHTML(
+                    group.section
+                )
+                : "Section " +
+                  escapeHTML(
+                    group.section
+                  );
+
+
+            row.innerHTML = `
+
+                <td class="subject">
+                    ${escapeHTML(
+                        group.subject
+                    )}
+                </td>
+
+                <td>
+                    ${sectionDisplay}
+                </td>
+
+                <td>
+                    ${group.sessions}
+                </td>
+
+                <td>
+                    ${studentCount}
+                </td>
+
+                <td class="present-text">
+                    ${group.present}
+                </td>
+
+                <td class="absent-text">
+                    ${group.absent}
+                </td>
+
+                <td>
+
+                    <span
+                        class="percentage ${percentageClass}"
+                    >
+                        ${percentage}%
+                    </span>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SESSION REPORT
+===================================================== */
+
+function renderSessionReport(
+    history
+){
+
+    const tbody =
+        document.getElementById(
+            "sessionBody"
+        );
+
+
+    tbody.innerHTML =
+        "";
+
+
+    if(
+        history.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="7">
+
+                    <div class="empty">
+
+                        No finalized attendance sessions found.
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    const sorted =
+        [...history]
+        .sort(
+            (a,b) => {
+
+                return new Date(
+                    b.dateTime ||
+                    b.date ||
+                    0
+                ) -
+                new Date(
+                    a.dateTime ||
+                    a.date ||
+                    0
+                );
+
+            }
+        );
+
+
+    sorted
+        .slice(
+            0,
+            10
+        )
+        .forEach(
+            session => {
+
+                const records =
+                    Array.isArray(
+                        session.records
+                    )
+                    ? session.records
+                    : [];
+
+
+                const total =
+                    session.totalStudents ??
+                    records.length;
+
+
+                const present =
+                    session.present !== undefined
+                    ? Number(
+                        session.present
+                    ) || 0
+                    : countStatus(
+                        session,
+                        "PRESENT"
+                    );
+
+
+                const absent =
+                    session.absent !== undefined
+                    ? Number(
+                        session.absent
+                    ) || 0
+                    : countStatus(
+                        session,
+                        "ABSENT"
+                    );
+
+
+                const className =
+                    "Year: " +
+                    (
+                        session.year ||
+                        "-"
+                    ) +
+                    " • Sem: " +
+                    (
+                        session.semester ||
+                        "-"
+                    ) +
+                    " • Sec: " +
+                    (
+                        session.section ||
+                        "-"
+                    );
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(
+                            formatDate(
+                                session.dateTime ||
+                                session.date
+                            )
+                        )}
+                    </td>
+
+                    <td class="subject">
+                        ${escapeHTML(
+                            session.subject ||
+                            "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            className
+                        )}
+                    </td>
+
+                    <td>
+                        ${total}
+                    </td>
+
+                    <td class="present-text">
+                        ${present}
+                    </td>
+
+                    <td class="absent-text">
+                        ${absent}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="percentage"
+                        >
+                            FINALIZED
+                        </span>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    row
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function formatDate(
+    value
+){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return String(
+            value
+        );
+
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day:
+                "2-digit",
+
+            month:
+                "short",
+
+            year:
+                "numeric",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    return confirm(
+        "Are you sure you want to logout?"
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+function initialize(){
+
+    loadFaculty();
+
+
+    const history =
+        getFacultyHistory();
+
+
+    updateSummary(
+        history
+    );
+
+
+    loadFilters(
+        history
+    );
+
+
+    applyFilters();
+
+}
+
+
+initialize();
+
+
+/* =====================================================
+   BACKEND SYNC
+===================================================== */
+
+async function syncReportsDataFromBackend(){
+
+    const apiBase = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
+
+    try{
+
+        let url = apiBase + "/api/attendance/history";
+
+        if(faculty){
+
+            const fId =
+                faculty.id ||
+                faculty.facultyId;
+
+            if(fId){
+
+                url +=
+                    "?facultyId=" +
+                    encodeURIComponent(fId);
+
+            }
+
+        }
+
+        const res =
+            await fetch(url);
+
+        if(res.ok){
+
+            const data =
+                await res.json();
+
+            if(
+                Array.isArray(data)
+            ){
+
+                localStorage.setItem(
+                    "snapdexAttendanceHistory",
+                    JSON.stringify(data)
+                );
+
+            }
+
+        }
+
+    }catch(err){
+
+        console.warn(
+            "Backend attendance sync warning:",
+            err
+        );
+
+    }
+
+
+    try{
+
+        const sRes =
+            await fetch(
+                apiBase + "/api/students"
+            );
+
+        if(sRes.ok){
+
+            const sData =
+                await sRes.json();
+
+            if(
+                Array.isArray(sData)
+            ){
+
+                localStorage.setItem(
+                    "snapdexStudents",
+                    JSON.stringify(sData)
+                );
+
+            }
+
+        }
+
+    }catch(err){
+
+        console.warn(
+            "Backend student sync warning:",
+            err
+        );
+
+    }
+
+
+    initialize();
+
+}
+
+syncReportsDataFromBackend();
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+window.addEventListener(
+    "pageshow",
+    function(){
+
+        loadFaculty();
+
+
+        const history =
+            getFacultyHistory();
+
+
+        updateSummary(
+            history
+        );
+
+
+        loadFilters(
+            history
+        );
+
+
+        applyFilters();
+
+        syncReportsDataFromBackend();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

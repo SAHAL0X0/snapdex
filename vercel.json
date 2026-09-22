@@ -1,7 +1,29 @@
 {
-  "cleanUrls": true,
+  "cleanUrls": false,
   "rewrites": [
-    { "source": "/", "destination": "/frontend/index.html" },
-    { "source": "/((?!frontend/).*)", "destination": "/frontend/$1" }
+    { "source": "/facultyregister", "destination": "/facultyregister.html" },
+    { "source": "/studentregister", "destination": "/studentregister.html" },
+    { "source": "/facultydashboard", "destination": "/facultydashboard.html" },
+    { "source": "/studentdashboard", "destination": "/studentdashboard.html" },
+    { "source": "/students", "destination": "/students.html" },
+    { "source": "/takeattendance", "destination": "/takeattendance.html" },
+    { "source": "/attendancereview", "destination": "/attendancereview.html" },
+    { "source": "/attendancehistory", "destination": "/attendancehistory.html" },
+    { "source": "/reports", "destination": "/reports.html" },
+    { "source": "/subjects", "destination": "/subjects.html" },
+    { "source": "/forgotpassword", "destination": "/forgotpassword.html" },
+    { "source": "/facultyprofile", "destination": "/facultyprofile.html" },
+    { "source": "/frontend/facultyregister", "destination": "/frontend/facultyregister.html" },
+    { "source": "/frontend/studentregister", "destination": "/frontend/studentregister.html" },
+    { "source": "/frontend/facultydashboard", "destination": "/frontend/facultydashboard.html" },
+    { "source": "/frontend/studentdashboard", "destination": "/frontend/studentdashboard.html" },
+    { "source": "/frontend/students", "destination": "/frontend/students.html" },
+    { "source": "/frontend/takeattendance", "destination": "/frontend/takeattendance.html" },
+    { "source": "/frontend/attendancereview", "destination": "/frontend/attendancereview.html" },
+    { "source": "/frontend/attendancehistory", "destination": "/frontend/attendancehistory.html" },
+    { "source": "/frontend/reports", "destination": "/frontend/reports.html" },
+    { "source": "/frontend/subjects", "destination": "/frontend/subjects.html" },
+    { "source": "/frontend/forgotpassword", "destination": "/frontend/forgotpassword.html" },
+    { "source": "/frontend/facultyprofile", "destination": "/frontend/facultyprofile.html" }
   ]
 }

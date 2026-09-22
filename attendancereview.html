@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDex - Attendance Review</title>
+<script src="config.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+    color:#06245c;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:300px;
+    height:100vh;
+    background:#fff;
+    border-right:1px solid #dce4ef;
+    padding:35px 22px;
+    overflow-y:auto;
+}
+
+.logo{
+    font-size:34px;
+    font-weight:800;
+    margin:0 20px 60px;
+    color:#071b41;
+}
+
+.logo span{
+    color:#1468e8;
+}
+
+.menu-title{
+    font-size:15px;
+    font-weight:600;
+    color:#71809b;
+    margin:0 18px 20px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.menu a{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    height:52px;
+    min-height:52px;
+    padding:5px 10px;
+    margin:4px 0;
+    border-radius:14px;
+    color:#10244a;
+    text-decoration:none;
+    font-size:15px;
+    font-weight:700;
+    transition:background .2s ease, color .2s ease;
+}
+
+.menu a:hover{
+    color:#075edb;
+    background:#eef5fc;
+}
+
+.menu a.active{
+    color:#075edb;
+    background:#e1edff;
+    font-weight:700;
+}
+
+.menu-icon{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    min-width:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:#edf5fe;
+    color:#10244a;
+    transition:background .2s ease, color .2s ease;
+}
+
+.menu a:hover .menu-icon{
+    background:#e3effc;
+    color:#075edb;
+}
+
+.menu a.active .menu-icon{
+    background:#f0f6fe;
+    color:#075edb;
+}
+
+.menu-icon svg{
+    width:19px;
+    height:19px;
+    display:block;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.account-title{
+    margin-top:35px;
+}
+
+.logout{
+    color:#e60000 !important;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:300px;
+    min-height:100vh;
+}
+
+/* HEADER */
+
+.header{
+    height:100px;
+    background:#fff;
+    border-bottom:1px solid #dce4ef;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 38px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.srm-box{
+    width:58px;
+    height:58px;
+    background:#eef4ff;
+    border-radius:14px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#075ce5;
+    font-size:22px;
+    font-weight:800;
+}
+
+.brand-name{
+    font-size:31px;
+    font-weight:800;
+    color:#071b41;
+}
+
+.brand-name span{
+    color:#1468e8;
+}
+
+.brand-sub{
+    font-size:16px;
+    margin-top:4px;
+    color:#516b92;
+}
+
+.faculty-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    text-align:right;
+}
+
+.faculty-name{
+    font-size:17px;
+    font-weight:700;
+    color:#071b41;
+}
+
+.faculty-id{
+    color:#71809b;
+    margin-top:4px;
+}
+
+.faculty-photo{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #d9e3f2;
+}
+
+/* CONTENT */
+
+.content{
+    padding:45px 55px;
+}
+
+.page-title{
+    font-size:39px;
+    font-weight:800;
+    color:#061b43;
+}
+
+.page-subtitle{
+    font-size:18px;
+    color:#285487;
+    margin-top:12px;
+    margin-bottom:35px;
+}
+
+/* CARD */
+
+.card{
+    background:#fff;
+    border:1px solid #dbe4ef;
+    border-radius:18px;
+    padding:30px;
+    margin-bottom:25px;
+}
+
+.card h2{
+    font-size:25px;
+    margin-bottom:10px;
+    color:#071b41;
+}
+
+.card p{
+    color:#31557e;
+    font-size:17px;
+}
+
+/* NOTICE */
+
+.notice{
+    background:#eef5ff;
+    border:1px solid #bdd8ff;
+    color:#005bea;
+    border-radius:12px;
+    padding:20px;
+    margin-top:25px;
+    font-size:17px;
+}
+
+/* CLASS INFO */
+
+.class-info{
+    background:#f8fafc;
+    border:1px solid #dce5ef;
+    border-radius:12px;
+    padding:22px;
+    margin-top:20px;
+    line-height:1.9;
+    font-size:17px;
+}
+
+.class-info b{
+    color:#071b41;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.stat{
+    background:#fff;
+    border:1px solid #dbe4ef;
+    border-radius:16px;
+    padding:25px;
+}
+
+.stat-title{
+    font-size:17px;
+    color:#49678e;
+}
+
+.stat-number{
+    font-size:40px;
+    font-weight:800;
+    margin-top:10px;
+}
+
+.blue{
+    color:#075ce5;
+}
+
+.green{
+    color:#00a83b;
+}
+
+.red{
+    color:#ed1c24;
+}
+
+.orange{
+    color:#ed7200;
+}
+
+/* TABLE */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+}
+
+th{
+    background:#f1f5f9;
+    text-align:left;
+    padding:18px;
+    font-size:16px;
+    color:#071b41;
+}
+
+td{
+    padding:18px;
+    border-bottom:1px solid #e2e8f0;
+    font-size:17px;
+    color:#173764;
+}
+
+.student{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    font-weight:700;
+    color:#071b41;
+}
+
+.student img{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+    border:1px solid #dce4ef;
+}
+
+/* BADGES */
+
+.badge{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:20px;
+    font-weight:700;
+    font-size:14px;
+}
+
+.review-badge{
+    background:#fff0c9;
+    color:#e76b00;
+}
+
+.present-badge{
+    background:#d9f8e4;
+    color:#008f34;
+}
+
+.absent-badge{
+    background:#ffe0e0;
+    color:#d80000;
+}
+
+/* SELECT */
+
+select{
+    width:190px;
+    padding:12px 15px;
+    border:1px solid #cbd8e8;
+    border-radius:10px;
+    background:#fff;
+    color:#06245c;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+select.present{
+    border-color:#22a957;
+    background:#effcf4;
+    color:#08772e;
+}
+
+select.absent{
+    border-color:#e22b2b;
+    background:#fff3f3;
+    color:#d80000;
+}
+
+select.review{
+    border-color:#ed9b00;
+    background:#fff9e9;
+    color:#e76b00;
+}
+
+/* ACTIONS */
+
+.actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    margin-top:30px;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:15px 25px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.retake{
+    background:#fff;
+    color:#06245c;
+    border:1px solid #cbd8e8;
+}
+
+.retake:hover{
+    background:#f4f7fb;
+}
+
+.finalize{
+    background:#0da447;
+    color:#fff;
+}
+
+.finalize:hover{
+    background:#078c3a;
+}
+
+.finalize:disabled{
+    background:#a7b9af;
+    color:#fff;
+    cursor:not-allowed;
+}
+
+/* SUCCESS */
+
+.success{
+    display:none;
+    background:#e0f8e8;
+    border:1px solid #8bd6a5;
+    color:#08772e;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:25px;
+    font-size:17px;
+    font-weight:600;
+}
+
+/* EMPTY */
+
+.empty{
+    text-align:center;
+    padding:40px;
+    color:#71809b;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+    .sidebar{
+        width:230px;
+    }
+
+    .main{
+        margin-left:230px;
+    }
+
+    .content{
+        padding:30px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .header{
+        height:auto;
+        padding:20px;
+        flex-wrap:wrap;
+        gap:15px;
+    }
+
+    .content{
+        padding:25px 18px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+
+    select{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Snap<span>Dex</span>
+    </div>
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+    <nav class="menu">
+
+        <a href="facultydashboard.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 10.5L12 3l9 7.5V21H5V10.5z"></path>
+                    <path d="M9 21v-6h6v6"></path>
+                </svg>
+            </span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="facultydashboard.html#classes">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="5" width="17" height="15" rx="2.5"></rect>
+                    <path d="M8 3v4"></path>
+                    <path d="M16 3v4"></path>
+                    <path d="M3.5 10h17"></path>
+                </svg>
+            </span>
+            <span>My Classes</span>
+        </a>
+
+        <a href="subjects.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                    <path d="M8 9h8"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h5"></path>
+                </svg>
+            </span>
+            <span>Subjects</span>
+        </a>
+
+        <a href="students.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3.2"></circle>
+                    <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"></path>
+                    <circle cx="17" cy="9" r="2.5"></circle>
+                    <path d="M15 15.5c2.8-.1 4.8 1.5 5.5 4.5"></path>
+                </svg>
+            </span>
+            <span>Students</span>
+        </a>
+
+        <a href="takeattendance.html" class="active">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3.5" y="6" width="17" height="14" rx="2.5"></rect>
+                    <circle cx="12" cy="13" r="3.5"></circle>
+                    <path d="M8 6l1-2.5h6l1 2.5"></path>
+                </svg>
+            </span>
+            <span>Take Attendance</span>
+        </a>
+
+        <a href="attendancehistory.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7.5v4.5l3 2"></path>
+                </svg>
+            </span>
+            <span>Attendance History</span>
+        </a>
+
+        <a href="reports.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 20h16"></path>
+                    <path d="M7 20V12"></path>
+                    <path d="M12 20V5"></path>
+                    <path d="M17 20V15"></path>
+                </svg>
+            </span>
+            <span>Reports</span>
+        </a>
+
+    </nav>
+
+    <div class="menu-title account-title">
+        ACCOUNT
+    </div>
+
+    <nav class="menu">
+
+        <a href="facultyprofile.html">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5.5 20.5c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5"></path>
+                </svg>
+            </span>
+            <span>My Profile</span>
+        </a>
+
+        <a href="index.html" class="logout" onclick="return logout();">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 12h10"></path>
+                    <path d="M11 8l4 4-4 4"></path>
+                    <path d="M19 6v12"></path>
+                </svg>
+            </span>
+            <span>Logout</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="srm-box">
+            SRM
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                Snap<span>Dex</span>
+            </div>
+
+            <div class="brand-sub">
+                Smart Attendance • SRM Institute of Science and Technology
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="faculty-box">
+
+        <div>
+
+            <div class="faculty-name" id="facultyName">
+                Faculty
+            </div>
+
+            <div class="faculty-id" id="facultyId">
+                -
+            </div>
+
+        </div>
+
+        <img
+            id="facultyPhoto"
+            class="faculty-photo"
+            src=""
+            alt="Faculty"
+        >
+
+    </div>
+
+</header>
+
+
+<section class="content">
+
+<h1 class="page-title">
+    Attendance Review
+</h1>
+
+<p class="page-subtitle">
+    Faculty has the final authority to mark attendance.
+</p>
+
+
+<div id="successMessage" class="success">
+    ✓ Attendance finalized successfully.
+</div>
+
+
+<!-- VERIFICATION -->
+
+<div class="card">
+
+    <h2>
+        🔐 Faculty Verification Required
+    </h2>
+
+    <p>
+        Face recognition results do not automatically finalize attendance.
+        Please verify every student manually before saving.
+    </p>
+
+    <div class="notice">
+
+        Attendance can only be finalized when every student is marked
+        <b>Present</b> or <b>Absent</b>.
+
+    </div>
+
+</div>
+
+
+<!-- CLASS -->
+
+<div class="card">
+
+    <h2>
+        Selected Class
+    </h2>
+
+    <div class="class-info" id="classInfo">
+        Loading...
+    </div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="stats">
+
+    <div class="stat">
+        <div class="stat-title">Total Students</div>
+        <div class="stat-number blue" id="totalStudents">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-title">Present</div>
+        <div class="stat-number green" id="presentCount">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-title">Absent</div>
+        <div class="stat-number red" id="absentCount">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-title">Review</div>
+        <div class="stat-number orange" id="reviewCount">0</div>
+    </div>
+
+</div>
+
+
+<!-- STUDENTS -->
+
+<div class="card">
+
+    <h2>
+        Student Attendance
+    </h2>
+
+    <p>
+        Verify each student before finalizing.
+    </p>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Student</th>
+                    <th>Registration Number</th>
+                    <th>Recognition</th>
+                    <th>Attendance</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="studentTable"></tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="actions">
+
+        <button
+            class="retake"
+            onclick="retakePhotos()"
+        >
+            ↻ Retake Photos
+        </button>
+
+        <button
+            class="finalize"
+            id="finalizeBtn"
+            onclick="finalizeAttendance()"
+            disabled
+        >
+            ✓ Finalize Attendance
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<script>
+
+const API_BASE_URL = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
+
+/* =====================================================
+   FACULTY
+===================================================== */
+
+let faculty = null;
+
+try{
+
+    faculty = JSON.parse(
+        localStorage.getItem("snapdexFaculty") || "null"
+    );
+
+}catch(error){
+
+    faculty = null;
+
+}
+
+
+if(faculty){
+
+    document.getElementById("facultyName").textContent =
+        faculty.name || "Faculty";
+
+    document.getElementById("facultyId").textContent =
+        faculty.id ||
+        faculty.facultyId ||
+        "-";
+
+    if(faculty.profilePhoto){
+
+        document.getElementById("facultyPhoto").src =
+            faculty.profilePhoto;
+
+    }
+
+}
+
+
+/* =====================================================
+   SELECTED CLASS
+===================================================== */
+
+let selectedClass = null;
+
+try{
+
+    selectedClass = JSON.parse(
+        localStorage.getItem("snapdexAttendanceClass") ||
+        localStorage.getItem("snapdexSelectedClass") ||
+        "null"
+    );
+
+}catch(error){
+
+    selectedClass = null;
+
+}
+
+
+/* =====================================================
+   NORMALIZATION
+===================================================== */
+
+function normalize(value){
+
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g," ");
+
+}
+
+
+function normalizeYear(value){
+
+    return normalize(value)
+        .replace(/^year\s+/,"");
+
+}
+
+
+function normalizeSemester(value){
+
+    return normalize(value)
+        .replace(/^semester\s+/,"");
+
+}
+
+
+function normalizeSection(value){
+
+    return normalize(value)
+        .replace(/^section\s+/,"");
+
+}
+
+
+function normalizeRegistration(value){
+
+    return String(value || "")
+        .trim()
+        .toUpperCase();
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   SHOW CLASS
+===================================================== */
+
+function showClass(){
+
+    const box =
+        document.getElementById("classInfo");
+
+    if(!selectedClass){
+
+        box.innerHTML =
+            "<b>No class selected.</b>";
+
+        return;
+
+    }
+
+    box.innerHTML = `
+
+        <div>
+            <b>Program / Branch:</b>
+            ${escapeHTML(selectedClass.program || "-")}
+        </div>
+
+        <div>
+
+            <b>Year:</b>
+            ${escapeHTML(selectedClass.year || "-")}
+
+            &nbsp; • &nbsp;
+
+            <b>Semester:</b>
+            ${escapeHTML(selectedClass.semester || "-")}
+
+            &nbsp; • &nbsp;
+
+            <b>Section:</b>
+            ${escapeHTML(selectedClass.section || "-")}
+
+        </div>
+
+        <div>
+
+            <b>Subject:</b>
+
+            <strong>
+                ${escapeHTML(selectedClass.subject || "-")}
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+showClass();
+
+
+/* =====================================================
+   GET ALL STUDENTS
+===================================================== */
+
+function getAllStudents(){
+
+    const merged = [];
+
+    /* Multiple student storage */
+
+    try{
+
+        const multiple =
+            JSON.parse(
+                localStorage.getItem("snapdexStudents") || "[]"
+            );
+
+        if(Array.isArray(multiple)){
+
+            multiple.forEach(student => {
+
+                if(student){
+                    merged.push(student);
+                }
+
+            });
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Error loading snapdexStudents:",
+            error
+        );
+
+    }
+
+
+    /* Single student storage */
+
+    try{
+
+        const single =
+            JSON.parse(
+                localStorage.getItem("snapdexStudent") || "null"
+            );
+
+        if(single){
+
+            merged.push(single);
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Error loading snapdexStudent:",
+            error
+        );
+
+    }
+
+
+    /* Remove duplicates */
+
+    const unique = [];
+    const seen = new Set();
+
+    merged.forEach(student => {
+
+        const key =
+            normalizeRegistration(
+                student.registrationNumber
+            );
+
+        if(!key){
+
+            return;
+
+        }
+
+        if(seen.has(key)){
+
+            return;
+
+        }
+
+        seen.add(key);
+        unique.push(student);
+
+    });
+
+
+    return unique;
+
+}
+
+
+/* =====================================================
+   ALL STUDENTS
+===================================================== */
+
+const allStudents =
+    getAllStudents();
+
+
+/* =====================================================
+   MATCH STUDENTS EXACTLY
+===================================================== */
+
+let students = [];
+
+if(selectedClass){
+
+    students =
+        allStudents.filter(student => {
+
+            const sameDepartment =
+                normalize(student.department) ===
+                normalize(selectedClass.department);
+
+
+            const sameProgram =
+                normalize(student.program) ===
+                normalize(selectedClass.program);
+
+
+            const sameYear =
+                normalizeYear(student.year) ===
+                normalizeYear(selectedClass.year);
+
+
+            const sameSemester =
+                normalizeSemester(student.semester) ===
+                normalizeSemester(selectedClass.semester);
+
+
+            const sameSection =
+                normalizeSection(student.section) ===
+                normalizeSection(selectedClass.section);
+
+
+            return (
+                sameDepartment &&
+                sameProgram &&
+                sameYear &&
+                sameSemester &&
+                sameSection
+            );
+
+        });
+
+}
+
+
+/*
+ IMPORTANT:
+ No section-only fallback.
+ We only show students belonging to
+ the exact selected academic class.
+*/
+
+
+/* =====================================================
+   ATTENDANCE RECORDS
+===================================================== */
+
+let attendanceRecords = [];
+
+students.forEach(student => {
+
+    attendanceRecords.push({
+
+        studentId:
+            student.registrationNumber ||
+            student.id ||
+            Date.now(),
+
+        name:
+            student.name ||
+            "Student",
+
+        registrationNumber:
+            student.registrationNumber ||
+            "-",
+
+        profilePhoto:
+            student.profilePhoto ||
+            "",
+
+        recognition:
+            "REVIEW",
+
+        attendance:
+            "REVIEW"
+
+    });
+
+});
+
+
+/* =====================================================
+   RENDER STUDENTS
+===================================================== */
+
+function renderStudents(){
+
+    const table =
+        document.getElementById("studentTable");
+
+    table.innerHTML = "";
+
+
+    if(attendanceRecords.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="4">
+
+                    <div class="empty">
+
+                        No students found for this class.
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        updateStats();
+
+        return;
+
+    }
+
+
+    attendanceRecords.forEach(
+        (record,index) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            let photo =
+                record.profilePhoto;
+
+
+            if(!photo){
+
+                photo =
+                    "data:image/svg+xml;charset=UTF-8," +
+                    encodeURIComponent(`
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="50"
+                            height="50"
+                            viewBox="0 0 50 50"
+                        >
+
+                            <circle
+                                cx="25"
+                                cy="25"
+                                r="25"
+                                fill="#e9eef5"
+                            />
+
+                            <circle
+                                cx="25"
+                                cy="19"
+                                r="8"
+                                fill="#9aa9bd"
+                            />
+
+                            <path
+                                d="M10 43
+                                   C12 33 18 29 25 29
+                                   C32 29 38 33 40 43"
+                                fill="#9aa9bd"
+                            />
+
+                        </svg>
+
+                    `);
+
+            }
+
+
+            tr.innerHTML = `
+
+                <td>
+
+                    <div class="student">
+
+                        <img
+                            src="${photo}"
+                            alt="Student"
+                        >
+
+                        <span>
+                            ${escapeHTML(record.name)}
+                        </span>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        record.registrationNumber
+                    )}
+                </td>
+
+
+                <td>
+
+                    <span
+                        id="recognition-${index}"
+                        class="badge review-badge"
+                    >
+                        Review
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <select
+                        id="attendance-${index}"
+                        class="review"
+                        onchange="changeAttendance(${index}, this.value)"
+                    >
+
+                        <option value="REVIEW">
+                            Review
+                        </option>
+
+                        <option value="PRESENT">
+                            Present
+                        </option>
+
+                        <option value="ABSENT">
+                            Absent
+                        </option>
+
+                    </select>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(tr);
+
+        }
+    );
+
+
+    updateStats();
+
+}
+
+
+renderStudents();
+
+async function syncClassStudents() {
+    if(!selectedClass || !selectedClass.id) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/students/class/${selectedClass.id}`);
+        if(res.ok) {
+            const backendStudents = await res.json();
+            if(Array.isArray(backendStudents) && backendStudents.length > 0) {
+                students = backendStudents;
+                attendanceRecords = students.map(student => ({
+                    studentId: student.registrationNumber || student.id || Date.now(),
+                    name: student.name || "Student",
+                    registrationNumber: student.registrationNumber || "-",
+                    profilePhoto: student.profilePhoto || "",
+                    recognition: "REVIEW",
+                    attendance: "REVIEW"
+                }));
+                renderStudents();
+                updateStats();
+            }
+        }
+    } catch(e) {
+        console.warn("Could not sync class students from backend:", e);
+    }
+}
+syncClassStudents();
+
+
+/* =====================================================
+   CHANGE ATTENDANCE
+===================================================== */
+
+function changeAttendance(index,value){
+
+    if(!attendanceRecords[index]){
+        return;
+    }
+
+
+    attendanceRecords[index].attendance =
+        value;
+
+
+    const select =
+        document.getElementById(
+            "attendance-" + index
+        );
+
+
+    const recognition =
+        document.getElementById(
+            "recognition-" + index
+        );
+
+
+    select.classList.remove(
+        "present",
+        "absent",
+        "review"
+    );
+
+
+    recognition.classList.remove(
+        "review-badge",
+        "present-badge",
+        "absent-badge"
+    );
+
+
+    if(value === "PRESENT"){
+
+        select.classList.add("present");
+
+        recognition.classList.add(
+            "present-badge"
+        );
+
+        recognition.textContent =
+            "Matched";
+
+        attendanceRecords[index].recognition =
+            "MATCHED";
+
+    }
+
+
+    else if(value === "ABSENT"){
+
+        select.classList.add("absent");
+
+        recognition.classList.add(
+            "absent-badge"
+        );
+
+        recognition.textContent =
+            "Not Present";
+
+        attendanceRecords[index].recognition =
+            "REVIEW";
+
+    }
+
+
+    else{
+
+        select.classList.add("review");
+
+        recognition.classList.add(
+            "review-badge"
+        );
+
+        recognition.textContent =
+            "Review";
+
+        attendanceRecords[index].recognition =
+            "REVIEW";
+
+    }
+
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   UPDATE STATS
+===================================================== */
+
+function updateStats(){
+
+    const total =
+        attendanceRecords.length;
+
+
+    const present =
+        attendanceRecords.filter(
+            record =>
+                record.attendance === "PRESENT"
+        ).length;
+
+
+    const absent =
+        attendanceRecords.filter(
+            record =>
+                record.attendance === "ABSENT"
+        ).length;
+
+
+    const review =
+        attendanceRecords.filter(
+            record =>
+                record.attendance === "REVIEW"
+        ).length;
+
+
+    document.getElementById(
+        "totalStudents"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "presentCount"
+    ).textContent = present;
+
+
+    document.getElementById(
+        "absentCount"
+    ).textContent = absent;
+
+
+    document.getElementById(
+        "reviewCount"
+    ).textContent = review;
+
+
+    const finalizeButton =
+        document.getElementById(
+            "finalizeBtn"
+        );
+
+
+    finalizeButton.disabled =
+        total === 0 ||
+        review > 0;
+
+}
+
+
+/* =====================================================
+   FINALIZE ATTENDANCE
+===================================================== */
+
+async function finalizeAttendance(){
+
+    const review =
+        attendanceRecords.filter(
+            record =>
+                record.attendance === "REVIEW"
+        ).length;
+
+
+    if(review > 0){
+
+        alert(
+            "Please mark every student as Present or Absent."
+        );
+
+        return;
+
+    }
+
+
+    if(attendanceRecords.length === 0){
+
+        alert(
+            "No students found for this class."
+        );
+
+        return;
+
+    }
+
+
+    const present =
+        attendanceRecords.filter(
+            record =>
+                record.attendance === "PRESENT"
+        ).length;
+
+
+    const absent =
+        attendanceRecords.filter(
+            record =>
+                record.attendance === "ABSENT"
+        ).length;
+
+
+    /* CREATE SESSION */
+
+    const session = {
+
+        id:
+            Date.now(),
+
+        classId:
+            selectedClass?.id ||
+            "",
+
+        department:
+            selectedClass?.department ||
+            "",
+
+        program:
+            selectedClass?.program ||
+            "",
+
+        year:
+            selectedClass?.year ||
+            "",
+
+        semester:
+            selectedClass?.semester ||
+            "",
+
+        section:
+            selectedClass?.section ||
+            "",
+
+        subject:
+            selectedClass?.subject ||
+            "",
+
+        facultyId:
+            faculty?.id ||
+            faculty?.facultyId ||
+            "",
+
+        facultyName:
+            faculty?.name ||
+            "Faculty",
+
+        dateTime:
+            new Date().toISOString(),
+
+        totalStudents:
+            attendanceRecords.length,
+
+        present:
+            present,
+
+        absent:
+            absent,
+
+        status:
+            "FINALIZED",
+
+        records:
+            attendanceRecords.map(
+                record => ({
+                    ...record
+                })
+            )
+
+    };
+
+
+    /* LOAD HISTORY */
+
+    let history = [];
+
+    try{
+
+        const savedHistory =
+            JSON.parse(
+                localStorage.getItem(
+                    "snapdexAttendanceHistory"
+                ) || "[]"
+            );
+
+        if(Array.isArray(savedHistory)){
+
+            history =
+                savedHistory;
+
+        }
+
+    }catch(error){
+
+        history = [];
+
+    }
+
+
+    /* SEND TO BACKEND API */
+    try {
+        await fetch(`${API_BASE_URL}/api/attendance`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(session)
+        });
+    } catch (backendErr) {
+        console.warn("Backend attendance persistence error (stored locally):", backendErr);
+    }
+
+    /* SAVE HISTORY */
+
+    history.unshift(session);
+
+    localStorage.setItem(
+        "snapdexAttendanceHistory",
+        JSON.stringify(history)
+    );
+
+
+    /* LAST ATTENDANCE */
+
+    localStorage.setItem(
+        "snapdexLastAttendance",
+        JSON.stringify(session)
+    );
+
+
+    /* UPDATE STUDENTS */
+
+    updateStudentAttendance(session);
+
+
+    /* SUCCESS */
+
+    const success =
+        document.getElementById(
+            "successMessage"
+        );
+
+    success.style.display =
+        "block";
+
+    success.textContent =
+        `✓ Attendance finalized successfully. Present: ${present}, Absent: ${absent}`;
+
+
+    document.getElementById(
+        "finalizeBtn"
+    ).disabled = true;
+
+
+    /* REDIRECT */
+
+    setTimeout(() => {
+
+        window.location.href =
+            "attendancehistory.html";
+
+    },1200);
+
+}
+
+
+/* =====================================================
+   UPDATE STUDENT ATTENDANCE
+===================================================== */
+
+function updateStudentAttendance(session){
+
+    let studentsData =
+        getAllStudents();
+
+
+    studentsData =
+        studentsData.map(student => {
+
+            const record =
+                session.records.find(
+                    record => {
+
+                        return (
+                            normalizeRegistration(
+                                record.registrationNumber
+                            ) ===
+                            normalizeRegistration(
+                                student.registrationNumber
+                            )
+                        );
+
+                    }
+                );
+
+
+            if(!record){
+
+                return student;
+
+            }
+
+
+            const oldTotal =
+                Number(
+                    student.totalClasses || 0
+                );
+
+
+            const oldPresent =
+                Number(
+                    student.presentClasses || 0
+                );
+
+
+            const oldAbsent =
+                Number(
+                    student.absentClasses || 0
+                );
+
+
+            const newTotal =
+                oldTotal + 1;
+
+
+            const newPresent =
+                oldPresent +
+                (
+                    record.attendance === "PRESENT"
+                    ? 1
+                    : 0
+                );
+
+
+            const newAbsent =
+                oldAbsent +
+                (
+                    record.attendance === "ABSENT"
+                    ? 1
+                    : 0
+                );
+
+
+            const percentage =
+                newTotal > 0
+                ? Math.round(
+                    (
+                        newPresent /
+                        newTotal
+                    ) * 100
+                )
+                : 0;
+
+
+            return {
+
+                ...student,
+
+                totalClasses:
+                    newTotal,
+
+                presentClasses:
+                    newPresent,
+
+                absentClasses:
+                    newAbsent,
+
+                attendancePercentage:
+                    percentage
+
+            };
+
+        });
+
+
+    /* SAVE MULTIPLE */
+
+    if(studentsData.length > 0){
+
+        localStorage.setItem(
+            "snapdexStudents",
+            JSON.stringify(
+                studentsData
+            )
+        );
+
+
+        /* Keep current single student
+           synchronized */
+
+        const firstRecord =
+            session.records[0];
+
+
+        const currentStudent =
+            studentsData.find(
+                student => {
+
+                    return (
+                        normalizeRegistration(
+                            student.registrationNumber
+                        ) ===
+                        normalizeRegistration(
+                            firstRecord?.registrationNumber
+                        )
+                    );
+
+                }
+            );
+
+
+        if(currentStudent){
+
+            localStorage.setItem(
+                "snapdexStudent",
+                JSON.stringify(
+                    currentStudent
+                )
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   RETAKE PHOTOS
+===================================================== */
+
+function retakePhotos(){
+
+    localStorage.removeItem(
+        "snapdexAttendancePhotos"
+    );
+
+    localStorage.removeItem(
+        "snapdexCurrentAttendance"
+    );
+
+    localStorage.removeItem(
+        "snapdexAttendanceFrames"
+    );
+
+    window.location.href =
+        "takeattendance.html";
+
+}
+
+
+/* =====================================================
+   DEBUG
+===================================================== */
+
+console.log(
+    "SnapDex Faculty:",
+    faculty
+);
+
+console.log(
+    "SnapDex Selected Class:",
+    selectedClass
+);
+
+console.log(
+    "SnapDex All Students:",
+    allStudents
+);
+
+console.log(
+    "SnapDex Matched Students:",
+    students
+);
+
+console.log(
+    "SnapDex Attendance Records:",
+    attendanceRecords
+);
+
+</script>
+
+</body>
+</html>
