@@ -1,4 +1,17 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false
+  "cleanUrls": false,
+  "redirects": [
+    { "source": "/facultyregister", "destination": "/facultyregister.html", "permanent": true },
+    { "source": "/studentregister", "destination": "/studentregister.html", "permanent": true },
+    { "source": "/facultydashboard", "destination": "/facultydashboard.html", "permanent": true },
+    { "source": "/studentdashboard", "destination": "/studentdashboard.html", "permanent": true },
+    { "source": "/students", "destination": "/students.html", "permanent": true },
+    { "source": "/takeattendance", "destination": "/takeattendance.html", "permanent": true },
+    { "source": "/attendancereview", "destination": "/attendancereview.html", "permanent": true },
+    { "source": "/attendancehistory", "destination": "/attendancehistory.html", "permanent": true },
+    { "source": "/reports", "destination": "/reports.html", "permanent": true },
+    { "source": "/subjects", "destination": "/subjects.html", "permanent": true },
+    { "source": "/forgotpassword", "destination": "/forgotpassword.html", "permanent": true },
+    { "source": "/facultyprofile", "destination": "/facultyprofile.html", "permanent": true }
+  ]
 }
