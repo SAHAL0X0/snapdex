@@ -9,6 +9,7 @@ import java.util.Random;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -176,6 +177,42 @@ public class FacultyController {
         response.put("message", "Profile photo updated successfully");
         response.put("facultyId", saved.getFacultyId());
         response.put("profilePhoto", saved.getProfilePhoto());
+        return ResponseEntity.ok(response);
+    }
+
+
+    // =====================================================
+    // GET FACULTY PROFILE BY ID, FACULTY ID, OR EMAIL
+    // =====================================================
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getFacultyProfile(@PathVariable String id) {
+        Faculty faculty = null;
+        try {
+            Long numericId = Long.parseLong(id);
+            faculty = facultyRepository.findById(numericId).orElse(null);
+        } catch (NumberFormatException ignored) {}
+
+        if (faculty == null) {
+            faculty = facultyRepository.findByFacultyId(id).orElse(null);
+        }
+
+        if (faculty == null) {
+            faculty = facultyRepository.findByEmail(id.trim().toLowerCase()).orElse(null);
+        }
+
+        if (faculty == null) {
+            return ResponseEntity.status(404).body("Faculty not found");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", faculty.getId());
+        response.put("name", faculty.getName());
+        response.put("email", faculty.getEmail());
+        response.put("facultyId", faculty.getFacultyId());
+        response.put("profilePhoto", faculty.getProfilePhoto());
+        response.put("department", faculty.getDepartment());
+
         return ResponseEntity.ok(response);
     }
 

@@ -674,12 +674,12 @@ body{
 <section class="content">
 
 
-    <h1 class="page-title">
+    <h1 class="page-title" id="pageTitle">
         My Profile
     </h1>
 
 
-    <p class="page-subtitle">
+    <p class="page-subtitle" id="pageSubtitle">
         View your faculty profile and account information.
     </p>
 
@@ -724,7 +724,7 @@ body{
                 </div>
 
 
-                <div class="profile-role">
+                <div class="profile-role" id="profileRole">
                     Faculty / Teacher
                 </div>
 
@@ -781,7 +781,7 @@ body{
 
                 <div class="detail-box">
 
-                    <div class="detail-label">
+                    <div class="detail-label" id="lblId">
                         FACULTY ID
                     </div>
 
@@ -835,12 +835,13 @@ body{
 
                 <div class="detail-box">
 
-                    <div class="detail-label">
+                    <div class="detail-label" id="lblDesignation">
                         DESIGNATION
                     </div>
 
                     <div
                         class="detail-value"
+                        id="detailDesignation"
                     >
                         Faculty / Teacher
                     </div>
@@ -852,12 +853,13 @@ body{
 
                 <div class="detail-box">
 
-                    <div class="detail-label">
+                    <div class="detail-label" id="lblInstitute">
                         INSTITUTE
                     </div>
 
                     <div
                         class="detail-value"
+                        id="detailInstitute"
                     >
                         SRM Institute of Science and Technology
                     </div>
@@ -869,7 +871,7 @@ body{
 
             <!-- INFO -->
 
-            <div class="info-box">
+            <div class="info-box" id="profileInfoBox">
 
                 🔐 Your faculty account information is associated
                 with your SnapDex profile. Official email and faculty
@@ -887,6 +889,7 @@ body{
             <a
                 href="facultydashboard.html"
                 class="back-btn"
+                id="backToDashboardBtn"
             >
                 ← Back to Dashboard
             </a>
@@ -905,156 +908,229 @@ body{
 <script>
 
 /* =====================================================
-   SNAPDEX FACULTY PROFILE
+   SNAPDEX PROFILE CONTROLLER (FACULTY & STUDENT SUPPORT)
 ===================================================== */
 
+const API_BASE_URL = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
 
-/* ================= LOAD FACULTY ================= */
+let currentProfile = null;
+let profileType = "faculty";
 
-let faculty = null;
-
-
-try{
-
-    faculty =
-        JSON.parse(
-            localStorage.getItem(
-                "snapdexFaculty"
-            ) || "null"
+function getStoredProfile() {
+    // 1. Check current logged-in user in session/local storage
+    try {
+        const current = JSON.parse(
+            sessionStorage.getItem("snapdexCurrentUser") ||
+            localStorage.getItem("snapdexCurrentUser") ||
+            "null"
         );
+        if (current) {
+            if (current.registrationNumber || current.studentId || current.semester || current.program) {
+                profileType = "student";
+                return current;
+            }
+            if (current.facultyId || current.department || (current.email && current.email.includes("@srmist.edu.in"))) {
+                profileType = "faculty";
+                return current;
+            }
+        }
+    } catch (e) {}
 
-}catch(error){
+    // 2. Check explicit faculty storage
+    try {
+        const faculty = JSON.parse(localStorage.getItem("snapdexFaculty") || "null");
+        if (faculty && (faculty.name || faculty.email || faculty.facultyId)) {
+            profileType = "faculty";
+            return faculty;
+        }
+    } catch (e) {}
 
-    faculty = null;
+    // 3. Check explicit student storage
+    try {
+        const student = JSON.parse(
+            localStorage.getItem("snapdexLoggedInStudent") ||
+            localStorage.getItem("snapdexCurrentStudent") ||
+            localStorage.getItem("snapdexStudent") ||
+            "null"
+        );
+        if (student && (student.name || student.email || student.registrationNumber)) {
+            profileType = "student";
+            return student;
+        }
+    } catch (e) {}
 
+    // 4. Fallback check for students array
+    try {
+        const students = JSON.parse(localStorage.getItem("snapdexStudents") || "[]");
+        if (Array.isArray(students) && students.length > 0) {
+            profileType = "student";
+            return students[students.length - 1];
+        }
+    } catch (e) {}
+
+    return null;
 }
 
+function renderFacultyProfile(f) {
+    const name = f.name || "Faculty Member";
+    const fId = f.facultyId || f.id || "-";
+    const email = f.email || f.officialEmail || "-";
+    const dept = f.department || f.dept || "-";
+    const designation = f.designation || "Faculty / Teacher";
+    const photoSrc = (f.profilePhoto && f.profilePhoto.trim()) ? f.profilePhoto : "srm_logo.png";
 
-/* ================= DISPLAY ================= */
+    document.getElementById("pageTitle").textContent = "My Profile";
+    document.getElementById("pageSubtitle").textContent = "View your faculty profile and account information.";
 
-function loadProfile(){
+    document.getElementById("headerFacultyName").textContent = name;
+    document.getElementById("headerFacultyId").textContent = fId;
+    document.getElementById("headerFacultyPhoto").src = photoSrc;
 
-    if(!faculty){
+    document.getElementById("profilePhoto").src = photoSrc;
+    document.getElementById("profileName").textContent = name;
+    document.getElementById("profileRole").textContent = designation;
+    document.getElementById("profileFacultyId").textContent = "Faculty ID: " + fId;
 
-        document.getElementById(
-            "profileName"
-        ).textContent =
-            "Faculty";
+    document.getElementById("detailName").textContent = name;
+    document.getElementById("lblId").textContent = "FACULTY ID";
+    document.getElementById("detailFacultyId").textContent = fId;
+    document.getElementById("detailEmail").textContent = email;
+    document.getElementById("detailDepartment").textContent = dept;
+    document.getElementById("lblDesignation").textContent = "DESIGNATION";
+    document.getElementById("detailDesignation").textContent = designation;
+    document.getElementById("lblInstitute").textContent = "INSTITUTE";
+    document.getElementById("detailInstitute").textContent = "SRM Institute of Science and Technology";
 
+    const updateLabel = document.querySelector(".btn-change-photo");
+    if (updateLabel) updateLabel.style.display = "inline-flex";
 
-        document.getElementById(
-            "detailName"
-        ).textContent =
-            "Not available";
-
-
-        return;
-
+    const backBtn = document.getElementById("backToDashboardBtn");
+    if (backBtn) {
+        backBtn.href = "facultydashboard.html";
+        backBtn.textContent = "← Back to Faculty Dashboard";
     }
 
-
-    /* ================= BASIC DATA ================= */
-
-    const name =
-        faculty.name ||
-        "Faculty";
-
-
-    const facultyId =
-        faculty.facultyId ||
-        faculty.id ||
-        "-";
-
-
-    const email =
-        faculty.email ||
-        faculty.officialEmail ||
-        "-";
-
-
-    const department =
-        faculty.department ||
-        faculty.dept ||
-        "-";
-
-
-    /* ================= HEADER ================= */
-
-    document.getElementById(
-        "headerFacultyName"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "headerFacultyId"
-    ).textContent =
-        facultyId;
-
-
-    /* ================= PROFILE TOP ================= */
-
-    document.getElementById(
-        "profileName"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "profileFacultyId"
-    ).textContent =
-        "Faculty ID: " +
-        facultyId;
-
-
-    /* ================= DETAILS ================= */
-
-    document.getElementById(
-        "detailName"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "detailFacultyId"
-    ).textContent =
-        facultyId;
-
-
-    document.getElementById(
-        "detailEmail"
-    ).textContent =
-        email;
-
-
-    document.getElementById(
-        "detailDepartment"
-    ).textContent =
-        department;
-
-
-    /* ================= PHOTO ================= */
-
-    const photoSrc =
-        (faculty.profilePhoto && faculty.profilePhoto.trim())
-            ? faculty.profilePhoto
-            : "srm_logo.png";
-
-    document.getElementById(
-        "profilePhoto"
-    ).src =
-        photoSrc;
-
-
-    document.getElementById(
-        "headerFacultyPhoto"
-    ).src =
-        photoSrc;
-
+    // Background sync from Railway backend
+    const lookupId = f.facultyId || f.id || f.email;
+    if (lookupId && lookupId !== "-") {
+        fetch(`${API_BASE_URL}/api/faculty/${encodeURIComponent(lookupId)}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(fresh => {
+                if (fresh) {
+                    currentProfile = { ...currentProfile, ...fresh };
+                    localStorage.setItem("snapdexFaculty", JSON.stringify(currentProfile));
+                    sessionStorage.setItem("snapdexCurrentUser", JSON.stringify(currentProfile));
+                    if (fresh.name) document.getElementById("detailName").textContent = fresh.name;
+                    if (fresh.facultyId) {
+                        document.getElementById("detailFacultyId").textContent = fresh.facultyId;
+                        document.getElementById("profileFacultyId").textContent = "Faculty ID: " + fresh.facultyId;
+                        document.getElementById("headerFacultyId").textContent = fresh.facultyId;
+                    }
+                    if (fresh.department) document.getElementById("detailDepartment").textContent = fresh.department;
+                    if (fresh.profilePhoto) {
+                        document.getElementById("profilePhoto").src = fresh.profilePhoto;
+                        document.getElementById("headerFacultyPhoto").src = fresh.profilePhoto;
+                    }
+                }
+            })
+            .catch(err => console.warn("Background sync error:", err));
+    }
 }
 
+function renderStudentProfile(s) {
+    const name = s.name || "Student";
+    const regNo = s.registrationNumber || s.studentId || s.id || "-";
+    const email = s.email || "-";
+    const dept = s.department || "-";
+    const prog = s.program || "SRM Student";
+    const sectionInfo = `${s.year || ""} • Semester ${s.semester || ""} • Section ${s.section || ""}`;
+    const photoSrc = (s.profilePhoto && s.profilePhoto.trim()) ? s.profilePhoto : "srm_logo.png";
 
-/* ================= UPDATE PHOTO ================= */
+    document.getElementById("pageTitle").textContent = "My Profile";
+    document.getElementById("pageSubtitle").textContent = "View your student profile and academic enrollment information.";
+
+    document.getElementById("headerFacultyName").textContent = name;
+    document.getElementById("headerFacultyId").textContent = regNo;
+    document.getElementById("headerFacultyPhoto").src = photoSrc;
+
+    document.getElementById("profilePhoto").src = photoSrc;
+    document.getElementById("profileName").textContent = name;
+    document.getElementById("profileRole").textContent = "Student • " + prog;
+    document.getElementById("profileFacultyId").textContent = "Registration No: " + regNo;
+
+    document.getElementById("detailName").textContent = name;
+    document.getElementById("lblId").textContent = "REGISTRATION NUMBER";
+    document.getElementById("detailFacultyId").textContent = regNo;
+    document.getElementById("detailEmail").textContent = email;
+    document.getElementById("detailDepartment").textContent = dept;
+    document.getElementById("lblDesignation").textContent = "PROGRAM / BRANCH";
+    document.getElementById("detailDesignation").textContent = prog;
+    document.getElementById("lblInstitute").textContent = "ACADEMIC SECTION";
+    document.getElementById("detailInstitute").textContent = sectionInfo;
+
+    const updateLabel = document.querySelector(".btn-change-photo");
+    if (updateLabel) updateLabel.style.display = "none";
+
+    const infoBox = document.getElementById("profileInfoBox");
+    if (infoBox) {
+        infoBox.textContent = "🎓 Your student account information is associated with your SnapDex profile. Official email, registration number, and enrolled face reference are used for smart attendance.";
+    }
+
+    const backBtn = document.getElementById("backToDashboardBtn");
+    if (backBtn) {
+        backBtn.href = "studentdashboard.html";
+        backBtn.textContent = "← Back to Student Dashboard";
+    }
+
+    // Background sync from Railway backend
+    if (regNo && regNo !== "-") {
+        fetch(`${API_BASE_URL}/api/students/${encodeURIComponent(regNo)}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(fresh => {
+                if (fresh) {
+                    currentProfile = { ...currentProfile, ...fresh };
+                    localStorage.setItem("snapdexLoggedInStudent", JSON.stringify(currentProfile));
+                    sessionStorage.setItem("snapdexCurrentUser", JSON.stringify(currentProfile));
+                    if (fresh.name) document.getElementById("detailName").textContent = fresh.name;
+                    if (fresh.department) document.getElementById("detailDepartment").textContent = fresh.department;
+                    if (fresh.program) document.getElementById("detailDesignation").textContent = fresh.program;
+                    if (fresh.profilePhoto) {
+                        document.getElementById("profilePhoto").src = fresh.profilePhoto;
+                        document.getElementById("headerFacultyPhoto").src = fresh.profilePhoto;
+                    }
+                }
+            })
+            .catch(err => console.warn("Background sync error:", err));
+    }
+}
+
+function loadProfile() {
+    currentProfile = getStoredProfile();
+
+    if (!currentProfile) {
+        document.getElementById("profileName").textContent = "Guest User";
+        document.getElementById("profileRole").textContent = "Not Signed In";
+        document.getElementById("profileFacultyId").textContent = "Please sign in to view your profile.";
+        document.getElementById("detailName").textContent = "Not available";
+        document.getElementById("detailFacultyId").textContent = "-";
+        document.getElementById("detailEmail").textContent = "-";
+        document.getElementById("detailDepartment").textContent = "-";
+        const backBtn = document.getElementById("backToDashboardBtn");
+        if (backBtn) {
+            backBtn.href = "index.html";
+            backBtn.textContent = "← Go to Login Page";
+        }
+        return;
+    }
+
+    if (profileType === "student") {
+        renderStudentProfile(currentProfile);
+    } else {
+        renderFacultyProfile(currentProfile);
+    }
+}
+
+/* ================= UPDATE PHOTO (FACULTY) ================= */
 
 async function handlePhotoUpdate(input) {
     const file = input.files && input.files[0];
@@ -1088,7 +1164,7 @@ async function handlePhotoUpdate(input) {
             statusEl.textContent = "Saving profile photo...";
         }
 
-        const facultyIdentifier = faculty ? (faculty.facultyId || faculty.id) : null;
+        const facultyIdentifier = currentProfile ? (currentProfile.facultyId || currentProfile.id || currentProfile.email) : null;
         if (!facultyIdentifier) {
             if (statusEl) {
                 statusEl.style.color = "#dc2626";
@@ -1097,6 +1173,7 @@ async function handlePhotoUpdate(input) {
             return;
         }
 
+        try {
             const apiBase = window.API_BASE_URL || "https://snapdex-production-44f0.up.railway.app";
             const response = await fetch(
                 `${apiBase}/api/faculty/${encodeURIComponent(facultyIdentifier)}/photo`,
@@ -1116,9 +1193,11 @@ async function handlePhotoUpdate(input) {
                 throw new Error(errText || "Failed to update profile photo on server.");
             }
 
-            faculty.profilePhoto = base64Photo;
-            localStorage.setItem("snapdexFaculty", JSON.stringify(faculty));
-            sessionStorage.setItem("snapdexCurrentUser", JSON.stringify(faculty));
+            if (currentProfile) {
+                currentProfile.profilePhoto = base64Photo;
+                localStorage.setItem("snapdexFaculty", JSON.stringify(currentProfile));
+                sessionStorage.setItem("snapdexCurrentUser", JSON.stringify(currentProfile));
+            }
 
             if (statusEl) {
                 statusEl.style.color = "#16a34a";
@@ -1138,49 +1217,21 @@ async function handlePhotoUpdate(input) {
     reader.readAsDataURL(file);
 }
 
-
 /* ================= LOGOUT ================= */
 
 function logout(){
-
-    return confirm(
-        "Are you sure you want to logout?"
-    );
-
+    return confirm("Are you sure you want to logout?");
 }
-
 
 /* ================= START ================= */
 
 loadProfile();
 
-
 /* ================= REFRESH ================= */
 
-window.addEventListener(
-    "pageshow",
-    function(){
-
-        try{
-
-            faculty =
-                JSON.parse(
-                    localStorage.getItem(
-                        "snapdexFaculty"
-                    ) || "null"
-                );
-
-        }catch(error){
-
-            faculty = null;
-
-        }
-
-
-        loadProfile();
-
-    }
-);
+window.addEventListener("pageshow", function(){
+    loadProfile();
+});
 
 </script>
 
