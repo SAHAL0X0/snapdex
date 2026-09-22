@@ -1,17 +1,4 @@
 {
-  "routes": [
-    { "src": "/facultyregister", "dest": "/facultyregister.html" },
-    { "src": "/studentregister", "dest": "/studentregister.html" },
-    { "src": "/facultydashboard", "dest": "/facultydashboard.html" },
-    { "src": "/studentdashboard", "dest": "/studentdashboard.html" },
-    { "src": "/students", "dest": "/students.html" },
-    { "src": "/takeattendance", "dest": "/takeattendance.html" },
-    { "src": "/attendancereview", "dest": "/attendancereview.html" },
-    { "src": "/attendancehistory", "dest": "/attendancehistory.html" },
-    { "src": "/reports", "dest": "/reports.html" },
-    { "src": "/subjects", "dest": "/subjects.html" },
-    { "src": "/forgotpassword", "dest": "/forgotpassword.html" },
-    { "src": "/facultyprofile", "dest": "/facultyprofile.html" },
-    { "handle": "filesystem" }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
